@@ -10,8 +10,3 @@
 .DS_Store
 *.bak
 .gitconfig
-
-# zed
-zed/conversations
-zed/prompts
-zed/themes
