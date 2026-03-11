@@ -1,66 +1,75 @@
 {
+  inputs,
   globals,
+  config,
   pkgs,
   ...
 }: {
   imports = [
-    ../../modules/darwin/home-manager.nix
-    ../../modules/darwin/auto-upgrade.nix
-    ../../modules/shared
+    ../base-darwin.nix
+    ../../modules/auto-upgrade-darwin.nix
   ];
 
-  nix = {
-    package = pkgs.lixPackageSets.stable.lix;
+  nix-homebrew = {
+    inherit (globals) user;
+    enable = true;
+    taps = {
+      "homebrew/homebrew-core" = inputs.homebrew-core;
+      "homebrew/homebrew-cask" = inputs.homebrew-cask;
+      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+    };
+    mutableTaps = false;
+    autoMigrate = false;
+  };
 
+  users.users.${globals.user} = {
+    name = globals.user;
+    home = "/Users/${globals.user}";
+    isHidden = false;
+    shell = pkgs.zsh;
+  };
+
+  nix = {
     settings = {
       trusted-users = ["@admin" "${globals.user}"];
-      substituters = ["https://nix-community.cachix.org" "https://cache.nixos.org"];
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
     };
 
     gc = {
-      automatic = true;
       interval = {
         Weekday = 0;
         Hour = 2;
         Minute = 0;
       };
-      options = "--delete-older-than 30d";
     };
-
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
   };
 
-  # Host-specific homebrew casks
-  homebrew.casks = pkgs.callPackage ./casks.nix {};
+  homebrew = {
+    taps = builtins.attrNames config.nix-homebrew.taps;
+    casks = [
+      "tailscale-app"
+      "codex"
+      "slack"
+      "zed"
+    ];
+  };
 
-  # Host-specific git email override
-  home-manager.users.${globals.user} = {
-    programs.git = {
-      settings.user.email = "antoine.bouteiller@pelico.io";
-      includes = [
-        {
-          condition = "hasconfig:remote.*.url:git@github.com:*/**";
-          path = "~/.gitconfig-github";
-        }
-        {
-          condition = "hasconfig:remote.*.url:https://github.com/**";
-          path = "~/.gitconfig-github";
-        }
-      ];
-    };
+  home-manager = {
+    useGlobalPkgs = true;
+    extraSpecialArgs = {inherit globals;};
+    users.${globals.user} = import ./home.nix;
+  };
 
-    home.file.".gitconfig-github" = {
-      text = ''
-        [user]
-          email = ${globals.email}
-      '';
-    };
+  # Shared dock configuration for all Macs
+  local.dock = {
+    enable = true;
+    username = globals.user;
+    entries = [
+      {path = "/Applications/Slack.app/";}
+      {path = "/Applications/Ghostty.app/";}
+      {path = "/Applications/Zen.app/";}
+      {path = "/Applications/Zed.app/";}
+      {path = "/Applications/Telegram.app/";}
+    ];
   };
 
   system = {

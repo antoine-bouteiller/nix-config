@@ -3,7 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     darwin = {
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,9 +30,17 @@
       url = "github:code-yeongyu/go-claude-code-comment-checker";
       flake = false;
     };
-    disko = {
-      url = "github:nix-community/disko";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    autoscan = {
+      url = "github:antoine-bouteiller/autoscan";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    ygege = {
+      url = "github:UwUDev/ygege";
+      flake = false;
     };
   };
 
@@ -43,12 +54,16 @@
     comment-checker-src,
     home-manager,
     nixpkgs,
-    disko,
+    sops-nix,
+    autoscan,
+    ygege,
   } @ inputs: let
     globals = import ./globals.nix;
-    user = globals.user;
-    linuxSystems = ["x86_64-linux" "aarch64-linux"];
-    darwinSystems = ["aarch64-darwin" "x86_64-darwin"];
+    overlays = [
+      (import ./overlays/comment-checker.nix {comment-checker-src = comment-checker-src;})
+    ];
+    linuxSystems = ["x86_64-linux"];
+    darwinSystems = ["aarch64-darwin"];
     forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
     devShell = system: let
       pkgs = nixpkgs.legacyPackages.${system};
@@ -70,73 +85,37 @@
         exec ${self}/apps/${system}/${scriptName}
       '')}/bin/${scriptName}";
     };
-    mkLinuxApps = system: {
+    mkApps = system: {
       "apply" = mkApp "apply" system;
-      "build-switch" = mkApp "build-switch" system;
       "clean" = mkApp "clean" system;
-      "copy-keys" = mkApp "copy-keys" system;
-      "create-keys" = mkApp "create-keys" system;
-      "check-keys" = mkApp "check-keys" system;
-      "install" = mkApp "install" system;
-    };
-    mkDarwinApps = system: {
-      "apply" = mkApp "apply" system;
-      "build" = mkApp "build" system;
-      "build-switch" = mkApp "build-switch" system;
-      "clean" = mkApp "clean" system;
-      "copy-keys" = mkApp "copy-keys" system;
-      "create-keys" = mkApp "create-keys" system;
-      "check-keys" = mkApp "check-keys" system;
-      "rollback" = mkApp "rollback" system;
     };
   in {
     devShells = forAllSystems devShell;
-    apps = nixpkgs.lib.genAttrs linuxSystems mkLinuxApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
+    apps = nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) mkApps;
 
-    darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
-      system:
-        darwin.lib.darwinSystem {
-          inherit system;
-          specialArgs = inputs // {inherit globals;};
-          modules = [
-            home-manager.darwinModules.home-manager
-            nix-homebrew.darwinModules.nix-homebrew
-            {
-              home-manager.extraSpecialArgs = {inherit globals;};
-              nix-homebrew = {
-                inherit user;
-                enable = true;
-                taps = {
-                  "homebrew/homebrew-core" = homebrew-core;
-                  "homebrew/homebrew-cask" = homebrew-cask;
-                  "homebrew/homebrew-bundle" = homebrew-bundle;
-                };
-                mutableTaps = false;
-                autoMigrate = true;
-              };
-            }
-            ./hosts/pelico
-          ];
-        }
-    );
+    darwinConfigurations.pelico = darwin.lib.darwinSystem {
+      system = "aarch64-darwin";
+      specialArgs = {inherit inputs globals;};
+      modules = [
+        {nixpkgs.overlays = overlays;}
+        home-manager.darwinModules.home-manager
+        nix-homebrew.darwinModules.nix-homebrew
+        ./hosts/pelico
+      ];
+    };
 
-    nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system:
-      nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = inputs // {inherit globals;};
+    nixosConfigurations = {
+      plex-server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs globals;};
         modules = [
-          disko.nixosModules.disko
+          {nixpkgs.overlays = overlays;}
           home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = {inherit globals;};
-              users.${user} = import ./modules/nixos/home-manager.nix;
-            };
-          }
-          ./hosts/nixos
+          sops-nix.nixosModules.sops
+          autoscan.nixosModules.default
+          ./hosts/plex-server
         ];
-      });
+      };
+    };
   };
 }

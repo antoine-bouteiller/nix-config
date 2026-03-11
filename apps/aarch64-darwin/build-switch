@@ -1,8 +1,0 @@
-#!/bin/sh -e
-
-SYSTEM_TYPE="aarch64-darwin"
-
-export NIXPKGS_ALLOW_UNFREE=1
-
-# See https://github.com/nix-darwin/nix-darwin/issues/1457 on why we need sudo
-sudo darwin-rebuild switch --flake .#${SYSTEM_TYPE} $@

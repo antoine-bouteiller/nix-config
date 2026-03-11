@@ -7,6 +7,13 @@
       "WebFetch(domain:mynixos.com)",
       "Bash(nix:*)",
       "Bash(gh:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "mcp__github",
+      "Bash(git add:*)",
+      "Bash(git mv:*)",
+      "Bash(git rm:*)",
+      "Bash(chmod +x apps/aarch64-darwin/apply apps/x86_64-linux/apply apps/x86_64-linux/clean apps/aarch64-darwin/clean)",
       "Bash(nix build:*)"
     ]
   }
