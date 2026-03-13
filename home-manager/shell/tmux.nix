@@ -7,28 +7,6 @@
       yank
       prefix-highlight
       {
-        plugin = catppuccin;
-        extraConfig = ''
-          set -g @catppuccin_flavor 'mocha'
-
-          # Window styling
-          set -g @catppuccin_window_status_style 'rounded'
-          set -g @catppuccin_window_default_text ' #W'
-          set -g @catppuccin_window_current_text ' #W'
-
-          # Status bar modules (left: session, right: directory, git, time, user)
-          set -g @catppuccin_status_left_separator ""
-          set -g @catppuccin_status_right_separator ""
-          set -g @catppuccin_status_connect_separator "no"
-
-          set -g status-left "#{E:@catppuccin_status_session}"
-          set -g status-right "#{E:@catppuccin_status_directory}#{E:@catppuccin_status_date_time}#{E:@catppuccin_status_user}"
-
-          # Date/time format matching starship
-          set -g @catppuccin_date_time_text " %H:%M"
-        '';
-      }
-      {
         plugin = resurrect;
         extraConfig = ''
           set -g @resurrect-dir '$HOME/.cache/tmux/resurrect'
@@ -93,6 +71,42 @@
       bind-key -T copy-mode-vi 'C-k' select-pane -U
       bind-key -T copy-mode-vi 'C-l' select-pane -R
       bind-key -T copy-mode-vi 'C-\' select-pane -l
+
+      # -----------------------------------------------------------------------------
+      # Theme
+      # -----------------------------------------------------------------------------
+      # Palette
+      # background=#282A36  foreground=#F8F8F2  current_line=#44475A
+      # primary=#1E1F29  green=#50FA7B  pink=#FF79C6  purple=#BD93F9
+      # yellow=#F1FA8C  blue=#6272A4  red=#FF5555  orange=#FFB86C
+
+      # General
+      set -g status-position bottom
+      set -g status-style "bg=#282A36"
+      set -g status-left-length 50
+      set -g status-right-length 100
+      set -g status-justify left
+      set -g window-status-separator ""
+
+      # Pane borders
+      set -g pane-border-style "fg=#44475A"
+      set -g pane-active-border-style "fg=#BD93F9"
+
+      # Messages
+      set -g message-style "fg=#F8F8F2,bg=#44475A"
+      set -g message-command-style "fg=#F8F8F2,bg=#44475A"
+
+      # Status left: session pill (green)
+      set -g status-left "#[fg=#50FA7B,bg=#282A36]#[fg=#1E1F29,bg=#50FA7B]  #[fg=#50FA7B,bg=#44475A]#[fg=#F8F8F2,bg=#44475A] #S #[fg=#44475A,bg=#282A36]"
+
+      # Inactive window (muted single pill)
+      set -g window-status-format "#[fg=#44475A,bg=#282A36]─#[fg=#F8F8F2,bg=#44475A] #I #[fg=#44475A,bg=#282A36]"
+
+      # Active window (pink icon pill + box text pill)
+      set -g window-status-current-format "#[fg=#44475A,bg=#282A36]─#[fg=#FF79C6,bg=#282A36]#[fg=#1E1F29,bg=#FF79C6] #I #[fg=#FF79C6,bg=#44475A]#[fg=#F8F8F2,bg=#44475A] #W #[fg=#44475A,bg=#282A36]"
+
+      # Status right: time (purple) + user (yellow)
+      set -g status-right "#[fg=#BD93F9,bg=#282A36]#[fg=#1E1F29,bg=#BD93F9] 󰦖 #[fg=#BD93F9,bg=#44475A]#[fg=#F8F8F2,bg=#44475A] %H:%M #[fg=#44475A,bg=#282A36]#[fg=#44475A,bg=#282A36]─#[fg=#F1FA8C,bg=#282A36]#[fg=#1E1F29,bg=#F1FA8C]  #[fg=#F1FA8C,bg=#44475A]#[fg=#F8F8F2,bg=#44475A] #h #[fg=#44475A,bg=#282A36] "
     '';
   };
 }

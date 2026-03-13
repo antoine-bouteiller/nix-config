@@ -10,6 +10,10 @@
     ../../modules/auto-upgrade-darwin.nix
   ];
 
+  environment.variables = {
+    NODE_OPTIONS = "--max-old-space-size=4096";
+  };
+
   nix-homebrew = {
     inherit (globals) user;
     enable = true;

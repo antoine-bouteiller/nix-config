@@ -19,23 +19,23 @@
         "$line_break"
         "$character"
       ];
-      palette = "catppuccin-mocha";
+      palette = "dracula";
       add_newline = true;
 
-      palettes.catppuccin-mocha = {
-        foreground = "#cdd6f4";
-        background = "#1e1e2e";
-        current_line = "#45475a";
-        primary = "#11111b";
-        box = "#45475a";
-        blue = "#89b4fa";
-        cyan = "#89dceb";
-        green = "#a6e3a1";
-        orange = "#fab387";
-        pink = "#f5c2e7";
-        purple = "#cba6f7";
-        red = "#f38ba8";
-        yellow = "#f9e2af";
+      palettes.dracula = {
+        foreground = "#F8F8F2";
+        background = "#282A36";
+        current_line = "#44475A";
+        primary = "#1E1F29";
+        box = "#44475A";
+        blue = "#6272A4";
+        cyan = "#8BE9FD";
+        green = "#50FA7B";
+        orange = "#FFB86C";
+        pink = "#FF79C6";
+        purple = "#BD93F9";
+        red = "#FF5555";
+        yellow = "#F1FA8C";
       };
 
       os = {
