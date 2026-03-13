@@ -42,6 +42,10 @@
       url = "github:UwUDev/ygege";
       flake = false;
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -57,6 +61,7 @@
     sops-nix,
     autoscan,
     ygege,
+    nixos-wsl,
   } @ inputs: let
     globals = import ./globals.nix;
     overlays = [
@@ -114,6 +119,17 @@
           sops-nix.nixosModules.sops
           autoscan.nixosModules.default
           ./hosts/plex-server
+        ];
+      };
+
+      wsl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs globals;};
+        modules = [
+          {nixpkgs.overlays = overlays;}
+          home-manager.nixosModules.home-manager
+          nixos-wsl.nixosModules.default
+          ./hosts/wsl
         ];
       };
     };
