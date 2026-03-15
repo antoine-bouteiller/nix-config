@@ -65,23 +65,28 @@ in {
       path = [pkgs.nix pkgs.git pkgs.host];
     };
 
-    system.autoUpgrade = {
-      enable = true;
-      dates = cfg.schedule;
-      flake = flakePath;
-      flags = ["-L"];
-      allowReboot = cfg.allowReboot;
-    } // lib.optionalAttrs cfg.allowReboot {
-      rebootWindow = {
-        lower = "01:00";
-        upper = "03:00";
+    system.autoUpgrade =
+      {
+        enable = true;
+        dates = cfg.schedule;
+        flake = flakePath;
+        flags = ["-L"];
+        allowReboot = cfg.allowReboot;
+      }
+      // lib.optionalAttrs cfg.allowReboot {
+        rebootWindow = {
+          lower = "01:00";
+          upper = "03:00";
+        };
       };
-    };
 
     systemd.services.nixos-upgrade = {
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = "120";
+        MemoryMax = "2G";
+        Nice = 19;
+        IOSchedulingClass = "idle";
       };
       unitConfig = {
         StartLimitIntervalSec = 600;
