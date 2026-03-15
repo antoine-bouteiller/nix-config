@@ -15,7 +15,11 @@
       "Bash(git rm:*)",
       "Bash(chmod +x apps/aarch64-darwin/apply apps/x86_64-linux/apply apps/x86_64-linux/clean apps/aarch64-darwin/clean)",
       "Bash(nix build:*)",
-      "Skill(pua-unicode:icon-lookup)"
+      "Skill(pua-unicode:icon-lookup)",
+      "WebFetch(domain:viteplus.dev)",
+      "WebFetch(domain:vite.plus)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "Bash(nix-prefetch-url:*)"
     ]
   }
 }

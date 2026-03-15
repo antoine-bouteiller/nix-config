@@ -4,6 +4,9 @@
   "lsp": {
     "vtsls": {
       "settings": {
+        "tsserver": {
+          "maxTsServerMemory": 8192,
+        },
         "typescript": {
           "updateImportsOnFileMove": {
             "enabled": "always",
@@ -15,17 +18,21 @@
           },
         },
       },
-      "enable_lsp_tasks": true,
     },
   },
-  "agent_servers": {
-    "gemini": {
-      "ignore_system_version": false,
-    },
-    "claude": {
-      "ignore_system_version": false,
-    },
-  },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/.worktree",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    "**/node_modules",
+    "**/coverage",
+  ],
   "languages": {
     "Python": {
       "code_actions_on_format": {

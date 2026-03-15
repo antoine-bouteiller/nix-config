@@ -1,4 +1,8 @@
-{lib, pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;
@@ -60,5 +64,6 @@
     alejandra
     nixd
     comment-checker
+    ffmpeg
   ];
 }

@@ -11,6 +11,9 @@
       cleanup = "uninstall";
       upgrade = true;
     };
+    global = {
+      autoUpdate = true;
+    };
     casks = [
       # Development Tools
       "orbstack"

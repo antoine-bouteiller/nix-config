@@ -66,6 +66,7 @@
     globals = import ./globals.nix;
     overlays = [
       (import ./overlays/comment-checker.nix {comment-checker-src = comment-checker-src;})
+      (import ./overlays/vite-plus.nix)
     ];
     linuxSystems = ["x86_64-linux"];
     darwinSystems = ["aarch64-darwin"];

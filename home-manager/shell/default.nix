@@ -6,5 +6,6 @@
     ./starship.nix
     ./tmux.nix
     ./shell-tools.nix
+    ./vite-plus.nix
   ];
 }
