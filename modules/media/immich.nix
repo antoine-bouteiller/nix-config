@@ -39,6 +39,13 @@ in {
     psql -d immich -tAc "CREATE EXTENSION IF NOT EXISTS vchord CASCADE"
   '';
 
+  systemd.services.immich-machine-learning = {
+    serviceConfig = {
+      MemoryMax = "3G";
+      MemorySwapMax = "0B";
+    };
+  };
+
   systemd.services.immich-server = {
     after = ["postgresql-setup.service"];
     requires = ["postgresql-setup.service"];
