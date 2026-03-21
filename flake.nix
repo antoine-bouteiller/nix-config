@@ -38,10 +38,6 @@
       url = "github:antoine-bouteiller/autoscan";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ygege = {
-      url = "github:UwUDev/ygege";
-      flake = false;
-    };
     rtk-src = {
       url = "github:rtk-ai/rtk";
       flake = false;
@@ -64,7 +60,6 @@
     nixpkgs,
     sops-nix,
     autoscan,
-    ygege,
     nixos-wsl,
     rtk-src,
   } @ inputs: let

@@ -9,7 +9,7 @@ in {
     ./jellyseerr.nix
     ./sonarr.nix
     ./radarr.nix
-    ./prowlarr
+    ./prowlarr.nix
     ./bazarr.nix
     ./transmission.nix
     ./recyclarr.nix
@@ -244,11 +244,6 @@ in {
         type = types.str;
         default = "media";
       };
-    };
-
-    ygege.port = mkOption {
-      type = types.port;
-      default = 8715;
     };
   };
 }
