@@ -8,7 +8,7 @@
     ../../home-manager/applications/ghostty.nix
     ../../home-manager/applications/vim.nix
     ../../home-manager/applications/zed
-    ../../home-manager/applications/claude-code.nix
+    ../../home-manager/applications/claude-code
   ];
 
   home = {

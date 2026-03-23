@@ -68,6 +68,10 @@
         },
       },
     },
+    "TOML": {
+      "language_servers": [],
+      "format_on_save": "off",
+    },
   },
   "code_actions_on_format": {
     "source.organizeImports": true,

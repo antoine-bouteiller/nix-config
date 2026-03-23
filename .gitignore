@@ -11,3 +11,4 @@
 *.bak
 .gitconfig
 result
+.claude/settings.local.json
