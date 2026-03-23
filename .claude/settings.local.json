@@ -17,7 +17,11 @@
       "Bash(tar tzf:*)",
       "Bash(nix-prefetch-git:*)",
       "Bash(git checkout:*)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(find /Users/antoinebouteiller/.dotfiles -type f -name *.nix)",
+      "WebFetch(domain:mynixos.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(jq -r .locks.nodes[\"\"home-manager\"\"].locked.rev)"
     ]
   }
 }

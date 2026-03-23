@@ -1,0 +1,14 @@
+{
+  "name": "dotfiles-plugins",
+  "description": "Personal Claude Code plugins managed via dotfiles",
+  "owner": {
+    "name": "Antoine Bouteiller"
+  },
+  "plugins": [
+    {
+      "name": "pua-unicode",
+      "description": "Workaround for BMP PUA Unicode filtering with placeholder syntax and automatic conversion (primarily for Nerd Font icons)",
+      "source": "./pua-unicode"
+    }
+  ]
+}

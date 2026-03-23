@@ -8,12 +8,13 @@
     ../../home-manager/applications/ghostty.nix
     ../../home-manager/applications/vim.nix
     ../../home-manager/applications/zed
+    ../../home-manager/applications/claude-code.nix
   ];
 
   home = {
     enableNixpkgsReleaseCheck = false;
     packages = [pkgs.dockutil];
-    stateVersion = "23.11";
+    stateVersion = "25.11";
   };
 
   # Host-specific git email override

@@ -36,6 +36,7 @@
       # Entertainment Tools
       "spotify"
     ];
+    greedyCasks = true;
     masApps = {};
   };
 }
