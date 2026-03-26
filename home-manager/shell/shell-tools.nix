@@ -21,7 +21,5 @@
       enable = true;
       enableZshIntegration = true;
     };
-
-    vite-plus.enable = true;
   };
 }

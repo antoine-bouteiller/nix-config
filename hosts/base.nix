@@ -77,5 +77,6 @@ in {
     ffmpeg
     customPkgs.rtk
     customPkgs._1mcp
+    customPkgs.vite-plus
   ];
 }
