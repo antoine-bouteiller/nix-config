@@ -17,11 +17,6 @@
       enableZshIntegration = true;
     };
 
-    mise = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     carapace = {
       enable = true;
       enableZshIntegration = true;

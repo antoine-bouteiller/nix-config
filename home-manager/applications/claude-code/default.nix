@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  customPkgs = inputs.self.packages.${pkgs.system};
+  customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
   inherit (config.lib.file) mkOutOfStoreSymlink;
   inherit (config.home) homeDirectory;
   inherit (pkgs.stdenv) isDarwin;
@@ -45,7 +45,7 @@ in
           Label = "fr.antoinebouteiller.1mcp";
           ProgramArguments = ["${customPkgs._1mcp}/bin/1mcp" "--enable-auth"];
           EnvironmentVariables = {
-            PATH = "${homeDirectory}/.local/share/mise/shims:/usr/bin:/bin:/usr/sbin:/sbin";
+            PATH = lib.makeBinPath [pkgs.nodejs_24 pkgs.coreutils pkgs.bash];
           };
           RunAtLoad = true;
           StandardOutPath = "${homeDirectory}/Library/Logs/1mcp.log";

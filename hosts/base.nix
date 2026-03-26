@@ -43,7 +43,14 @@ in {
     gnupg
 
     # Node.js development tools
-    mise
+    nodejs_24
+    bun
+
+    # Python
+    python313
+
+    # Java
+    jdk25_headless
 
     # Text and terminal utilities
     htop
