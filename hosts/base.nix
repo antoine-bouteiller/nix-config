@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  customPkgs = inputs.self.packages.${pkgs.system};
+  customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   nixpkgs.config = {
     allowUnfree = true;
