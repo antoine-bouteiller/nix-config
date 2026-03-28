@@ -5,8 +5,6 @@
 }: let
   cfg = config.mediaServer;
 in {
-  imports = [./custom-def];
-
   services.prowlarr = {
     enable = true;
     dataDir = cfg.prowlarr.dataDir;
