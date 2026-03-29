@@ -1,7 +1,6 @@
 {...}: {
   imports = [
     ./base.nix
-    ../modules/dock.nix
   ];
 
   homebrew = {

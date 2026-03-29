@@ -1,5 +1,5 @@
 {lib, ...}: let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption mkEnableOption types;
 in {
   imports = [
     ./caddy.nix
@@ -22,6 +22,8 @@ in {
   ];
 
   options.mediaServer = {
+    enable = mkEnableOption "media server stack";
+
     # Host-specific (no defaults)
     network.domain = mkOption {
       type = types.str;

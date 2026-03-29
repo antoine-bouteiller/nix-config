@@ -1,4 +1,5 @@
 {
+  config,
   globals,
   inputs,
   pkgs,
@@ -8,13 +9,13 @@
 in {
   imports = [
     ../base-nixos.nix
-    ../../modules/auto-upgrade-nixos.nix
     ../../modules/media
     ./hardware-configuration.nix
   ];
 
   # Media server
   mediaServer = {
+    enable = true;
     network.domain = "antoinebouteiller.fr";
     paths.mediaDir = "/mnt/media";
   };
@@ -32,7 +33,8 @@ in {
 
   # Auto upgrade
   autoUpgrade = {
-    flakePath = "/etc/nixos";
+    enable = true;
+    flakePath = "${config.users.users.${user}.home}/nixconfig";
     allowReboot = true;
     schedule = "Sun *-*-* 01:00:00";
   };

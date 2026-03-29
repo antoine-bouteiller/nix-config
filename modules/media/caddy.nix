@@ -1,7 +1,12 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.mediaServer;
 in {
-  services.caddy = {
+  config = lib.mkIf cfg.enable {
+    services.caddy = {
     enable = true;
 
     extraConfig = ''
@@ -13,5 +18,6 @@ in {
         }
       }
     '';
+  };
   };
 }

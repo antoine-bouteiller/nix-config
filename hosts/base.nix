@@ -3,6 +3,7 @@
   pkgs,
   ...
 }: {
+  imports = [../modules];
   nixpkgs.config = {
     allowUnfree = true;
     allowBroken = true;

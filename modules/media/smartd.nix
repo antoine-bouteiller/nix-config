@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: let
   cfg = config.mediaServer;
@@ -20,10 +21,12 @@
           "https://localhost:${toString cfg.autoscan.port}/send-message" > /dev/null
   '';
 in {
-  services.smartd = {
-    enable = true;
-    autodetect = true;
-    defaults.monitored = "-a -o on -s (S/../.././02|L/../../6/03) -m <nomailer> -M exec ${smartdWebhook}";
-    notifications.mail.enable = false;
+  config = lib.mkIf cfg.enable {
+    services.smartd = {
+      enable = true;
+      autodetect = true;
+      defaults.monitored = "-a -o on -s (S/../.././02|L/../../6/03) -m <nomailer> -M exec ${smartdWebhook}";
+      notifications.mail.enable = false;
+    };
   };
 }

@@ -9,8 +9,12 @@
 in {
   imports = [
     ../base-darwin.nix
-    ../../modules/auto-upgrade-darwin.nix
   ];
+
+  autoUpgrade = {
+    enable = true;
+    flakePath = "${config.users.users.${globals.user}.home}/.dotfiles";
+  };
 
   environment.variables = {
     NODE_OPTIONS = "--max-old-space-size=4096";
