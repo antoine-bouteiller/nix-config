@@ -49,6 +49,7 @@
       "WebFetch",
       "WebSearch"
     ],
+    "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
   "hooks": {
@@ -109,5 +110,6 @@
       }
     }
   },
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true
 }
