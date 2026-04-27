@@ -30,13 +30,15 @@ in {
     pnpm
     customPkgs.vite-plus
 
+    agent-browser
+
     # Java
     jdk25_headless
+    glab
 
     # Python
     (python313.withPackages (ps:
       with ps; [
-        python-gitlab
         black
         ruff
         isort

@@ -9,6 +9,7 @@ in {
   mkDarwinHost = {
     hostname,
     system,
+    name ? hostname,
     extraModules ? [],
   }:
     darwin.lib.darwinSystem {
@@ -18,8 +19,10 @@ in {
         [
           home-manager.darwinModules.home-manager
           inputs.nix-homebrew.darwinModules.nix-homebrew
-          {networking.hostName = hostname;}
-          (self + "/hosts/${hostname}")
+          {
+            networking.hostName = hostname;
+          }
+          (self + "/hosts/${name}")
         ]
         ++ extraModules;
     };
@@ -27,6 +30,7 @@ in {
   mkNixosHost = {
     hostname,
     system,
+    name ? hostname,
     extraModules ? [],
   }:
     nixpkgs.lib.nixosSystem {
@@ -37,7 +41,7 @@ in {
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
           {networking.hostName = nixpkgs.lib.mkDefault hostname;}
-          (self + "/hosts/${hostname}")
+          (self + "/hosts/${name}")
         ]
         ++ extraModules;
     };

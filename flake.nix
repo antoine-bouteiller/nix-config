@@ -116,8 +116,9 @@
       default = ./home-manager;
     };
 
-    darwinConfigurations.pelico = mkDarwinHost {
-      hostname = "pelico";
+    darwinConfigurations."lv6cfqjl6l-macos" = mkDarwinHost {
+      name = "pelico";
+      hostname = "lv6cfqjl6l-macos";
       system = "aarch64-darwin";
     };
 
@@ -127,10 +128,10 @@
         system = "x86_64-linux";
         extraModules = [inputs.autoscan.nixosModules.default];
       };
-	
 
-      dell = mkNixosHost {
-        hostname = "dell";
+      "antoine-dell" = mkNixosHost {
+        name = "dell";
+        hostname = "antoine-dell";
         system = "x86_64-linux";
         extraModules = [inputs.nixos-hardware.nixosModules.dell-xps-15-9500-nvidia];
       };
