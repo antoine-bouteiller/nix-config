@@ -88,7 +88,13 @@ in {
           type = "stdio";
           disabled = false;
           command = "npx";
-          args = ["-y" "chrome-devtools-mcp@latest" "--no-usage-statistics"];
+          args = [
+            "-y"
+            "chrome-devtools-mcp@latest"
+            "--no-usage-statistics"
+            "-e"
+            "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+          ];
         };
         linear = {
           type = "http";
