@@ -20,11 +20,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      home.packages = [
-        customPkgs._1mcp
-      ];
-    }
     (lib.mkIf isDarwin {
       launchd.agents."1mcp" = {
         enable = true;
