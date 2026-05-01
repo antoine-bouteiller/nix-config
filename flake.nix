@@ -78,17 +78,21 @@
 
     packages = forAllSystems (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
-      rtk = pkgs.callPackage ./pkgs/rtk.nix {};
-      vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
-      _1mcp = pkgs.callPackage ./pkgs/1mcp.nix {};
-      whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
-        overlay = ./home-manager/themes/WhiteSur-icon-overlay;
-      };
-      we10x-gtk-theme = pkgs.callPackage ./pkgs/we10x-gtk-theme.nix {};
-      sphinx-sddm-theme = pkgs.callPackage ./pkgs/sphinx-sddm-theme.nix {};
-    });
+    in
+      {
+        comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
+        rtk = pkgs.callPackage ./pkgs/rtk.nix {};
+        vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
+        _1mcp = pkgs.callPackage ./pkgs/1mcp.nix {};
+        whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
+          overlay = ./home-manager/themes/WhiteSur-icon-overlay;
+        };
+        we10x-gtk-theme = pkgs.callPackage ./pkgs/we10x-gtk-theme.nix {};
+        sphinx-sddm-theme = pkgs.callPackage ./pkgs/sphinx-sddm-theme.nix {};
+      }
+      // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
+        nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
+      });
 
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 

@@ -5,6 +5,7 @@
   ...
 }: let
   user = globals.user;
+  customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
     ../base-nixos.nix
@@ -35,6 +36,7 @@ in {
   environment.systemPackages = with pkgs; [
     brave
     packet
+    customPkgs.nearby-file-share
   ];
 
   environment.etc."brave/policies/managed/policies.json".text = builtins.toJSON {
