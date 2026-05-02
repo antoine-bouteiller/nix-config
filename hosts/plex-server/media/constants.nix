@@ -45,7 +45,7 @@
     appsecPort = 7422;
   };
 
-  flaresolverr.port = 8191;
+  byparr.port = 8191;
 
   homepage.port = 8082;
 

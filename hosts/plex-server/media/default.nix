@@ -13,7 +13,7 @@
     ./transmission.nix
     ./recyclarr.nix
     ./homepage.nix
-    ./flaresolverr.nix
+    ./byparr.nix
     ./coolercontrol.nix
     ./autoscan.nix
     ./immich.nix
