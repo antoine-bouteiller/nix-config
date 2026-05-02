@@ -9,11 +9,15 @@
       enable = true;
       dns = "none";
     };
-    nameservers = ["1.1.1.1" "9.9.9.9"];
     hosts = {
       "192.168.1.254" = ["mabbox.bytel.fr"];
     };
   };
+
+  environment.etc."resolv.conf".text = ''
+    nameserver 1.1.1.1
+    nameserver 9.9.9.9
+  '';
 
   boot.loader = {
     systemd-boot.enable = true;
