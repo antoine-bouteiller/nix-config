@@ -1,10 +1,10 @@
 #!/bin/sh -e
 
 echo "Cleaning up old system generations..."
-sudo nix-collect-garbage --delete-older-than 7d
+sudo nix-collect-garbage --delete-older-than 1d
 
 echo "Cleaning up boot partition..."
-sudo nixos-rebuild boot --flake ".#plex-server" --install-bootloader
+sudo nixos-rebuild boot --flake ".#${hostname}" --install-bootloader
 
 echo "Cleanup complete!"
 df -h /boot

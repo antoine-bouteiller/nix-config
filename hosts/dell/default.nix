@@ -29,14 +29,17 @@ in {
     powerOnBoot = true;
   };
 
-  networking.firewall.allowedTCPPorts = [
-    9400 # packet
-  ];
-
   environment.systemPackages = with pkgs; [
+    # Node.js development tools
+    nodejs_24
+    bun
+    pnpm
+    # customPkgs.vite-plus
+
     brave
-    packet
     customPkgs.nearby-file-share
+
+    plex-desktop
   ];
 
   environment.etc."brave/policies/managed/policies.json".text = builtins.toJSON {
@@ -49,7 +52,6 @@ in {
     TorDisabled = true;
     DnsOverHttpsMode = "automatic";
   };
-
 
   home-manager = {
     useGlobalPkgs = true;

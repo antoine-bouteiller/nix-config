@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
-# Clean up old generations (older than 7 days)
-sudo nix-collect-garbage --delete-older-than 7d
+# Clean up old generations (older than 1 day)
+sudo nix-collect-garbage --delete-older-than 1d
