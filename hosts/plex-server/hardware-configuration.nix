@@ -57,19 +57,13 @@ in {
   ];
 
   # Networking
-  networking = {
-    nameservers = ["1.1.1.1" "9.9.9.9"];
-    hosts = {
-      "192.168.1.254" = ["mabbox.bytel.fr"];
-    };
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        22 # SSH
-        80 # HTTP (Caddy)
-        443 # HTTPS (Caddy)
-      ];
-    };
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      22 # SSH
+      80 # HTTP (Caddy)
+      443 # HTTPS (Caddy)
+    ];
   };
 
   boot.kernel.sysctl = {

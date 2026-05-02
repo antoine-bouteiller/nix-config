@@ -4,7 +4,16 @@
     ../modules/desktop.nix
   ];
 
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager = {
+      enable = true;
+      dns = "none";
+    };
+    nameservers = ["1.1.1.1" "9.9.9.9"];
+    hosts = {
+      "192.168.1.254" = ["mabbox.bytel.fr"];
+    };
+  };
 
   boot.loader = {
     systemd-boot.enable = true;
