@@ -20,10 +20,12 @@
 
   updateFlakeScript = pkgs.writeShellApplication {
     name = "update-flake";
-    runtimeInputs = [pkgs.git pkgs.openssh];
+    runtimeInputs = [pkgs.git pkgs.openssh pkgs.coreutils];
     text = ''
       cd "${flakePath}"
       export GIT_SSH_COMMAND="ssh ${sshOpts}"
+      owner=$(stat -c '%u:%g' "${flakePath}")
+      trap 'chown -R "$owner" "${flakePath}"' EXIT
       git -c safe.directory="${flakePath}" pull --ff-only origin "${cfg.flakeBranch}"
     '';
   };
