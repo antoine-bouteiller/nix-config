@@ -42,6 +42,8 @@ in {
     plex-desktop
   ];
 
+  services.logind.lidSwitch = "hybernate";
+
   environment.etc."brave/policies/managed/policies.json".text = builtins.toJSON {
     BraveRewardsDisabled = true;
     BraveWalletDisabled = true;
