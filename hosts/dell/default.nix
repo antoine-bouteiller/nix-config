@@ -40,9 +40,10 @@ in {
     customPkgs.nearby-file-share
 
     plex-desktop
+    telegram-desktop
   ];
 
-  services.logind.lidSwitch = "hybernate";
+  services.logind.settings.Login.HandleLidSwitch = "hybernate";
 
   environment.etc."brave/policies/managed/policies.json".text = builtins.toJSON {
     BraveRewardsDisabled = true;

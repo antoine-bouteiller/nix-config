@@ -9,49 +9,30 @@
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   options.desktop = {
-    enable = lib.mkEnableOption "KDE Plasma Desktop";
+    enable = lib.mkEnableOption "COSMIC Desktop";
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        kdePackages =
-          prev.kdePackages
-          // {
-            dolphin = prev.kdePackages.dolphin.overrideAttrs (old: {
-              postPatch =
-                (old.postPatch or "")
-                + ''
-                  substituteInPlace src/dolphinmainwindow.cpp \
-                    --replace-fail \
-                      'placesDock->setWidget(m_placesPanel);' \
-                      'placesDock->setWidget(m_placesPanel);
-                      placesDock->setContentsMargins(16, 0, 8, 0);'
-                '';
-            });
-          };
-      })
-    ];
+    services.displayManager.cosmic-greeter.enable = true;
+    services.desktopManager.cosmic.enable = true;
 
-    services.displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = "sphinx";
-    };
-    services.desktopManager.plasma6.enable = true;
+    environment.sessionVariables.NIXOS_OZONE_WL = 1;
+    environment.sessionVariables.COSMIC_DATA_CONTROL_ENABLED = 1;
 
-    programs.dconf.enable = true;
+    services.system76-scheduler.enable = true;
 
     environment.systemPackages = [
-      pkgs.whitesur-kde
-      customPkgs.we10x-gtk-theme
-      customPkgs.sphinx-sddm-theme
+      customPkgs.whitesur-icon-theme
+    ];
+
+    environment.cosmic.excludePackages = with pkgs; [
+      cosmic-edit
+      cosmic-term
+      cosmic-player
     ];
 
     fonts.packages = [
       pkgs.nerd-fonts.jetbrains-mono
     ];
-
-    fonts.fontconfig.defaultFonts.monospace = ["JetBrainsMono Nerd Font Mono"];
   };
 }

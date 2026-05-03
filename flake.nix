@@ -39,8 +39,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
@@ -87,8 +87,6 @@
         whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
           overlay = ./home-manager/themes/WhiteSur-icon-overlay;
         };
-        we10x-gtk-theme = pkgs.callPackage ./pkgs/we10x-gtk-theme.nix {};
-        sphinx-sddm-theme = pkgs.callPackage ./pkgs/sphinx-sddm-theme.nix {};
       }
       // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
         nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};

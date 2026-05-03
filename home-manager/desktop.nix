@@ -7,144 +7,148 @@
 }: let
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
-  imports = [inputs.plasma-manager.homeModules.plasma-manager];
+  imports = [inputs.cosmic-manager.homeManagerModules.cosmic-manager];
 
   config = lib.mkIf (osConfig.desktop.enable or false) {
-    programs.plasma = {
+    wayland.desktopManager.cosmic = {
       enable = true;
 
-      workspace = {
-        clickItemTo = "select";
-        theme = "WhiteSur-dark";
-        iconTheme = "WhiteSur";
-        windowDecorations = {
-          library = "org.kde.klassy";
-          theme = "Klassy";
-        };
-      };
-
-      fonts = {
-        general = {
-          family = "Inter";
-          pointSize = 11;
-        };
-        menu = {
-          family = "Inter";
-          pointSize = 11;
-        };
-        toolbar = {
-          family = "Inter";
-          pointSize = 11;
-        };
-      };
-
-      kwin = {
-        titlebarButtons.left = ["close" "minimize" "maximize"];
-        titlebarButtons.right = [];
-        effects.minimization.animation = "magiclamp";
-        effects.blur = {
-          enable = true;
-          strength = 10;
-          noiseStrength = 0;
+      applets.app-list = {
+        settings = {
+          favorites = [
+            "ghostty"
+            "brave-browser"
+            "zed"
+            "plex-desktop"
+            "telegram"
+          ];
         };
       };
 
       panels = [
         {
-          location = "top";
-          height = 28;
-          widgets = [
-            {
-              name = "org.kde.plasma.kicker";
-              config.General.icon = "nix-snowflake-white";
-            }
-            "org.kde.plasma.appmenu"
-            "org.kde.plasma.panelspacer"
-            "org.kde.plasma.digitalclock"
-            "org.kde.plasma.panelspacer"
-            "org.kde.plasma.systemtray"
-          ];
+          name = "Panel";
+          anchor = {
+            __type = "enum";
+            variant = "Top";
+          };
+          expand_to_edges = true;
+          anchor_gap = false;
+          margin = 0;
+          opacity = 0.8;
+          size = {
+            __type = "enum";
+            variant = "XS";
+          };
+          plugins_center = {
+            __type = "optional";
+            value = ["com.system76.CosmicAppletTime"];
+          };
+          plugins_wings = {
+            __type = "optional";
+            value = {
+              __type = "tuple";
+              value = [
+                [
+                  "com.system76.CosmicPanelWorkspacesButton"
+                  "com.system76.CosmicPanelAppButton"
+                ]
+                [
+                  "com.system76.CosmicAppletStatusArea"
+                  "com.system76.CosmicAppletAudio"
+                  "com.system76.CosmicAppletNetwork"
+                  "com.system76.CosmicAppletNotifications"
+                  "com.system76.CosmicAppletBattery"
+                  "com.system76.CosmicAppletPower"
+                ]
+              ];
+            };
+          };
         }
-        # Bottom Floating Dock
         {
-          location = "bottom";
-          alignment = "center";
-          floating = true;
-          hiding = "dodgewindows";
-          lengthMode = "fit";
-          height = 66;
-          widgets = [
-            "org.kde.plasma.icontasks" # Icons-only task manager
-          ];
+          name = "Dock";
+          anchor = {
+            __type = "enum";
+            variant = "Bottom";
+          };
+          expand_to_edges = false;
+          anchor_gap = true;
+          margin = 8;
+          opacity = 0.6;
+          size = {
+            __type = "enum";
+            variant = "M";
+          };
+          plugins_center = {
+            __type = "optional";
+            value = ["com.system76.CosmicAppList" "com.system76.CosmicAppletWorkspace"];
+          };
+          plugins_wings = {
+            __type = "optional";
+            value = {
+              __type = "tuple";
+              value = [[] []];
+            };
+          };
+          autohide = {
+            __type = "optional";
+            value = {
+              handle_size = 4;
+              transition_time = 200;
+              wait_time = 1000;
+            };
+          };
         }
       ];
 
-      configFile = {
-        "kdeglobals"."KDE"."widgetStyle" = "kvantum";
+      compositor.active_hint = false;
+
+      shortcuts = [
+        {
+          key = "Alt+Space";
+          action = {
+            __type = "enum";
+            variant = "System";
+            value = [
+              {
+                __type = "enum";
+                variant = "Launcher";
+              }
+            ];
+          };
+        }
+      ];
+
+      appearance.toolkit = {
+        monospace_font = {
+          family = "JetBrainsMono Nerd Font";
+          stretch = {
+            __type = "enum";
+            variant = "Normal";
+          };
+          style = {
+            __type = "enum";
+            variant = "Normal";
+          };
+          weight = {
+            __type = "enum";
+            variant = "Normal";
+          };
+        };
       };
     };
 
     gtk = {
       enable = true;
-      gtk3.theme = {
-        name = "We10X-Dark";
-        package = customPkgs.we10x-gtk-theme;
-      };
-      gtk4.theme = {
-        name = "We10X-Dark";
-        package = customPkgs.we10x-gtk-theme;
-      };
       gtk2.force = true;
       iconTheme = {
         name = "WhiteSur";
         package = customPkgs.whitesur-icon-theme;
       };
-      font = {
-        name = "Inter";
-        size = 11;
-      };
-    };
-
-    dconf.settings = {
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-      };
-    };
-
-    home.pointerCursor = {
-      name = "WhiteSur-cursors";
-      package = pkgs.whitesur-cursors;
-      size = 24;
-      gtk.enable = true;
-      x11.enable = true;
     };
 
     home.packages = [
-      pkgs.kdePackages.qtstyleplugin-kvantum
-      pkgs.klassy
-      pkgs.inter
       pkgs.nixos-icons
     ];
-
-    xdg = {
-      dataFile = {
-        "klassy/presets/whitesur.klpw".source = ./themes/whitesur.klpw;
-      };
-
-      configFile = {
-        "Kvantum/Fluent-roundDark".source = ./themes/Fluent-round;
-        "Kvantum/kvantum.kvconfig".text = ''
-          [General]
-          theme=Fluent-roundDark
-        '';
-      };
-    };
-
-    home.activation.applyKlassyPreset = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      run env QT_QPA_PLATFORM=offscreen ${pkgs.klassy}/bin/klassy-settings \
-        --import-preset "${./themes/whitesur.klpw}" -f || true
-      run env QT_QPA_PLATFORM=offscreen ${pkgs.klassy}/bin/klassy-settings \
-        --load-windeco-preset "WhiteSur" || true
-    '';
   };
 }
