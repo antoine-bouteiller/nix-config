@@ -70,6 +70,7 @@ in {
     secrets = {
       github_pat = {};
       gitlab_token = {};
+      ai_agent_hub = {};
       azure_openai_api_key = {};
       linear_token = {};
       "deskbird/refresh_token" = {};
@@ -99,18 +100,21 @@ in {
         linear = {
           type = "http";
           url = "https://mcp.linear.app/mcp";
-          disabled = false;
-        };
-        notion = {
-          type = "http";
-          url = "https://mcp.notion.com/mcp";
-          disabled = false;
+          disabled = true;
         };
         github = {
           type = "http";
           url = "https://api.githubcopilot.com/mcp";
           headers = {
             Authorization = "Bearer ${config.sops.placeholder.github_pat}";
+          };
+          disabled = false;
+        };
+        ai_agent_hub = {
+          type = "http";
+          url = "https://mcp-server.ai-service.pelico.best/mcp";
+          headers = {
+            Authorization = "Bearer ${config.sops.placeholder.ai_agent_hub}";
           };
           disabled = false;
         };

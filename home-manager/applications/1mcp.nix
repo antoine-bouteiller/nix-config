@@ -30,6 +30,7 @@ in {
             PATH = lib.makeBinPath [pkgs.nodejs_24 pkgs.coreutils pkgs.bash];
           };
           RunAtLoad = true;
+          WatchPaths = [cfg.configFile];
           StandardOutPath = "${homeDirectory}/Library/Logs/1mcp.log";
           StandardErrorPath = "${homeDirectory}/Library/Logs/1mcp.error.log";
         };
