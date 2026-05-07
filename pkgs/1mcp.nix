@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "1mcp";
-  version = "0.30.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "1mcp-app";
     repo = "agent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ndRHBsKs5HcbybpWwO7BoZAChtm2D9X3uTwxP6dr5OM=";
+    hash = "sha256-48Z/VLgQl5RoRhiOhXW98rtD+tX3Jd1Jc0aI6cIOUu8=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JNiLhojoJdpT5b3L0zj1hZLd1o/PjaeETuHnIaZmtH0=";
+    hash = "sha256-jLd1CO5Wbgq3NUuDHqFJEuxg3aJd1hRL6jkm9AVzLWw=";
     fetcherVersion = 3;
   };
 
