@@ -27,7 +27,6 @@ in {
     # Node.js development tools
     nodejs_24
     bun
-    pnpm
     customPkgs.vite-plus
 
     agent-browser

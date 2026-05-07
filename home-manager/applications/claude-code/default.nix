@@ -38,7 +38,7 @@
 
   skills = findSkills "";
 
-  topLevelFiles = ["CLAUDE.md" "settings.json" "hooks" "commands" "rules"];
+  topLevelFiles = ["CLAUDE.md" "settings.json" "hooks"];
 in {
   options.local.home-manager.claudeCode = {
     enable = lib.mkEnableOption "claude code";
