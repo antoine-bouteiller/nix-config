@@ -6,6 +6,7 @@
   pnpm,
   pnpmConfigHook,
   makeWrapper,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "1mcp";
@@ -47,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = ["--flake"];
+  };
 
   meta = {
     description = "One MCP server to aggregate them all";

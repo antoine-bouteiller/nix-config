@@ -8,6 +8,7 @@
   nodejs,
   pnpm_10,
   pnpmConfigHook,
+  writeShellScript,
 }: let
   sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
@@ -91,7 +92,11 @@ in
     dontStrip = true;
 
     passthru = {
-      updateScript = ./update.sh;
+      updateScript = writeShellScript "vite-plus-update" ''
+        set -e
+        cd "$PWD/pkgs/vite-plus"
+        exec ./update.sh
+      '';
     };
 
     meta = with lib; {

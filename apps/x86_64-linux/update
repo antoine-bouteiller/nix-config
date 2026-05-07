@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export NIX_PATH="nixpkgs=flake:nixpkgs"
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+system="$(basename "$script_dir")"
+
+echo "==> Updating flake lock file..."
+# nix flake update
+
+echo "==> Evaluating updatable packages (this may take a moment)..."
+
+json_data=$(nix eval --json --impure ".#packages.${system}" --apply '
+  pkgs:
+  let
+    toCmd = s:
+      if builtins.isList s then map toString s
+      else if (builtins.isAttrs s && (s.type or "") == "derivation")
+             || builtins.isPath s
+             || builtins.isString s then [(toString s)]
+      else if builtins.isAttrs s && s ? command then map toString s.command
+      else [];
+  in
+  builtins.listToAttrs (
+    map (n: {
+      name = n;
+      value = {
+        name = pkgs.${n}.name or "";
+        pname = pkgs.${n}.pname or "";
+        version = pkgs.${n}.version or "";
+        command = toCmd pkgs.${n}.updateScript;
+      };
+    })
+    (builtins.filter (n: pkgs.${n} ? updateScript) (builtins.attrNames pkgs))
+  )
+')
+
+failed=0
+
+for attr in $(echo "$json_data" | jq -r 'keys[]'); do
+  echo ""
+  echo "==> Updating $attr"
+
+  data=$(echo "$json_data" | jq -c ".\"$attr\"")
+
+  cmd_count=$(echo "$data" | jq '.command | length')
+  if [ "$cmd_count" = "0" ]; then
+    echo "    $attr: empty updateScript, skipping"
+    continue
+  fi
+
+  name=$(echo "$data" | jq -r '.name')
+  pname=$(echo "$data" | jq -r '.pname')
+  version=$(echo "$data" | jq -r '.version')
+
+  readarray -t cmd < <(echo "$data" | jq -r '.command[]')
+
+  exe="${cmd[0]}"
+  if [[ "$exe" == /nix/store/* ]] && [ ! -e "$exe" ]; then
+    store_path=$(echo "$exe" | cut -d/ -f1-4)
+    echo "    Realizing missing store path: $store_path"
+    nix-store --realise "$store_path" >/dev/null 2>&1 || true
+  fi
+
+  if UPDATE_NIX_ATTR_PATH="packages.${system}.${attr}" \
+     UPDATE_NIX_NAME="$name" \
+     UPDATE_NIX_PNAME="$pname" \
+     UPDATE_NIX_OLD_VERSION="$version" \
+     "${cmd[@]}"; then
+    echo "    $attr: ok"
+  else
+    echo "    $attr: failed (continuing)"
+    failed=1
+  fi
+done
+
+exit "$failed"

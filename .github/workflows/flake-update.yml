@@ -18,40 +18,21 @@ jobs:
           extra_nix_config: |
             extra-experimental-features = nix-command flakes
 
-      - name: Update flake.lock
-        run: nix flake update
-
-      - name: Update packages
+      - name: Update flake.lock and packages
         env:
           NIX_PATH: nixpkgs=flake:nixpkgs
-        run: |
-          nix run nixpkgs#nix-update -- --flake comment-checker
-          nix run nixpkgs#nix-update -- --flake rtk
-          nix run nixpkgs#nix-update -- --flake _1mcp
-          ./pkgs/vite-plus/update.sh
-
-      - name: Update Caddy Hash
-        run: |
-          PKG_FILE=./pkgs/caddy-crowdsec.nix
-          FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-          sed -i -E "s|hash = \"sha256-[A-Za-z0-9+/=]+\";|hash = \"$FAKE_HASH\";|" "$PKG_FILE"
-
-          OUTPUT=$(nix build .#nixosConfigurations.plex-server.config.services.caddy.package --no-link --impure 2>&1 || true)
-          NEW_HASH=$(echo "$OUTPUT" | grep -oE 'sha256-[A-Za-z0-9+/=]{44}' | grep -v "$FAKE_HASH" | tail -1 || true)
-
-          echo "$OUTPUT"
-
-          if [ -z "$NEW_HASH" ]; then
-            echo "Failed to extract new hash."
-            exit 1
-          fi
-
-          echo "New Caddy hash: $NEW_HASH"
-          sed -i -E "s|hash = \"$FAKE_HASH\";|hash = \"$NEW_HASH\";|" "$PKG_FILE"
+        run: nix run --impure .#updateScripts
 
       - name: Verify hosts build
         run: |
-          nix build .#nixosConfigurations.plex-server.config.system.build.toplevel --dry-run --impure
+          set -e
+          system=x86_64-linux
+          hosts=$(nix eval --json --impure ".#checks.$system" --apply 'builtins.attrNames' | jq -r '.[]')
+          for host in $hosts; do
+            echo "::group::Verifying $host"
+            nix build ".#checks.$system.$host" --dry-run --impure
+            echo "::endgroup::"
+          done
 
       - name: Commit and push
         run: |
@@ -59,6 +40,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "chore(deps): auto-update flake.lock, packages, and caddy hash"
+            git commit -m "chore(deps): auto-update flake.lock and packages"
             git push
           fi

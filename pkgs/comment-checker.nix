@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "comment-checker";
@@ -18,4 +19,8 @@ buildGoModule rec {
   proxyVendor = true;
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = ["--flake"];
+  };
 }

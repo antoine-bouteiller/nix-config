@@ -4,6 +4,7 @@
   rustPlatform,
   makeWrapper,
   jq,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rtk";
@@ -32,6 +33,10 @@ rustPlatform.buildRustPackage rec {
         --prefix PATH : ${lib.makeBinPath [jq]}:$out/bin
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = ["--flake"];
+  };
 
   meta = with lib; {
     description = "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands";

@@ -60,11 +60,13 @@
     allSystems = linuxSystems ++ darwinSystems;
     forAllSystems = f: nixpkgs.lib.genAttrs allSystems f;
 
-    mkApp = scriptName: system: {
+    mkApp = scriptName: system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
       type = "app";
-      program = "${(nixpkgs.legacyPackages.${system}.writeScriptBin scriptName ''
+      program = "${(pkgs.writeScriptBin scriptName ''
         #!/usr/bin/env bash
-        PATH=${nixpkgs.legacyPackages.${system}.git}/bin:$PATH
+        PATH=${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
         echo "Running ${scriptName} for ${system}"
         exec ${self}/apps/${system}/${scriptName}
       '')}/bin/${scriptName}";
@@ -72,6 +74,7 @@
     mkApps = system: {
       "apply" = mkApp "apply" system;
       "clean" = mkApp "clean" system;
+      "update" = mkApp "update" system;
     };
   in {
     apps = nixpkgs.lib.genAttrs allSystems mkApps;
@@ -90,6 +93,7 @@
       }
       // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
         nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
+        caddy-crowdsec = pkgs.callPackage ./pkgs/caddy-crowdsec.nix {};
       });
 
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
