@@ -45,6 +45,7 @@
 
       # Browsers
       "brave-browser"
+      "helium-browser"
 
       # Utility Tools
       "unnaturalscrollwheels"
