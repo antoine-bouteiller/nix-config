@@ -50,9 +50,7 @@
       "WebSearch"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/.claude"
-    ]
+    "additionalDirectories": ["~/.claude"]
   },
   "hooks": {
     "PreToolUse": [
