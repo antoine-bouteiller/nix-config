@@ -92,6 +92,8 @@
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
     "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true,
     "pua-unicode@dotfiles-plugins": true
   },
   "extraKnownMarketplaces": {
