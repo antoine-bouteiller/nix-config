@@ -2,6 +2,7 @@
   imports = [
     ./base.nix
     ../modules/desktop.nix
+    ../modules/gaming.nix
   ];
 
   networking = {

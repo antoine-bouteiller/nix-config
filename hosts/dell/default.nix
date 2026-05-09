@@ -15,6 +15,7 @@ in {
   flakePath = "/home/${user}/nix-config";
 
   desktop.enable = true;
+  gaming.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {
