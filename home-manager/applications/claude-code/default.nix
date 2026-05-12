@@ -39,15 +39,31 @@
   skills = findSkills "";
 
   topLevelFiles = ["CLAUDE.md" "settings.json" "hooks" "commands" "rules"];
+
+  claudePackage = customPkgs.claude-code.override {
+    inherit (cfg) mcpConfigFile;
+  };
 in {
   options.local.home-manager.claudeCode = {
     enable = lib.mkEnableOption "claude code";
+
+    package = claudePackage;
+
+    mcpConfigFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to an MCP servers JSON config file. When set, the wrapped
+        `claude` binary is invoked with `--mcp-config <path>` on every call.
+        The custom package also disables Claude Code's auto-installer so
+        it cannot shadow this binary from `~/.local/bin`.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = [
-      pkgs.claude-code
-
+      claudePackage
       # Utils
       customPkgs.comment-checker
       customPkgs.rtk

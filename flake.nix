@@ -80,16 +80,26 @@
     apps = nixpkgs.lib.genAttrs allSystems mkApps;
 
     packages = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      claudeCodeVersions = ./pkgs/claude-code/versions;
+      claudeCodeLatest = let
+        inherit (nixpkgs.lib) attrNames filterAttrs hasSuffix removeSuffix last;
+        files = attrNames (filterAttrs (n: t: t == "regular" && hasSuffix ".json" n) (builtins.readDir claudeCodeVersions));
+        sorted = builtins.sort (a: b: builtins.compareVersions a b < 0) (map (removeSuffix ".json") files);
+      in
+        claudeCodeVersions + "/${last sorted}.json";
     in
       {
         comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
         rtk = pkgs.callPackage ./pkgs/rtk.nix {};
         vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
-        _1mcp = pkgs.callPackage ./pkgs/1mcp.nix {};
         whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
           overlay = ./home-manager/themes/WhiteSur-icon-overlay;
         };
+        claude-code = pkgs.callPackage ./pkgs/claude-code {sourcesFile = claudeCodeLatest;};
       }
       // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
         nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};

@@ -15,12 +15,11 @@ in {
   local.home-manager = {
     ghostty.enable = true;
     zed.enable = true;
-    claudeCode.enable = true;
-    tmux.enable = true;
-    oneMcp = {
+    claudeCode = {
       enable = true;
-      configFile = config.sops.templates."1mcp-config".path;
+      mcpConfigFile = config.sops.templates."claude-mcp-config".path;
     };
+    tmux.enable = true;
   };
 
   home = {
@@ -77,46 +76,17 @@ in {
       "deskbird/google_api_key" = {};
     };
 
-    templates."1mcp-config".content = builtins.toJSON {
+    templates."claude-mcp-config".content = builtins.toJSON {
       mcpServers = {
-        context7 = {
-          type = "stdio";
-          disabled = false;
-          command = "npx";
-          args = ["-y" "@upstash/context7-mcp"];
-        };
-        devtools = {
-          type = "stdio";
-          disabled = false;
-          command = "npx";
-          args = [
-            "-y"
-            "chrome-devtools-mcp@latest"
-            "--no-usage-statistics"
-            "-e"
-            "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
-          ];
-        };
-        linear = {
-          type = "http";
-          url = "https://mcp.linear.app/mcp";
-          disabled = true;
-        };
         github = {
           type = "http";
           url = "https://api.githubcopilot.com/mcp";
-          headers = {
-            Authorization = "Bearer ${config.sops.placeholder.github_pat}";
-          };
-          disabled = false;
+          headers.Authorization = "Bearer ${config.sops.placeholder.github_pat}";
         };
         ai_agent_hub = {
           type = "http";
           url = "https://mcp-server.ai-service.pelico.best/mcp";
-          headers = {
-            Authorization = "Bearer ${config.sops.placeholder.ai_agent_hub}";
-          };
-          disabled = false;
+          headers.Authorization = "Bearer ${config.sops.placeholder.ai_agent_hub}";
         };
       };
     };
