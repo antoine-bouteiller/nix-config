@@ -1,6 +1,6 @@
 {...}: {
   imports = [
-    ./caddy.nix
+    ./caddy
     ./crowdsec.nix
     ./authelia.nix
     ./postgres.nix

@@ -7,6 +7,12 @@ in {
     port = constants.immich.port;
     mediaLocation = "${constants.paths.mediaDir}/immich";
 
+    # Trust Caddy on loopback so request.ip / failed-login logs carry the
+    # real client IP via X-Forwarded-For — required for the CrowdSec
+    # gauth-fr/immich-bf brute-force scenario to ban actual attackers
+    # instead of the reverse proxy.
+    environment.IMMICH_TRUSTED_PROXIES = "127.0.0.1,::1";
+
     database = {
       enable = true;
       createDB = false;

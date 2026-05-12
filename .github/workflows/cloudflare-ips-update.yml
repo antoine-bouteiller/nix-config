@@ -1,0 +1,45 @@
+name: Update Cloudflare IP lists
+
+on:
+  schedule:
+    - cron: "30 4 * * *" # Daily at 04:30 UTC
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Update Cloudflare IP lists
+        run: bash ./hosts/plex-server/media/caddy/update-cloudflare-ips.sh
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if git diff --quiet -- hosts/plex-server/media/caddy/cloudflare-ips-v4.txt hosts/plex-server/media/caddy/cloudflare-ips-v6.txt; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add hosts/plex-server/media/caddy/cloudflare-ips-v4.txt hosts/plex-server/media/caddy/cloudflare-ips-v6.txt
+          git commit -m "chore(caddy): update cloudflare IP lists"
+          git push
+
+      - name: Notify via Telegram
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -sf -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=Cloudflare IPs changed — plex-server rebuild needed (or wait for the next weekly flake-update)."

@@ -4,14 +4,11 @@
   pkgs,
   ...
 }: let
-  constants = import ./constants.nix;
-  cloudflareIpsV4File = builtins.fetchurl {
-    url = "https://www.cloudflare.com/ips-v4";
-    sha256 = "sha256-8Cxtg7wBqwroV3Fg4DbXAMdFU1m84FTfiE5dfZ5Onns=";
-  };
-  cloudflareIps =
+  constants = import ../constants.nix;
+  readIps = file:
     builtins.filter (s: s != "")
-    (lib.splitString "\n" (builtins.readFile cloudflareIpsV4File));
+    (lib.splitString "\n" (builtins.readFile file));
+  cloudflareIps = readIps ./cloudflare-ips-v4.txt ++ readIps ./cloudflare-ips-v6.txt;
   trustedProxies = builtins.concatStringsSep " " cloudflareIps;
 in {
   sops.secrets."crowdsec/caddy-bouncer" = {};
@@ -36,7 +33,7 @@ in {
   services.caddy = {
     enable = true;
 
-    package = pkgs.callPackage ../../../pkgs/caddy-crowdsec.nix {};
+    package = pkgs.callPackage ../../../../pkgs/caddy-crowdsec {};
 
     globalConfig = ''
       order crowdsec first
