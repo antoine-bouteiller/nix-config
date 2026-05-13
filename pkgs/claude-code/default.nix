@@ -4,6 +4,11 @@
   fetchurl,
   makeWrapper,
   autoPatchelfHook,
+  writeShellApplication,
+  bash,
+  curl,
+  jq,
+  nix,
   zlib,
   additionalPaths ? [],
   disableTelemetry ? false,
@@ -89,7 +94,19 @@ in
     '';
 
     passthru = {
-      updateScript = ./update.ts;
+      updateScript = lib.getExe (writeShellApplication {
+        name = "update-claude-code";
+        runtimeInputs = [bash curl jq nix];
+        text = ''
+          for candidate in "$PWD/pkgs/claude-code" "$PWD"; do
+            if [ -f "$candidate/update.sh" ] && [ -d "$candidate/versions" ]; then
+              exec bash "$candidate/update.sh"
+            fi
+          done
+          echo "Could not locate pkgs/claude-code source directory (cwd: $PWD)" >&2
+          exit 1
+        '';
+      });
     };
 
     meta = with lib; {
