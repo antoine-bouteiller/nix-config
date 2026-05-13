@@ -23,7 +23,6 @@
       cleanup = "uninstall";
       upgrade = true;
     };
-    enableZshIntegration = true;
     global = {
       autoUpdate = true;
     };

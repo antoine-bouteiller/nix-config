@@ -13,7 +13,6 @@ in {
   ];
 
   local.home-manager = {
-    ghostty.enable = true;
     zed.enable = true;
     claudeCode = {
       enable = true;
