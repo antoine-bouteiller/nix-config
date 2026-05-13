@@ -82,6 +82,7 @@ in {
     taps = builtins.attrNames config.nix-homebrew.taps;
     casks = [
       "tailscale-app"
+      "cmux"
     ];
   };
 
@@ -121,7 +122,7 @@ in {
 
         persistent-apps = [
           "/Applications/Slack.app/"
-          "/Applications/Ghostty.app/"
+          "/Applications/Cmux.app/"
           "/Applications/Brave Browser.app/"
           "/Applications/Zed.app/"
           "/Applications/Telegram.app/"
