@@ -78,6 +78,7 @@ in {
     "gc!" = "git commit -v --amend";
     gca = "git commit -v -a";
     "gca!" = "git commit -v -a --amend";
+    "gcan!" = "git commit -v -a --no-edit --amend";
     gcam = "git commit -a -m";
     "gcam!" = "git commit -a --amend";
     gcmsg = "git commit -m";
