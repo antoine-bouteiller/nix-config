@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  osConfig,
-  ...
-}: {
+{osConfig, ...}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -12,27 +7,13 @@
     historySubstringSearch.enable = true;
 
     history = {
-      size = 50000;
-      save = 50000;
+      size = 10000;
+      save = 10000;
       ignoreDups = true;
       ignoreAllDups = true;
       ignoreSpace = true;
       extended = true;
       share = true;
-      path = "$HOME/.zsh_history";
-    };
-
-    oh-my-zsh = {
-      enable = true;
-      plugins =
-        [
-          "git"
-          "sudo"
-          "dirhistory"
-          "colorize"
-          "extract"
-        ]
-        ++ lib.optionals pkgs.stdenv.isDarwin ["brew"];
     };
 
     shellAliases = {
@@ -59,7 +40,6 @@
       export XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
       export XDG_DATA_HOME=''${XDG_DATA_HOME:-$HOME/.local/share}
       export XDG_CACHE_HOME=''${XDG_CACHE_HOME:-$HOME/.cache}
-      export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
       typeset -gU path fpath
     '';
 
@@ -77,9 +57,6 @@
         /usr/local/{,s}bin(N)
         $path
       )
-
-      # Emacs keybindings
-      bindkey -e
 
       # Completion styles
       zstyle ':completion:*' menu select

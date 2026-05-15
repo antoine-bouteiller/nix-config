@@ -1,7 +1,21 @@
-{lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  starshipInit = pkgs.runCommand "starship-init.zsh" {} ''
+    ${pkgs.starship}/bin/starship init zsh --print-full-init > $out
+  '';
+in {
+  programs.zsh.initContent = ''
+    if [[ $TERM != "dumb" ]]; then
+      source ${starshipInit}
+    fi
+  '';
+
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
+    enableZshIntegration = false;
     settings = {
       format = lib.concatStrings [
         "[╭](fg:current_line)"

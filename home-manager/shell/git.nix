@@ -64,4 +64,40 @@ in {
       user.signingkey = signingKeyPath;
     };
   };
+
+  programs.zsh.shellAliases = {
+    # --- The Basics ---
+    g = "git";
+    gst = "git status";
+    gd = "git diff";
+    ga = "git add";
+    gaa = "git add --all";
+
+    # --- Commits (The 'gc' family) ---
+    gc = "git commit -v";
+    "gc!" = "git commit -v --amend";
+    gca = "git commit -v -a";
+    "gca!" = "git commit -v -a --amend";
+    gcam = "git commit -a -m";
+    "gcam!" = "git commit -a --amend";
+    gcmsg = "git commit -m";
+
+    # --- Branches & Checkout ---
+    gb = "git branch";
+    gco = "git checkout";
+    gcb = "git checkout -b";
+
+    # --- Push & Pull ---
+    gp = "git push";
+    gpf = "git push --force-with-lease";
+    "gpf!" = "git push --force";
+    gl = "git pull";
+    gpr = "git pull --rebase";
+    gpra = "git pull --rebase --autostash";
+
+    # --- Logs ---
+    glo = "git log --oneline --decorate";
+    glg = "git log --stat";
+    glog = "git log --oneline --decorate --graph";
+  };
 }

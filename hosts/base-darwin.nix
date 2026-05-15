@@ -18,6 +18,7 @@
 
   homebrew = {
     enable = true;
+    enableZshIntegration = false;
     onActivation = {
       autoUpdate = true;
       cleanup = "uninstall";
@@ -48,7 +49,6 @@
 
       # Utility Tools
       "unnaturalscrollwheels"
-      "rectangle"
       "caffeine"
 
       "spotify"

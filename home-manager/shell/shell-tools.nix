@@ -1,24 +1,41 @@
-{...}: {
+{pkgs, ...}: let
+  zoxideInit = pkgs.runCommand "zoxide-init.zsh" {} ''
+    ${pkgs.zoxide}/bin/zoxide init zsh --cmd cd > $out
+  '';
+  direnvInit = pkgs.runCommand "direnv-init.zsh" {} ''
+    ${pkgs.direnv}/bin/direnv hook zsh > $out
+  '';
+  carapaceInit = pkgs.runCommand "carapace-init.zsh" {} ''
+    ${pkgs.carapace}/bin/carapace _carapace zsh > $out
+  '';
+in {
   programs = {
     zoxide = {
       enable = true;
+      enableZshIntegration = false;
       options = ["--cmd" "cd"];
     };
 
     carapace = {
       enable = true;
-      enableZshIntegration = true;
+      enableZshIntegration = false;
     };
 
     direnv = {
       enable = true;
-      enableZshIntegration = true;
+      enableZshIntegration = false;
     };
+
+    zsh.envExtra = ''
+      export CARAPACE_BRIDGES='zsh,bash'
+    '';
 
     zsh.initContent = ''
       if [[ -o interactive ]]; then
-        eval "$(zoxide init zsh --cmd cd)"
+        source ${zoxideInit}
       fi
+      source ${direnvInit}
+      source ${carapaceInit}
     '';
   };
 }

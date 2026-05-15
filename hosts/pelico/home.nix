@@ -2,13 +2,11 @@
   globals,
   pkgs,
   config,
-  inputs,
   ...
 }: let
   inherit (config.home) homeDirectory;
 in {
   imports = [
-    inputs.sops-nix.homeManagerModules.sops
     ../../home-manager
   ];
 
@@ -57,35 +55,6 @@ in {
   home.file.".npmrc".text = ''
     @pelico:registry=http://nexus.pelico.best/repository/npm/
     prefix=${homeDirectory}/.npm-packages
-  '';
-
-  sops = {
-    defaultSopsFile = ./secrets/secrets.yaml;
-    defaultSopsFormat = "yaml";
-    age.keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
-
-    secrets = {
-      gitlab_token = {};
-      azure_openai_api_key = {};
-      linear_token = {};
-      "deskbird/refresh_token" = {};
-      "deskbird/google_api_key" = {};
-    };
-
-    templates."secrets.env" = {
-      content = ''
-        export GITLAB_TOKEN=${config.sops.placeholder.gitlab_token}
-        export AZURE_OPENAI_API_KEY=${config.sops.placeholder.azure_openai_api_key}
-        export LINEAR_TOKEN=${config.sops.placeholder.linear_token}
-        export DESKBIRD_REFRESH_TOKEN=${config.sops.placeholder."deskbird/refresh_token"}
-        export DESKBIRD_GOOGLE_API_KEY=${config.sops.placeholder."deskbird/google_api_key"}
-      '';
-    };
-  };
-
-  programs.zsh.envExtra = ''
-    # Source sops-nix decrypted secrets
-    [[ -f "${config.sops.templates."secrets.env".path}" ]] && source "${config.sops.templates."secrets.env".path}"
   '';
 
   manual.manpages.enable = false;

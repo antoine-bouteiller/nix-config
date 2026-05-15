@@ -33,6 +33,7 @@ in {
     agent-browser
     gh
     glab
+    envchain
 
     # Java
     jdk25_headless
@@ -50,6 +51,7 @@ in {
   nix-homebrew = {
     inherit user;
     enable = true;
+    enableZshIntegration = false;
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
