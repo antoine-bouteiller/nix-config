@@ -85,8 +85,22 @@ in {
 
     # --- Branches & Checkout ---
     gb = "git branch";
+    gbd = "git branch -d";
+    gbD = "git branch -D";
     gco = "git checkout";
     gcb = "git checkout -b";
+
+    # --- Fetch & Rebase ---
+    gf = "git fetch";
+    grb = "git rebase";
+    grba = "git rebase --abort";
+    grbc = "git rebase --continue";
+    grbi = "git rebase -i";
+
+    # --- Cherry-pick ---
+    gcp = "git cherry-pick";
+    gcpa = "git cherry-pick --abort";
+    gcpc = "git cherry-pick --continue";
 
     # --- Push & Pull ---
     gp = "git push";
@@ -96,9 +110,10 @@ in {
     gpr = "git pull --rebase";
     gpra = "git pull --rebase --autostash";
 
-    # --- Logs ---
+    # --- Logs & Show ---
     glo = "git log --oneline --decorate";
     glg = "git log --stat";
     glog = "git log --oneline --decorate --graph";
+    gsh = "git show";
   };
 }
