@@ -6,12 +6,12 @@
       options = ["--cmd" "cd"];
     };
 
-    fzf = {
+    carapace = {
       enable = true;
       enableZshIntegration = true;
     };
 
-    carapace = {
+    direnv = {
       enable = true;
       enableZshIntegration = true;
     };
