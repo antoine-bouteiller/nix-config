@@ -2,7 +2,6 @@
   programs = {
     zoxide = {
       enable = true;
-      enableZshIntegration = true;
       options = ["--cmd" "cd"];
     };
 
@@ -15,5 +14,11 @@
       enable = true;
       enableZshIntegration = true;
     };
+
+    zsh.initContent = ''
+      if [[ -o interactive ]]; then
+        eval "$(zoxide init zsh --cmd cd)"
+      fi
+    '';
   };
 }
