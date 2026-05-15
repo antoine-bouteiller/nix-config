@@ -29,11 +29,13 @@ in {
     bun
     customPkgs.vite-plus
 
+    # CLI
     agent-browser
+    gh
+    glab
 
     # Java
     jdk25_headless
-    glab
 
     # Python
     (python313.withPackages (ps:
