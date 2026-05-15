@@ -57,9 +57,12 @@ for attr in $(echo "$json_data" | jq -r 'keys[]'); do
 
   exe="${cmd[0]}"
   if [[ "$exe" == /nix/store/* ]] && [ ! -e "$exe" ]; then
-    store_path=$(echo "$exe" | cut -d/ -f1-4)
-    echo "    Realizing missing store path: $store_path"
-    nix-store --realise "$store_path" >/dev/null 2>&1 || true
+    echo "    Building updateScript for $attr"
+    if ! nix build --no-link --impure ".#packages.${system}.${attr}.updateScript"; then
+      echo "    $attr: failed to build updateScript"
+      failed=1
+      continue
+    fi
   fi
 
   if UPDATE_NIX_ATTR_PATH="packages.${system}.${attr}" \
