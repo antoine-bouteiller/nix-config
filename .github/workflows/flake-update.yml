@@ -21,7 +21,7 @@ jobs:
       - name: Update flake.lock and packages
         env:
           NIX_PATH: nixpkgs=flake:nixpkgs
-        run: nix run --impure .#updateScripts
+        run: nix run --impure .#update
 
       - name: Verify hosts build
         run: |
