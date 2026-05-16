@@ -1,7 +1,8 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
+  nix-update,
+  writeShellScript,
 }:
 buildGoModule rec {
   pname = "comment-checker";
@@ -20,7 +21,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = ["--flake"];
-  };
+  passthru.updateScript = writeShellScript "${pname}-update" ''
+    exec ${nix-update}/bin/nix-update --flake
+  '';
 }

@@ -4,7 +4,8 @@
   rustPlatform,
   makeWrapper,
   jq,
-  nix-update-script,
+  nix-update,
+  writeShellScript,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rtk";
@@ -34,9 +35,9 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = ["--flake"];
-  };
+  passthru.updateScript = writeShellScript "${pname}-update" ''
+    exec ${nix-update}/bin/nix-update --flake
+  '';
 
   meta = with lib; {
     description = "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands";
