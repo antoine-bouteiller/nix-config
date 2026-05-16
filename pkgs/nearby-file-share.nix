@@ -10,7 +10,8 @@
   qrencode,
   sdbus-cpp_2,
   systemd,
-  nix-update-script,
+  nix-update,
+  writeShellScript,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nearby-file-share";
@@ -59,9 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = ["--flake"];
-  };
+  passthru.updateScript = writeShellScript "${finalAttrs.pname}-update" ''
+    exec ${nix-update}/bin/nix-update --flake \
+      --version=unstable \
+      --version-regex 'v(\d+\.\d+-beta-\d+)'
+  '';
 
   meta = {
     description = "Linux implementation of Google Nearby Connections, Nearby Presence, Fast Pair, and Quick Share";

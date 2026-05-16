@@ -4,7 +4,7 @@
   fetchurl,
   makeWrapper,
   autoPatchelfHook,
-  writeShellApplication,
+  writeShellScript,
   bash,
   curl,
   jq,
@@ -13,9 +13,8 @@
   additionalPaths ? [],
   disableTelemetry ? false,
   mcpConfigFile ? null,
-  sourcesFile,
 }: let
-  sourcesData = lib.importJSON sourcesFile;
+  sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
   sources = sourcesData.platforms;
 
@@ -94,19 +93,16 @@ in
     '';
 
     passthru = {
-      updateScript = lib.getExe (writeShellApplication {
-        name = "update-claude-code";
-        runtimeInputs = [bash curl jq nix];
-        text = ''
-          for candidate in "$PWD/pkgs/claude-code" "$PWD"; do
-            if [ -f "$candidate/update.sh" ] && [ -d "$candidate/versions" ]; then
-              exec bash "$candidate/update.sh"
-            fi
-          done
-          echo "Could not locate pkgs/claude-code source directory (cwd: $PWD)" >&2
-          exit 1
-        '';
-      });
+      updateScript = writeShellScript "claude-code-update" ''
+        export PATH="${lib.makeBinPath [bash curl jq nix]}:$PATH"
+        for candidate in "$PWD/pkgs/claude-code" "$PWD"; do
+          if [ -f "$candidate/update.sh" ] && [ -f "$candidate/sources.json" ]; then
+            exec bash "$candidate/update.sh"
+          fi
+        done
+        echo "Could not locate pkgs/claude-code source directory (cwd: $PWD)" >&2
+        exit 1
+      '';
     };
 
     meta = with lib; {

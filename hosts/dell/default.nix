@@ -41,6 +41,7 @@ in {
 
     plex-desktop
     telegram-desktop
+    caffeine-ng
   ];
 
   services.logind.settings.Login.HandleLidSwitch = "hybernate";
