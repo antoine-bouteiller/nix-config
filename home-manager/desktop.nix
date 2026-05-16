@@ -117,6 +117,19 @@ in {
             ];
           };
         }
+        {
+          key = "Ctrl+Shift+L";
+          action = {
+            __type = "enum";
+            variant = "System";
+            value = [
+              {
+                __type = "enum";
+                variant = "LockScreen";
+              }
+            ];
+          };
+        }
       ];
 
       appearance.toolkit = {
