@@ -15,11 +15,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nearby-file-share";
-  version = "0.1-beta-2";
+  version = "0.1-beta-3";
 
   src = fetchurl {
     url = "https://github.com/kidfromjupiter/nearby/releases/download/v${finalAttrs.version}/nearby-file-share-linux-x86_64.tar.gz";
-    hash = "sha256-Cd9VPNS90bxTEIF4ZdfJzJ8VSrGVvEeARr9Wgzq+/Ks=";
+    hash = "sha256-/yjPz0GGkxHlQyvymxfM7jiiC8ZL9KXGQc1jEXsNIDU=";
   };
 
   sourceRoot = ".";
