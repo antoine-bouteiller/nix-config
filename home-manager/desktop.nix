@@ -102,6 +102,30 @@ in {
       ];
 
       compositor.active_hint = false;
+      compositor.input_touchpad.scroll_config = {
+        __type = "optional";
+        value = {
+          method = {
+            __type = "optional";
+            value = {
+              __type = "enum";
+              variant = "Edge";
+            };
+          };
+          natural_scroll = {
+            __type = "optional";
+            value = false;
+          };
+          scroll_button = {
+            __type = "optional";
+            value = 2;
+          };
+          scroll_factor = {
+            __type = "optional";
+            value = 1.0;
+          };
+        };
+      };
 
       shortcuts = [
         {
