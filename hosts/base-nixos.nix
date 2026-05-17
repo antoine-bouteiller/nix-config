@@ -26,7 +26,10 @@
   '';
 
   boot.loader = {
-    systemd-boot.enable = lib.mkDefault true;
+    systemd-boot = {
+      enable = lib.mkDefault true;
+      consoleMode = "max";
+    };
     efi.canTouchEfiVariables = lib.mkDefault true;
   };
 
@@ -36,6 +39,7 @@
   };
 
   programs.zsh.enable = true;
+  programs.nix-ld.enable = true;
 
   i18n.defaultLocale = "en_GB.UTF-8";
   console.keyMap = "fr";

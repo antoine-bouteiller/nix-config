@@ -43,6 +43,7 @@ in {
     ];
     lfs = {
       enable = true;
+      skipSmudge = true;
     };
     settings = {
       user = {
