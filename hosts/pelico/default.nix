@@ -31,6 +31,7 @@ in {
 
     # CLI
     agent-browser
+    customPkgs.sonarqube-cli
     gh
     glab
     envchain

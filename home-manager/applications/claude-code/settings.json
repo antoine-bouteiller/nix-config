@@ -93,6 +93,7 @@
     "claude-mem@thedotmack": true,
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
+    "sonarqube@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true,
     "pua-unicode@dotfiles-plugins": true
   },
@@ -111,5 +112,10 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skillOverrides": {
+    "claude-api": "off",
+    "review": "off",
+    "simplify": "off"
+  }
 }

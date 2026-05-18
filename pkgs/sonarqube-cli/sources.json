@@ -1,0 +1,17 @@
+{
+  "version": "0.12.0.1512",
+  "platforms": {
+    "aarch64-darwin": {
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.12.0.1512/macos/sonarqube-cli-0.12.0.1512-macos-arm64.exe",
+      "hash": "sha256-oI1bS4Xkp7MIUj1Dc0y00T2dKJCmUHOf2kyXrWgVkq4="
+    },
+    "x86_64-linux": {
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.12.0.1512/linux/sonarqube-cli-0.12.0.1512-linux-x86-64.exe",
+      "hash": "sha256-RAgrOlntu1utafSEfI3s662yKx3YDs3u4vvx4pLsOz8="
+    },
+    "aarch64-linux": {
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.12.0.1512/linux/sonarqube-cli-0.12.0.1512-linux-arm64.exe",
+      "hash": "sha256-0pUnkokyWnE2XBSDOds4dDmfM/xloE4r3D4+MBAmG5M="
+    }
+  }
+}
