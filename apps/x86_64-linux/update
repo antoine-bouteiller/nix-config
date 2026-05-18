@@ -6,7 +6,7 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 system="$(basename "$script_dir")"
 
 echo "==> Updating flake lock file..."
-# nix flake update
+nix flake update
 
 echo "==> Evaluating updatable packages (this may take a moment)..."
 
