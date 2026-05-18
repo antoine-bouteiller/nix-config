@@ -62,11 +62,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [
+    home.packages = with pkgs; [
       claudePackage
       # Utils
       customPkgs.comment-checker
-      customPkgs.rtk
+      rtk
     ];
 
     home.activation.cleanClaudeSkillsSymlink = lib.hm.dag.entryBefore ["writeBoundary"] ''
