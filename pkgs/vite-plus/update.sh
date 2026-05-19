@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq pnpm_10
+#!nix-shell -i bash -p curl jq pnpm_11
 set -euo pipefail
 
 NPM_REGISTRY="https://registry.npmjs.org"
@@ -63,6 +63,7 @@ in pkgs.fetchPnpmDeps {
   src = $npm_dir;
   hash = "";
   fetcherVersion = 3;
+  pnpm = pkgs.pnpm_11;
 }
 NIXEOF
 

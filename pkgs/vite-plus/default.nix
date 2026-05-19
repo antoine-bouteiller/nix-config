@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   makeWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   writeShellScript,
 }: let
@@ -32,7 +32,7 @@ in
       [
         makeWrapper
         nodejs
-        pnpm_10
+        pnpm_11
         pnpmConfigHook
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -49,6 +49,7 @@ in
       src = ./npm;
       inherit (sourcesData) hash;
       fetcherVersion = 3;
+      pnpm = pnpm_11;
     };
 
     buildPhase = ''
