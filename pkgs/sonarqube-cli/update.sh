@@ -12,9 +12,9 @@ declare -A PLATFORMS=(
 )
 
 current_version=$(jq -r '.version' "$SCRIPT_DIR/sources.json")
-latest_version=$(curl -sf "$BASE_URL/latest-version.txt" | tr -d '[:space:]')
+latest_version=$(curl -sf "https://api.github.com/repos/SonarSource/sonarqube-cli/releases/latest" | jq -r '.tag_name')
 
-if [[ -z "$latest_version" ]]; then
+if [[ -z "$latest_version" || "$latest_version" == "null" ]]; then
   echo "ERROR: could not determine the latest version." >&2
   exit 1
 fi
