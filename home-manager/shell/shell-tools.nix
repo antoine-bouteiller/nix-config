@@ -8,6 +8,9 @@
   carapaceInit = pkgs.runCommand "carapace-init.zsh" {} ''
     ${pkgs.carapace}/bin/carapace _carapace zsh > $out
   '';
+  miseInit = pkgs.runCommand "mise-init.zsh" {} ''
+    ${pkgs.mise}/bin/mise activate zsh > $out
+  '';
 in {
   programs = {
     zoxide = {
@@ -26,6 +29,11 @@ in {
       enableZshIntegration = false;
     };
 
+    mise = {
+      enable = true;
+      enableZshIntegration = false;
+    };
+
     zsh.envExtra = ''
       export CARAPACE_BRIDGES='zsh,bash'
     '';
@@ -36,6 +44,7 @@ in {
       fi
       source ${direnvInit}
       source ${carapaceInit}
+      source ${miseInit}
     '';
   };
 }

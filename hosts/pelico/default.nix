@@ -24,9 +24,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    # Node.js development tools
-    nodejs_24
-    bun
+    # tools
     customPkgs.vite-plus
 
     # CLI
@@ -35,18 +33,6 @@ in {
     gh
     glab
     envchain
-
-    # Java
-    jdk25_headless
-
-    # Python
-    (python313.withPackages (ps:
-      with ps; [
-        black
-        ruff
-        isort
-      ]))
-    uv
   ];
 
   nix-homebrew = {
