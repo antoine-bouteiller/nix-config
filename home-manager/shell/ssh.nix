@@ -5,10 +5,10 @@
     includes = [
       "${config.home.homeDirectory}/.ssh/config_external"
     ];
-    matchBlocks = {
+    settings = {
       "*" = {
-        sendEnv = ["LANG" "LC_*"];
-        hashKnownHosts = true;
+        SendEnv = ["LANG" "LC_*"];
+        HashKnownHosts = true;
       };
     };
   };
