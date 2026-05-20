@@ -1,9 +1,8 @@
 {
   "name": "vp-wrapper",
-  "version": "0.1.21",
-  "packageManager": "pnpm@11.1.1",
+  "version": "0.1.22",
   "private": true,
   "dependencies": {
-    "vite-plus": "0.1.21"
+    "vite-plus": "0.1.22"
   }
 }
