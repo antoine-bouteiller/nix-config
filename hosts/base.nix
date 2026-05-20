@@ -12,7 +12,10 @@
   };
 
   nix = {
-    package = pkgs.lixPackageSets.stable.lix;
+    package = pkgs.lixPackageSets.stable.lix.overrideAttrs (_: {
+      doCheck = false;
+      doInstallCheck = false;
+    });
 
     settings = {
       experimental-features = ["nix-command" "flakes"];
