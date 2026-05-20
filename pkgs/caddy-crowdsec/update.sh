@@ -7,19 +7,16 @@ GITHUB_REPO="hslatman/caddy-crowdsec-bouncer"
 FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 current_version=$(jq -r '.version' "$SCRIPT_DIR/sources.json")
+current_hash=$(jq -r '.hash' "$SCRIPT_DIR/sources.json")
 latest_version=$(curl -sf "https://api.github.com/repos/$GITHUB_REPO/releases/latest" \
   | jq -r '.tag_name' | sed 's/^v//')
 
 echo "Current version: $current_version"
 echo "Latest version:  $latest_version"
 
-if [[ "$current_version" == "$latest_version" ]]; then
-  echo "Already up to date."
-  exit 0
-fi
-
-echo "Updating caddy-crowdsec from $current_version to $latest_version"
-
+# Always recompute the hash: caddy.withPlugins is a FOD whose contents depend on
+# the nixpkgs caddy version, so the hash can drift even when the plugin version
+# is unchanged.
 jq --arg v "$latest_version" --arg h "$FAKE_HASH" \
   '.version = $v | .hash = $h' "$SCRIPT_DIR/sources.json" > "$SCRIPT_DIR/sources.json.tmp"
 mv "$SCRIPT_DIR/sources.json.tmp" "$SCRIPT_DIR/sources.json"
@@ -32,12 +29,18 @@ echo "$OUTPUT"
 
 if [[ -z "$NEW_HASH" ]]; then
   echo "ERROR: Failed to extract new hash" >&2
+  # Restore previous sources.json so a failed run doesn't leave FAKE_HASH committed.
+  jq --arg v "$current_version" --arg h "$current_hash" \
+    '.version = $v | .hash = $h' "$SCRIPT_DIR/sources.json" > "$SCRIPT_DIR/sources.json.tmp"
+  mv "$SCRIPT_DIR/sources.json.tmp" "$SCRIPT_DIR/sources.json"
   exit 1
 fi
-
-echo "  new hash: $NEW_HASH"
 
 jq --arg h "$NEW_HASH" '.hash = $h' "$SCRIPT_DIR/sources.json" > "$SCRIPT_DIR/sources.json.tmp"
 mv "$SCRIPT_DIR/sources.json.tmp" "$SCRIPT_DIR/sources.json"
 
-echo "Updated caddy-crowdsec to version $latest_version"
+if [[ "$current_version" == "$latest_version" && "$current_hash" == "$NEW_HASH" ]]; then
+  echo "caddy-crowdsec $latest_version already up to date (hash unchanged)"
+else
+  echo "Updated caddy-crowdsec to version $latest_version (hash: $NEW_HASH)"
+fi
