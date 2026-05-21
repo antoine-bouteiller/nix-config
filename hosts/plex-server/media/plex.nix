@@ -1,20 +1,10 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
 in {
   services.plex = {
     enable = true;
     dataDir = constants.plex.dataDir;
-  };
-
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "plex.${constants.network.domain}";
-    port = constants.plex.port;
-    extraProxyConfig = ''
-      header_up Host {host}
-      header_up X-Real-IP {remote_host}
-      header_up X-Forwarded-For {remote_host}
-      header_up X-Forwarded-Proto {scheme}'';
+    openFirewall = true;
   };
 
   systemd.tmpfiles.rules = [

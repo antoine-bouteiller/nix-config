@@ -1,6 +1,6 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   sops.secrets = {
     "homepage/sonarr_api_key" = {
@@ -31,14 +31,6 @@ in {
       key = "immich_api_key";
       owner = "homepage-dashboard";
     };
-    "homepage/crowdsec_username" = {
-      key = "crowdsec/username";
-      owner = "homepage-dashboard";
-    };
-    "homepage/crowdsec_password" = {
-      key = "crowdsec/password";
-      owner = "homepage-dashboard";
-    };
   };
 
   users.users.homepage-dashboard = {
@@ -49,7 +41,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = "dashboard.${constants.network.domain}";
+    allowedHosts = "dashboard.${constants.network.internalDomain}";
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -116,7 +108,7 @@ in {
           {
             Plex = {
               icon = "plex.svg";
-              href = "https://plex.${constants.network.domain}";
+              href = "https://app.plex.tv";
               widget = {
                 type = "plex";
                 url = "http://localhost:${toString constants.plex.port}";
@@ -154,7 +146,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = "https://sonarr.${constants.network.domain}";
+              href = "https://sonarr.${constants.network.internalDomain}";
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString constants.sonarr.port}";
@@ -166,7 +158,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = "https://radarr.${constants.network.domain}";
+              href = "https://radarr.${constants.network.internalDomain}";
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString constants.radarr.port}";
@@ -178,7 +170,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = "https://prowlarr.${constants.network.domain}";
+              href = "https://prowlarr.${constants.network.internalDomain}";
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString constants.prowlarr.port}";
@@ -190,7 +182,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = "https://bazarr.${constants.network.domain}";
+              href = "https://bazarr.${constants.network.internalDomain}";
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString constants.bazarr.port}";
@@ -205,32 +197,11 @@ in {
           {
             Transmission = {
               icon = "transmission.svg";
-              href = "https://torrent.${constants.network.domain}";
+              href = "https://torrent.${constants.network.internalDomain}";
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString constants.transmission.port}";
                 fields = ["download" "upload"];
-              };
-            };
-          }
-          {
-            Crowdsec = {
-              icon = "crowdsec.svg";
-              href = "https://app.crowdsec.net";
-              widget = {
-                type = "crowdsec";
-                url = "http://localhost:${toString constants.crowdsec.port}";
-                username = "{{HOMEPAGE_FILE_CROWDSEC_USERNAME}}";
-                password = "{{HOMEPAGE_FILE_CROWDSEC_PASSWORD}}";
-              };
-            };
-          }
-          {
-            Caddy = {
-              icon = "caddy.svg";
-              widget = {
-                type = "caddy";
-                url = "http://localhost:${toString constants.caddy.port}";
               };
             };
           }
@@ -268,13 +239,10 @@ in {
     HOMEPAGE_FILE_BAZARR_API_KEY = config.sops.secrets."homepage/bazarr_api_key".path;
     HOMEPAGE_FILE_IMMICH_API_KEY = config.sops.secrets."homepage/immich_api_key".path;
     HOMEPAGE_FILE_SEERR_API_KEY = config.sops.secrets."homepage/seerr_api_key".path;
-    HOMEPAGE_FILE_CROWDSEC_USERNAME = config.sops.secrets."homepage/crowdsec_username".path;
-    HOMEPAGE_FILE_CROWDSEC_PASSWORD = config.sops.secrets."homepage/crowdsec_password".path;
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "dashboard.${constants.network.domain}";
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "dashboard";
     port = constants.homepage.port;
-    auth = true;
   };
 }

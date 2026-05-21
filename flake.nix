@@ -97,7 +97,6 @@
       }
       // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
         nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
-        caddy-crowdsec = pkgs.callPackage ./pkgs/caddy-crowdsec {};
       });
 
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);

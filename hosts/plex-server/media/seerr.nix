@@ -1,15 +1,16 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.seerr = {
     enable = true;
     configDir = constants.seerr.dataDir;
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = constants.network.domain;
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "";
     port = constants.seerr.port;
+    public = true;
   };
 
   systemd.services.seerr = {
