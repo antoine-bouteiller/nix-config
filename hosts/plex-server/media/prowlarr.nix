@@ -1,6 +1,5 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.prowlarr = {
     enable = true;
@@ -21,10 +20,5 @@ in {
   systemd.services.prowlarr = {
     after = ["pgbouncer.service"];
     requires = ["pgbouncer.service"];
-  };
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "prowlarr";
-    port = constants.prowlarr.port;
   };
 }

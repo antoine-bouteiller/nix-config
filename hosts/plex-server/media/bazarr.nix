@@ -1,6 +1,5 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.bazarr = {
     enable = true;
@@ -18,11 +17,6 @@ in {
       POSTGRES_DATABASE = "bazarr";
       POSTGRES_USERNAME = "bazarr";
     };
-  };
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "bazarr";
-    port = constants.bazarr.port;
   };
 
   users.users.bazarr.isSystemUser = true;

@@ -1,6 +1,5 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
   downloadDir = "${constants.paths.mediaDir}/torrents";
 in {
   services.transmission = {
@@ -21,7 +20,7 @@ in {
       watch-dir = "${downloadDir}/.watch";
 
       rpc-port = constants.transmission.port;
-      rpc-bind-address = "127.0.0.1";
+      rpc-bind-address = "0.0.0.0";
       rpc-host-whitelist-enabled = false;
 
       ratio-limit-enabled = true;
@@ -44,9 +43,4 @@ in {
     "d '${downloadDir}/.incomplete' 0755 ${constants.transmission.user} ${constants.transmission.group} - -"
     "d '${downloadDir}/.watch'      0755 ${constants.transmission.user} ${constants.transmission.group} - -"
   ];
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "torrent";
-    port = constants.transmission.port;
-  };
 }

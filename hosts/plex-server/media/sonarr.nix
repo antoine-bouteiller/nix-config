@@ -1,6 +1,5 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.sonarr = {
     enable = true;
@@ -18,11 +17,6 @@ in {
         logDb = "sonarr-log";
       };
     };
-  };
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "sonarr";
-    port = constants.sonarr.port;
   };
 
   systemd.services.sonarr = {

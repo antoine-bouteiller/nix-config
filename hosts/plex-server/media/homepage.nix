@@ -1,6 +1,9 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
+  # Internal services are reached over the Cloudflare WARP mesh directly,
+  # not through the tunnel, so their hrefs use the raw service port and
+  # rely on Zero Trust internal DNS to resolve the hostname → WARP IP.
+  internalUrl = name: port: "http://${name}.${constants.network.internalDomain}:${toString port}";
 in {
   sops.secrets = {
     "homepage/sonarr_api_key" = {
@@ -41,7 +44,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = "dashboard.${constants.network.internalDomain}";
+    allowedHosts = "dashboard.${constants.network.internalDomain}:${toString constants.homepage.port}";
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -146,7 +149,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = "https://sonarr.${constants.network.internalDomain}";
+              href = internalUrl "sonarr" constants.sonarr.port;
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString constants.sonarr.port}";
@@ -158,7 +161,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = "https://radarr.${constants.network.internalDomain}";
+              href = internalUrl "radarr" constants.radarr.port;
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString constants.radarr.port}";
@@ -170,7 +173,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = "https://prowlarr.${constants.network.internalDomain}";
+              href = internalUrl "prowlarr" constants.prowlarr.port;
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString constants.prowlarr.port}";
@@ -182,7 +185,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = "https://bazarr.${constants.network.internalDomain}";
+              href = internalUrl "bazarr" constants.bazarr.port;
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString constants.bazarr.port}";
@@ -197,7 +200,7 @@ in {
           {
             Transmission = {
               icon = "transmission.svg";
-              href = "https://torrent.${constants.network.internalDomain}";
+              href = internalUrl "torrent" constants.transmission.port;
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString constants.transmission.port}";
@@ -239,10 +242,5 @@ in {
     HOMEPAGE_FILE_BAZARR_API_KEY = config.sops.secrets."homepage/bazarr_api_key".path;
     HOMEPAGE_FILE_IMMICH_API_KEY = config.sops.secrets."homepage/immich_api_key".path;
     HOMEPAGE_FILE_SEERR_API_KEY = config.sops.secrets."homepage/seerr_api_key".path;
-  };
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "dashboard";
-    port = constants.homepage.port;
   };
 }
