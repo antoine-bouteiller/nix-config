@@ -7,7 +7,7 @@ in {
     user = constants.transmission.user;
     group = constants.transmission.group;
     openRPCPort = false;
-    openPeerPorts = true;
+    openPeerPorts = false;
     webHome = pkgs.flood-for-transmission;
 
     settings = {

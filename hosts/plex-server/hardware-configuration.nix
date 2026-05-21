@@ -56,7 +56,17 @@ in {
     }
   ];
 
-  networking.firewall.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      constants.ssh.port
+      constants.plex.port
+    ];
+    allowedUDPPorts = [
+      constants.cloudflareWarp.udpPort
+    ];
+    trustedInterfaces = ["CloudflareWARP"];
+  };
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.disable_ipv6" = 1;

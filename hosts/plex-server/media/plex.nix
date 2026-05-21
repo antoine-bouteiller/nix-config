@@ -4,7 +4,6 @@ in {
   services.plex = {
     enable = true;
     dataDir = constants.plex.dataDir;
-    openFirewall = true;
   };
 
   systemd.tmpfiles.rules = [

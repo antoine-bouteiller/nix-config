@@ -6,6 +6,7 @@
   ...
 }: let
   user = "antoineb";
+  constants = import ./media/constants.nix;
 in {
   imports = [
     ../base-nixos.nix
@@ -17,8 +18,7 @@ in {
 
   services.openssh = {
     enable = true;
-    ports = [22];
-    openFirewall = true;
+    ports = [constants.ssh.port];
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
