@@ -1,6 +1,5 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.radarr = {
     enable = true;
@@ -18,11 +17,6 @@ in {
         logDb = "radarr-log";
       };
     };
-  };
-
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "radarr";
-    port = constants.radarr.port;
   };
 
   systemd.services.radarr = {

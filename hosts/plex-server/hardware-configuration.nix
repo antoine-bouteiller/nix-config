@@ -56,14 +56,7 @@ in {
     }
   ];
 
-  # Networking
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      22 # SSH
-      32400 # Plex (router NATs an external random port → this)
-    ];
-  };
+  networking.firewall.enable = true;
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.disable_ipv6" = 1;

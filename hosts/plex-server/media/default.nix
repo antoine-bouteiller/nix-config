@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./cloudflared.nix
+    ./cloudflare-warp.nix
     ./postgres.nix
     ./plex.nix
     ./seerr.nix

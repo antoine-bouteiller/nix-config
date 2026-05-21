@@ -24,7 +24,6 @@ in {
   services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
     name = "photo";
     port = constants.immich.port;
-    public = true;
   };
 
   systemd.services.immich-machine-learning = {

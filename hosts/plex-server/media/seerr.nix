@@ -10,7 +10,6 @@ in {
   services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
     name = "";
     port = constants.seerr.port;
-    public = true;
   };
 
   systemd.services.seerr = {
