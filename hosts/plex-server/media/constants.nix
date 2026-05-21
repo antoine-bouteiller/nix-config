@@ -34,7 +34,9 @@
   # The cloudflared tunnel UUID (printed by `cloudflared tunnel create`).
   # The matching credentials JSON is stored in sops as
   # `cloudflared/credentials` and rendered at /run/secrets/.
-  cloudflared.tunnelId = "REPLACE_WITH_TUNNEL_UUID";
+  cloudflared.tunnelId = "8bf26bb6-b100-4e7f-9016-2d74c6deb378";
+
+  cloudflareWarp.udpPort = 2408;
 
   coolercontrol.port = 11987;
 
@@ -85,6 +87,8 @@
     group = "media";
     dataDir = "/var/lib/sonarr";
   };
+
+  ssh.port = 22;
 
   transmission = {
     port = 9092;
