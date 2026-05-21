@@ -1,16 +1,14 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.immich = {
     enable = true;
     port = constants.immich.port;
     mediaLocation = "${constants.paths.mediaDir}/immich";
 
-    # Trust Caddy on loopback so request.ip / failed-login logs carry the
-    # real client IP via X-Forwarded-For — required for the CrowdSec
-    # gauth-fr/immich-bf brute-force scenario to ban actual attackers
-    # instead of the reverse proxy.
+    # cloudflared on loopback forwards real client IPs via X-Forwarded-For;
+    # trust the loopback hop so logs / brute-force counters see actual IPs.
     environment.IMMICH_TRUSTED_PROXIES = "127.0.0.1,::1";
 
     database = {
@@ -23,9 +21,10 @@ in {
     };
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "photo.${constants.network.domain}";
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "photo";
     port = constants.immich.port;
+    public = true;
   };
 
   systemd.services.immich-machine-learning = {

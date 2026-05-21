@@ -1,5 +1,11 @@
 {
-  network.domain = "antoinebouteiller.fr";
+  network = {
+    domain = "antoinebouteiller.fr";
+    # Hostnames under this zone are not in public DNS — they're routed
+    # through the Cloudflare Tunnel as Zero Trust private resources and
+    # only resolve for devices enrolled in WARP.
+    internalDomain = "internal.antoinebouteiller.fr";
+  };
 
   paths = {
     app = "/var/lib";
@@ -9,12 +15,6 @@
   libraryOwner = {
     user = "root";
     group = "media";
-  };
-
-  authelia = {
-    port = 9091;
-    dataDir = "/var/lib/authelia-main";
-    user = "authelia-main";
   };
 
   autoscan = {
@@ -31,19 +31,12 @@
     dataDir = "/var/lib/bazarr";
   };
 
-  caddy = {
-    user = "caddy";
-    group = "caddy";
-    logDir = "/var/log/caddy";
-    port = 2019;
-  };
+  # The cloudflared tunnel UUID (printed by `cloudflared tunnel create`).
+  # The matching credentials JSON is stored in sops as
+  # `cloudflared/credentials` and rendered at /run/secrets/.
+  cloudflared.tunnelId = "REPLACE_WITH_TUNNEL_UUID";
 
   coolercontrol.port = 11987;
-
-  crowdsec = {
-    port = 8080;
-    appsecPort = 7422;
-  };
 
   byparr.port = 8191;
 

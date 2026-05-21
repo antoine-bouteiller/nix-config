@@ -61,8 +61,7 @@ in {
     enable = true;
     allowedTCPPorts = [
       22 # SSH
-      80 # HTTP (Caddy)
-      443 # HTTPS (Caddy)
+      32400 # Plex (router NATs an external random port → this)
     ];
   };
 

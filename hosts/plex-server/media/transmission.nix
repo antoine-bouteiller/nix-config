@@ -1,6 +1,6 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
   downloadDir = "${constants.paths.mediaDir}/torrents";
 in {
   services.transmission = {
@@ -45,9 +45,8 @@ in {
     "d '${downloadDir}/.watch'      0755 ${constants.transmission.user} ${constants.transmission.group} - -"
   ];
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "torrent.${constants.network.domain}";
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "torrent";
     port = constants.transmission.port;
-    auth = true;
   };
 }

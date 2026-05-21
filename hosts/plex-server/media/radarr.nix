@@ -1,6 +1,6 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.radarr = {
     enable = true;
@@ -20,11 +20,9 @@ in {
     };
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "radarr.${constants.network.domain}";
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "radarr";
     port = constants.radarr.port;
-    auth = true;
-    extraProxyConfig = "header_down -Access-Control-Allow-Origin";
   };
 
   systemd.services.radarr = {

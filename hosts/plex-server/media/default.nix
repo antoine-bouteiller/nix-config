@@ -1,8 +1,6 @@
 {...}: {
   imports = [
-    ./caddy
-    ./crowdsec.nix
-    ./authelia.nix
+    ./cloudflared.nix
     ./postgres.nix
     ./plex.nix
     ./seerr.nix

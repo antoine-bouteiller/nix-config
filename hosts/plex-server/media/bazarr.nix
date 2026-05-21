@@ -1,6 +1,6 @@
 {...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
+  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.bazarr = {
     enable = true;
@@ -20,10 +20,9 @@ in {
     };
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "bazarr.${constants.network.domain}";
+  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
+    name = "bazarr";
     port = constants.bazarr.port;
-    auth = true;
   };
 
   users.users.bazarr.isSystemUser = true;
