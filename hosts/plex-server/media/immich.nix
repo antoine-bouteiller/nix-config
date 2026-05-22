@@ -1,10 +1,9 @@
-{...}: let
+{config, ...}: let
   constants = import ./constants.nix;
   inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.immich = {
     enable = true;
-    port = constants.immich.port;
     mediaLocation = "${constants.paths.mediaDir}/immich";
 
     # cloudflared on loopback forwards real client IPs via X-Forwarded-For;
@@ -23,7 +22,7 @@ in {
 
   services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
     name = "photo";
-    port = constants.immich.port;
+    port = config.services.immich.port;
   };
 
   systemd.services.immich-machine-learning = {

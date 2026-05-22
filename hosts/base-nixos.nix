@@ -14,10 +14,11 @@
       enable = true;
       dns = "none";
     };
-    resolvconf.enable = false;
     hosts = {
       "192.168.1.254" = ["mabbox.bytel.fr"];
     };
+    nftables.enable = true;
+    firewall.enable = true;
   };
 
   environment.etc."resolv.conf".text = ''

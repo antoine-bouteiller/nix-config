@@ -19,7 +19,7 @@ in {
       watch-dir-enabled = true;
       watch-dir = "${downloadDir}/.watch";
 
-      rpc-port = constants.transmission.port;
+      rpc-port = 9092;
       rpc-bind-address = "0.0.0.0";
       rpc-host-whitelist-enabled = false;
 
@@ -31,7 +31,7 @@ in {
       encryption = 1;
       port-forwarding-enabled = false;
 
-      peer-port = constants.transmission.peerPort;
+      peer-port = 51413;
 
       anti-brute-force-enabled = true;
       anti-brute-force-threshold = 10;

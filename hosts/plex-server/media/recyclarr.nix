@@ -23,7 +23,7 @@ in {
     configuration = {
       sonarr = {
         sonarr = {
-          base_url = "http://localhost:${toString constants.sonarr.port}";
+          base_url = "http://localhost:${toString config.services.sonarr.settings.server.port}";
           api_key = {
             _secret = config.sops.secrets."recyclarr/sonarr_api_key".path;
           };
@@ -71,7 +71,7 @@ in {
 
       radarr = {
         radarr = {
-          base_url = "http://localhost:${toString constants.radarr.port}";
+          base_url = "http://localhost:${toString config.services.radarr.settings.server.port}";
           api_key = {
             _secret = config.sops.secrets."recyclarr/radarr_api_key".path;
           };

@@ -4,15 +4,15 @@ in {
   services.autoscan = {
     enable = true;
     dataDir = constants.autoscan.dataDir;
-    port = constants.autoscan.port;
+    port = 3030;
     group = constants.libraryOwner.group;
 
     settings = {
       plexUrl = "http://localhost:${toString constants.plex.port}";
       domain = constants.network.domain;
       tmdbApiUrl = "https://api.themoviedb.org/3";
-      sonarrApiUrl = "http://localhost:${toString constants.sonarr.port}";
-      radarrApiUrl = "http://localhost:${toString constants.radarr.port}";
+      sonarrApiUrl = "http://localhost:${toString config.services.sonarr.settings.server.port}";
+      radarrApiUrl = "http://localhost:${toString config.services.radarr.settings.server.port}";
       transcodePath = "${constants.paths.mediaDir}/transcode";
       postgres = {
         host = "/run/pgbouncer";
