@@ -1,9 +1,9 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  # Internal services are reached over the Cloudflare WARP mesh directly,
-  # not through the tunnel, so their hrefs use the raw service port and
-  # rely on Zero Trust internal DNS to resolve the hostname → WARP IP.
-  internalUrl = name: port: "http://${name}.${constants.network.internalDomain}:${toString port}";
+  # Internal services are reached over Tailscale and resolved by AdGuard Home.
+  localUrl = name: port: "http://${name}.${constants.network.localDomain}:${toString port}";
+  plexUrl = "${localUrl "plex" constants.plex.port}/web";
+  adguardUrl = localUrl "adguard" config.services.adguardhome.port;
 in {
   sops.secrets = {
     "homepage/sonarr_api_key" = {
@@ -44,7 +44,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = "dashboard.${constants.network.internalDomain}:${toString constants.homepage.port}";
+    allowedHosts = "dashboard.${constants.network.localDomain}:${toString constants.homepage.port}";
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -111,7 +111,7 @@ in {
           {
             Plex = {
               icon = "plex.svg";
-              href = "https://app.plex.tv";
+              href = plexUrl;
               widget = {
                 type = "plex";
                 url = "http://localhost:${toString constants.plex.port}";
@@ -149,7 +149,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = internalUrl "sonarr" constants.sonarr.port;
+              href = localUrl "sonarr" constants.sonarr.port;
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString constants.sonarr.port}";
@@ -161,7 +161,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = internalUrl "radarr" constants.radarr.port;
+              href = localUrl "radarr" constants.radarr.port;
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString constants.radarr.port}";
@@ -173,7 +173,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = internalUrl "prowlarr" constants.prowlarr.port;
+              href = localUrl "prowlarr" constants.prowlarr.port;
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString constants.prowlarr.port}";
@@ -185,7 +185,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = internalUrl "bazarr" constants.bazarr.port;
+              href = localUrl "bazarr" constants.bazarr.port;
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString constants.bazarr.port}";
@@ -198,9 +198,15 @@ in {
       {
         Infrastructure = [
           {
+            AdGuard = {
+              icon = "adguard-home.svg";
+              href = adguardUrl;
+            };
+          }
+          {
             Transmission = {
               icon = "transmission.svg";
-              href = internalUrl "torrent" constants.transmission.port;
+              href = localUrl "transmission" constants.transmission.port;
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString constants.transmission.port}";

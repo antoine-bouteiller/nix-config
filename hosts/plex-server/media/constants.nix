@@ -1,6 +1,7 @@
 {
   network = {
     domain = "antoinebouteiller.fr";
+    localDomain = "home";
     # Hostnames under this zone are not in public DNS — they're routed
     # through the Cloudflare Tunnel as Zero Trust private resources and
     # only resolve for devices enrolled in WARP.
@@ -96,4 +97,15 @@
     user = "transmission";
     group = "media";
   };
+
+  localDnsServices = [
+    "adguard"
+    "dashboard"
+    "plex"
+    "sonarr"
+    "radarr"
+    "prowlarr"
+    "bazarr"
+    "transmission"
+  ];
 }
