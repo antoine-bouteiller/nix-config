@@ -1,7 +1,6 @@
 {...}: {
   imports = [
     ./cloudflared.nix
-    ./cloudflare-warp.nix
     ./tailscale.nix
     ./local-services.nix
     ./adguard.nix
