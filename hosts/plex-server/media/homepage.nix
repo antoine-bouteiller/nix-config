@@ -1,7 +1,8 @@
 {config, ...}: let
   constants = import ./constants.nix;
+  localServices = config.local.media.localServices;
 in {
-  local.adguard.localDnsServices = ["dashboard"];
+  local.media.localServices.dashboard.localDns.enable = true;
 
   sops.secrets = {
     "homepage/sonarr_api_key" = {
@@ -42,7 +43,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = "dashboard.${constants.network.localDomain}:${toString config.services.homepage-dashboard.listenPort}";
+    allowedHosts = "${localServices.dashboard.localDomain}:${toString config.services.homepage-dashboard.listenPort}";
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -109,7 +110,7 @@ in {
           {
             Plex = {
               icon = "plex.svg";
-              href = "http://plex.${constants.network.localDomain}";
+              href = "http://${localServices.plex.localDomain}";
               widget = {
                 type = "plex";
                 url = "http://localhost:${toString constants.plex.port}";
@@ -147,7 +148,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = "http://sonarr.${constants.network.localDomain}";
+              href = "http://${localServices.sonarr.localDomain}";
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString config.services.sonarr.settings.server.port}";
@@ -159,7 +160,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = "http://radarr.${constants.network.localDomain}";
+              href = "http://${localServices.radarr.localDomain}";
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString config.services.radarr.settings.server.port}";
@@ -171,7 +172,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = "http://prowlarr.${constants.network.localDomain}";
+              href = "http://${localServices.prowlarr.localDomain}";
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
@@ -183,7 +184,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = "http://bazarr.${constants.network.localDomain}";
+              href = "http://${localServices.bazarr.localDomain}";
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString config.services.bazarr.listenPort}";
@@ -198,13 +199,13 @@ in {
           {
             AdGuard = {
               icon = "adguard-home.svg";
-              href = "http://adguard.${constants.network.localDomain}";
+              href = "http://${localServices.adguard.localDomain}";
             };
           }
           {
             Transmission = {
               icon = "transmission.svg";
-              href = "http://transmission.${constants.network.localDomain}";
+              href = "http://${localServices.transmission.localDomain}";
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString config.services.transmission.settings.rpc-port}";

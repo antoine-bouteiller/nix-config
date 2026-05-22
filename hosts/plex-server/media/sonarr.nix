@@ -1,7 +1,7 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
 in {
-  local.adguard.localDnsServices = ["sonarr"];
+  local.media.localServices.sonarr.localDns.enable = true;
 
   services.sonarr = {
     enable = true;

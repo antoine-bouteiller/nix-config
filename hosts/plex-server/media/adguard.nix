@@ -4,21 +4,15 @@
   pkgs,
   ...
 }: let
-  constants = import ./constants.nix;
   python = pkgs.python3.withPackages (ps: [ps.pyyaml]);
   localDomains =
-    map
-    (service: "${service}.${constants.network.localDomain}")
-    (lib.unique config.local.adguard.localDnsServices);
+    lib.unique
+    (map
+      (service: service.localDomain)
+      (lib.attrValues (lib.filterAttrs (_: service: service.localDns.enable) config.local.media.localServices)));
 in {
-  options.local.adguard.localDnsServices = lib.mkOption {
-    type = lib.types.listOf lib.types.str;
-    default = [];
-    description = "Local service names to publish under the .${constants.network.localDomain} DNS zone.";
-  };
-
   config = {
-    local.adguard.localDnsServices = ["adguard"];
+    local.media.localServices.adguard.localDns.enable = true;
 
     services.adguardhome = {
       enable = true;
