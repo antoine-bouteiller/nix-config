@@ -1,18 +1,8 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  # Internal services are reached over Tailscale and resolved by AdGuard Home.
-  localUrl = name: port: "http://${name}.${constants.network.localDomain}:${toString port}";
-  plexUrl = "${localUrl "plex" constants.plex.port}/web";
-  plexWidgetUrl = "http://localhost:${toString constants.plex.port}";
-  adguardUrl = localUrl "adguard" config.services.adguardhome.port;
-  immichUrl = "http://localhost:${toString config.services.immich.port}";
-  seerrUrl = "http://localhost:${toString config.services.seerr.port}";
-  sonarrUrl = "http://localhost:${toString config.services.sonarr.settings.server.port}";
-  radarrUrl = "http://localhost:${toString config.services.radarr.settings.server.port}";
-  prowlarrUrl = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
-  bazarrUrl = "http://localhost:${toString config.services.bazarr.listenPort}";
-  transmissionUrl = "http://localhost:${toString config.services.transmission.settings.rpc-port}";
 in {
+  local.adguard.localDnsServices = ["dashboard"];
+
   sops.secrets = {
     "homepage/sonarr_api_key" = {
       key = "sonarr_api_key";
@@ -119,10 +109,10 @@ in {
           {
             Plex = {
               icon = "plex.svg";
-              href = plexUrl;
+              href = "http://plex.${constants.network.localDomain}";
               widget = {
                 type = "plex";
-                url = plexWidgetUrl;
+                url = "http://localhost:${toString constants.plex.port}";
                 key = "{{HOMEPAGE_FILE_PLEX_TOKEN}}";
               };
             };
@@ -133,7 +123,7 @@ in {
               href = "https://photo.${constants.network.domain}";
               widget = {
                 type = "immich";
-                url = immichUrl;
+                url = "http://localhost:${toString config.services.immich.port}";
                 key = "{{HOMEPAGE_FILE_IMMICH_API_KEY}}";
                 version = 2;
               };
@@ -149,7 +139,7 @@ in {
               href = "https://${constants.network.domain}";
               widget = {
                 type = "seerr";
-                url = seerrUrl;
+                url = "http://localhost:${toString config.services.seerr.port}";
                 key = "{{HOMEPAGE_FILE_SEERR_API_KEY}}";
               };
             };
@@ -157,10 +147,10 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = localUrl "sonarr" config.services.sonarr.settings.server.port;
+              href = "http://sonarr.${constants.network.localDomain}";
               widget = {
                 type = "sonarr";
-                url = sonarrUrl;
+                url = "http://localhost:${toString config.services.sonarr.settings.server.port}";
                 key = "{{HOMEPAGE_FILE_SONARR_API_KEY}}";
                 fields = ["wanted"];
               };
@@ -169,10 +159,10 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = localUrl "radarr" config.services.radarr.settings.server.port;
+              href = "http://radarr.${constants.network.localDomain}";
               widget = {
                 type = "radarr";
-                url = radarrUrl;
+                url = "http://localhost:${toString config.services.radarr.settings.server.port}";
                 key = "{{HOMEPAGE_FILE_RADARR_API_KEY}}";
                 fields = ["wanted"];
               };
@@ -181,10 +171,10 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = localUrl "prowlarr" config.services.prowlarr.settings.server.port;
+              href = "http://prowlarr.${constants.network.localDomain}";
               widget = {
                 type = "prowlarr";
-                url = prowlarrUrl;
+                url = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
                 key = "{{HOMEPAGE_FILE_PROWLARR_API_KEY}}";
                 fields = ["numberOfFailGrabs" "numberOfFailQueries"];
               };
@@ -193,10 +183,10 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = localUrl "bazarr" config.services.bazarr.listenPort;
+              href = "http://bazarr.${constants.network.localDomain}";
               widget = {
                 type = "bazarr";
-                url = bazarrUrl;
+                url = "http://localhost:${toString config.services.bazarr.listenPort}";
                 key = "{{HOMEPAGE_FILE_BAZARR_API_KEY}}";
               };
             };
@@ -208,16 +198,16 @@ in {
           {
             AdGuard = {
               icon = "adguard-home.svg";
-              href = adguardUrl;
+              href = "http://adguard.${constants.network.localDomain}";
             };
           }
           {
             Transmission = {
               icon = "transmission.svg";
-              href = localUrl "transmission" config.services.transmission.settings.rpc-port;
+              href = "http://transmission.${constants.network.localDomain}";
               widget = {
                 type = "transmission";
-                url = transmissionUrl;
+                url = "http://localhost:${toString config.services.transmission.settings.rpc-port}";
                 fields = ["download" "upload"];
               };
             };

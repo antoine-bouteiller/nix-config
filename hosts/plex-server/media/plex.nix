@@ -1,6 +1,8 @@
 {...}: let
   constants = import ./constants.nix;
 in {
+  local.adguard.localDnsServices = ["plex"];
+
   services.plex = {
     enable = true;
     openFirewall = true;

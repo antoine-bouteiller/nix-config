@@ -1,6 +1,8 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
 in {
+  local.adguard.localDnsServices = ["radarr"];
+
   services.radarr = {
     enable = true;
     dataDir = constants.radarr.dataDir;

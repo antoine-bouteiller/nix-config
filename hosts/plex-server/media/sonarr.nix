@@ -1,6 +1,8 @@
 {pkgs, ...}: let
   constants = import ./constants.nix;
 in {
+  local.adguard.localDnsServices = ["sonarr"];
+
   services.sonarr = {
     enable = true;
     dataDir = constants.sonarr.dataDir;

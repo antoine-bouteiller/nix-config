@@ -1,6 +1,8 @@
 {...}: let
   constants = import ./constants.nix;
 in {
+  local.adguard.localDnsServices = ["bazarr"];
+
   services.bazarr = {
     enable = true;
     group = constants.libraryOwner.group;
