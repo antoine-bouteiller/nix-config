@@ -3,6 +3,7 @@
     ./cloudflared.nix
     ./cloudflare-warp.nix
     ./tailscale.nix
+    ./local-services.nix
     ./adguard.nix
     ./postgres.nix
     ./plex.nix

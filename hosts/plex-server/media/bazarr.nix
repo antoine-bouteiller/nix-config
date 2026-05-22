@@ -1,7 +1,7 @@
 {...}: let
   constants = import ./constants.nix;
 in {
-  local.adguard.localDnsServices = ["bazarr"];
+  local.media.localServices.bazarr.localDns.enable = true;
 
   services.bazarr = {
     enable = true;

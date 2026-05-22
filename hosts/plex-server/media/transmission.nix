@@ -2,7 +2,7 @@
   constants = import ./constants.nix;
   downloadDir = "${constants.paths.mediaDir}/torrents";
 in {
-  local.adguard.localDnsServices = ["transmission"];
+  local.media.localServices.transmission.localDns.enable = true;
 
   services.transmission = {
     enable = true;
