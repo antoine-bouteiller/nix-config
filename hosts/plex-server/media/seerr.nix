@@ -1,4 +1,4 @@
-{...}: let
+{config, ...}: let
   constants = import ./constants.nix;
   inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
@@ -9,7 +9,7 @@ in {
 
   services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
     name = "";
-    port = constants.seerr.port;
+    port = config.services.seerr.port;
   };
 
   systemd.services.seerr = {

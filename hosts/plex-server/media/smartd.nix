@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   constants = import ./constants.nix;
   smartdWebhook = pkgs.writeShellScript "smartd-webhook" ''
         ALERT_TEXT="SMART Disk Warning
@@ -13,7 +17,7 @@
         ${pkgs.curl}/bin/curl -s -X POST \
           -H "Content-Type: application/json" \
           -d "$PAYLOAD" \
-          "https://localhost:${toString constants.autoscan.port}/send-message" > /dev/null
+          "https://localhost:${toString config.services.autoscan.port}/send-message" > /dev/null
   '';
 in {
   services.smartd = {
