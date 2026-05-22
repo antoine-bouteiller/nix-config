@@ -18,6 +18,7 @@ in {
 
   services.openssh = {
     enable = true;
+    openFirewall = true;
     ports = [constants.ssh.port];
     settings = {
       PasswordAuthentication = false;

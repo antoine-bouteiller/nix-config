@@ -2,6 +2,8 @@
   imports = [
     ./cloudflared.nix
     ./cloudflare-warp.nix
+    ./tailscale.nix
+    ./adguard.nix
     ./postgres.nix
     ./plex.nix
     ./seerr.nix

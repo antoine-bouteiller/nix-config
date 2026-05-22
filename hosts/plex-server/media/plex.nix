@@ -3,6 +3,7 @@
 in {
   services.plex = {
     enable = true;
+    openFirewall = true;
     dataDir = constants.plex.dataDir;
   };
 

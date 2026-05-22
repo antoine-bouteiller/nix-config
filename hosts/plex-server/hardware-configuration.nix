@@ -56,16 +56,9 @@ in {
     }
   ];
 
+  networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [
-      constants.ssh.port
-      constants.plex.port
-    ];
-    allowedUDPPorts = [
-      constants.cloudflareWarp.udpPort
-    ];
-    trustedInterfaces = ["CloudflareWARP"];
   };
 
   boot.kernel.sysctl = {
