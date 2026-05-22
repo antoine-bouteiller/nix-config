@@ -79,15 +79,4 @@
     user = "transmission";
     group = "media";
   };
-
-  localDnsServices = [
-    "adguard"
-    "dashboard"
-    "plex"
-    "sonarr"
-    "radarr"
-    "prowlarr"
-    "bazarr"
-    "transmission"
-  ];
 }
