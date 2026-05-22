@@ -1,4 +1,23 @@
 {
+  "ssh_connections": [
+    {
+      "host": "devbouteiller-02.pelico.best",
+      "username": "pelico",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/srv/docker"
+          ]
+        },
+        {
+          "paths": [
+            "/srv/docker/meta/./"
+          ]
+        }
+      ]
+    }
+  ],
   "agent_servers": {
     
   },
