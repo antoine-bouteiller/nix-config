@@ -1,13 +1,10 @@
-{config, ...}: let
+_: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
 in {
-  local.media.localServices.coolercontrol.localDns.enable = true;
-
-  programs.coolercontrol.enable = true;
-
-  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
-    domain = config.local.media.localServices.coolercontrol.localDomain;
+  local.media.coolercontrol.localDns = {
+    enable = true;
     port = constants.coolercontrol.port;
   };
+
+  programs.coolercontrol.enable = true;
 }

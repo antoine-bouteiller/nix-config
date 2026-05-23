@@ -3,7 +3,7 @@
   #   sudo tailscale up
   #
   # Then configure Tailscale DNS in the admin console:
-  #   - Add a restricted nameserver for the "home" domain.
+  #   - Add a restricted nameserver for the public media domain.
   #   - Use this host's `tailscale ip -4` address as the nameserver.
   services.tailscale = {
     enable = true;

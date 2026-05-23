@@ -1,8 +1,10 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
 in {
-  local.media.localServices.bazarr.localDns.enable = true;
+  local.media.bazarr.localDns = {
+    enable = true;
+    port = config.services.bazarr.listenPort;
+  };
 
   services.bazarr = {
     enable = true;
@@ -20,11 +22,6 @@ in {
       POSTGRES_DATABASE = "bazarr";
       POSTGRES_USERNAME = "bazarr";
     };
-  };
-
-  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
-    domain = config.local.media.localServices.bazarr.localDomain;
-    port = config.services.bazarr.listenPort;
   };
 
   users.users.bazarr.isSystemUser = true;

@@ -12,10 +12,6 @@ in {
     tunnels.${constants.cloudflared.tunnelId} = {
       credentialsFile = config.sops.secrets."cloudflared/credentials".path;
       default = "http_status:404";
-      # Per-service ingress entries are merged in from each service's own
-      # .nix file via `mkCloudflaredIngress`, so the routing table lives
-      # alongside the service it serves.
-      ingress = {};
     };
   };
 }

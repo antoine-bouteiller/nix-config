@@ -3,7 +3,7 @@
     ./caddy.nix
     ./cloudflared.nix
     ./tailscale.nix
-    ./local-services.nix
+    ./local-media.nix
     ./adguard.nix
     ./postgres.nix
     ./plex.nix
