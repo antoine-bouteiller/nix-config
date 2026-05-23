@@ -15,4 +15,25 @@ in {
   in {
     "${host}" = "http://localhost:${toString port}";
   };
+
+  mkLocalCaddyVirtualHost = {
+    domain,
+    port,
+    extraProxyConfig ? "",
+  }: {
+    "${domain}" = {
+      extraConfig =
+        if extraProxyConfig == ""
+        then ''
+          tls internal
+          reverse_proxy 127.0.0.1:${toString port}
+        ''
+        else ''
+          tls internal
+          reverse_proxy 127.0.0.1:${toString port} {
+            ${extraProxyConfig}
+          }
+        '';
+    };
+  };
 }

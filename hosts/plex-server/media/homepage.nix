@@ -1,5 +1,6 @@
 {config, ...}: let
   constants = import ./constants.nix;
+  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
   localServices = config.local.media.localServices;
 in {
   local.media.localServices.dashboard.localDns.enable = true;
@@ -43,7 +44,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = "${localServices.dashboard.localDomain}:${toString config.services.homepage-dashboard.listenPort}";
+    allowedHosts = localServices.dashboard.localDomain;
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -110,7 +111,7 @@ in {
           {
             Plex = {
               icon = "plex.svg";
-              href = "http://${localServices.plex.localDomain}";
+              href = "https://app.plex.tv";
               widget = {
                 type = "plex";
                 url = "http://localhost:${toString constants.plex.port}";
@@ -148,7 +149,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = "http://${localServices.sonarr.localDomain}";
+              href = "https://${localServices.sonarr.localDomain}";
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString config.services.sonarr.settings.server.port}";
@@ -160,7 +161,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = "http://${localServices.radarr.localDomain}";
+              href = "https://${localServices.radarr.localDomain}";
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString config.services.radarr.settings.server.port}";
@@ -172,7 +173,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = "http://${localServices.prowlarr.localDomain}";
+              href = "https://${localServices.prowlarr.localDomain}";
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
@@ -184,7 +185,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = "http://${localServices.bazarr.localDomain}";
+              href = "https://${localServices.bazarr.localDomain}";
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString config.services.bazarr.listenPort}";
@@ -199,13 +200,13 @@ in {
           {
             AdGuard = {
               icon = "adguard-home.svg";
-              href = "http://${localServices.adguard.localDomain}";
+              href = "https://${localServices.adguard.localDomain}";
             };
           }
           {
             Transmission = {
               icon = "transmission.svg";
-              href = "http://${localServices.transmission.localDomain}";
+              href = "https://${localServices.transmission.localDomain}";
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString config.services.transmission.settings.rpc-port}";
@@ -232,6 +233,11 @@ in {
         };
       }
     ];
+  };
+
+  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
+    domain = localServices.dashboard.localDomain;
+    port = config.services.homepage-dashboard.listenPort;
   };
 
   systemd.services.homepage-dashboard.serviceConfig = {

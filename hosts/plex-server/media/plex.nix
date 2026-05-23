@@ -1,8 +1,6 @@
-{...}: let
+_: let
   constants = import ./constants.nix;
 in {
-  local.media.localServices.plex.localDns.enable = true;
-
   services.plex = {
     enable = true;
     openFirewall = true;
