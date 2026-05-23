@@ -35,6 +35,8 @@
   # `cloudflared/credentials` and rendered at /run/secrets/.
   cloudflared.tunnelId = "8bf26bb6-b100-4e7f-9016-2d74c6deb378";
 
+  coolercontrol.port = 11987;
+
   plex = {
     # Upstream services.plex hard-codes this port in its firewall rules but
     # does not expose it as a typed config option.

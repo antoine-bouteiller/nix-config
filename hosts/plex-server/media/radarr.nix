@@ -1,5 +1,10 @@
-{pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   constants = import ./constants.nix;
+  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
 in {
   local.media.localServices.radarr.localDns.enable = true;
 
@@ -25,6 +30,11 @@ in {
     after = ["pgbouncer.service"];
     requires = ["pgbouncer.service"];
     serviceConfig.UMask = pkgs.lib.mkForce "002";
+  };
+
+  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
+    domain = config.local.media.localServices.radarr.localDomain;
+    port = config.services.radarr.settings.server.port;
   };
 
   systemd.tmpfiles.rules = [

@@ -1,5 +1,10 @@
-{pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   constants = import ./constants.nix;
+  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
   downloadDir = "${constants.paths.mediaDir}/torrents";
 in {
   local.media.localServices.transmission.localDns.enable = true;
@@ -38,6 +43,11 @@ in {
       anti-brute-force-enabled = true;
       anti-brute-force-threshold = 10;
     };
+  };
+
+  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
+    domain = config.local.media.localServices.transmission.localDomain;
+    port = config.services.transmission.settings.rpc-port;
   };
 
   systemd.tmpfiles.rules = [

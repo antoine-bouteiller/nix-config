@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  python = pkgs.python3.withPackages (ps: [ps.pyyaml]);
+  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
   localDomains =
     lib.unique
     (map
@@ -35,68 +35,70 @@ in {
       };
     };
 
-    networking.firewall.interfaces.tailscale0 = {
-      allowedTCPPorts = [
-        config.services.adguardhome.settings.dns.port
-        config.services.adguardhome.port
-      ];
-      allowedUDPPorts = [config.services.adguardhome.settings.dns.port];
+    services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
+      domain = config.local.media.localServices.adguard.localDomain;
+      port = config.services.adguardhome.port;
     };
 
     systemd.services.adguardhome-tailscale-rewrites = {
       description = "Point AdGuard Home local DNS rewrites at the Tailscale IP";
-      after = ["tailscaled.service" "adguardhome.service"];
-      wants = ["tailscaled.service" "adguardhome.service"];
+
+      after = ["tailscaled.service"];
+      wants = ["tailscaled.service"];
+      before = ["adguardhome.service"];
       wantedBy = ["multi-user.target"];
-      unitConfig.StartLimitIntervalSec = 0;
-      serviceConfig = {
-        Type = "oneshot";
-        Restart = "on-failure";
-        RestartSec = "30s";
-      };
+
       path = [
         pkgs.coreutils
         pkgs.tailscale
-        pkgs.systemd
-        python
+        (pkgs.python3.withPackages (ps: [ps.pyyaml]))
       ];
+
       environment.LOCAL_DNS_DOMAINS = builtins.concatStringsSep " " localDomains;
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
       script = ''
         set -euo pipefail
 
-        tailscale_ip="$(tailscale ip -4)"
-        if [ -z "$tailscale_ip" ]; then
-          echo "Tailscale does not have an IPv4 address yet"
-          exit 1
-        fi
+        echo "Waiting for Tailscale IPv4 address..."
+        while true; do
+          tailscale_ip=$(tailscale ip -4 2>/dev/null || true)
+          if [ -n "$tailscale_ip" ]; then
+            break
+          fi
+          sleep 2
+        done
         export tailscale_ip
+        echo "Tailscale IP found: $tailscale_ip"
 
         python - <<'PY'
         import os
-        import shutil
         import sys
+        import tempfile
         from pathlib import Path
-
         import yaml
 
         config_path = Path("/var/lib/AdGuardHome/AdGuardHome.yaml")
         tailscale_ip = os.environ["tailscale_ip"]
-        domains = os.environ["LOCAL_DNS_DOMAINS"].split()
+        domains = os.environ.get("LOCAL_DNS_DOMAINS", "").split()
 
-        if not config_path.exists():
-            print(f"{config_path} does not exist yet", file=sys.stderr)
-            sys.exit(1)
-
-        with config_path.open() as f:
-            config = yaml.safe_load(f) or {}
+        # Handle first-boot gracefully if AdGuard hasn't generated its config yet
+        if config_path.exists():
+            with config_path.open() as f:
+                config = yaml.safe_load(f) or {}
+        else:
+            config = {}
 
         filtering = config.setdefault("filtering", {})
         rewrites = filtering.get("rewrites") or []
         managed_domains = set(domains)
+
         unmanaged_rewrites = [
-            rewrite
-            for rewrite in rewrites
-            if rewrite.get("domain") not in managed_domains
+            rw for rw in rewrites if rw.get("domain") not in managed_domains
         ]
         managed_rewrites = [
             {"domain": domain, "answer": tailscale_ip, "enabled": True}
@@ -104,19 +106,22 @@ in {
         ]
         next_rewrites = unmanaged_rewrites + managed_rewrites
 
+        # Exit early if nothing needs changing
         if filtering.get("rewrites") == next_rewrites and filtering.get("rewrites_enabled", True):
+            print("Configuration is already up to date.")
             sys.exit(0)
 
         filtering["rewrites_enabled"] = True
         filtering["rewrites"] = next_rewrites
 
-        backup_path = config_path.with_suffix(".yaml.bak")
-        shutil.copy2(config_path, backup_path)
-        with config_path.open("w") as f:
-            yaml.safe_dump(config, f, sort_keys=False)
-        PY
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile("w", dir=config_path.parent, delete=False) as tf:
+            yaml.safe_dump(config, tf, sort_keys=False)
+            temp_name = tf.name
 
-        systemctl restart adguardhome.service
+        os.replace(temp_name, config_path)
+        print("AdGuard Home configuration updated successfully.")
+        PY
       '';
     };
   };

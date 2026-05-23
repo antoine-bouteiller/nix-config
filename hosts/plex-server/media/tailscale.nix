@@ -13,9 +13,15 @@
     "TS_DEBUG_FIREWALL_MODE=nftables"
   ];
 
-  networking.firewall = {
-    trustedInterfaces = [config.services.tailscale.interfaceName];
-    allowedUDPPorts = [config.services.tailscale.port];
+  services.tailscale.extraSetFlags = ["--netfilter-mode=nodivert"];
+
+  networking.firewall.interfaces.${config.services.tailscale.interfaceName} = {
+    allowedTCPPorts = [
+      53
+      80
+      443
+    ];
+    allowedUDPPorts = [53];
   };
 
   systemd.network.wait-online.enable = false;

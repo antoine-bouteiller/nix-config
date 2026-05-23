@@ -1,5 +1,6 @@
-{...}: let
+{config, ...}: let
   constants = import ./constants.nix;
+  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
 in {
   local.media.localServices.prowlarr.localDns.enable = true;
 
@@ -22,5 +23,10 @@ in {
   systemd.services.prowlarr = {
     after = ["pgbouncer.service"];
     requires = ["pgbouncer.service"];
+  };
+
+  services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
+    domain = config.local.media.localServices.prowlarr.localDomain;
+    port = config.services.prowlarr.settings.server.port;
   };
 }
