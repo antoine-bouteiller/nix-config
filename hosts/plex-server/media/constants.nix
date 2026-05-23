@@ -1,11 +1,6 @@
 {
   network = {
     domain = "antoinebouteiller.fr";
-    localDomain = "home";
-    # Hostnames under this zone are not in public DNS — they're routed
-    # through the Cloudflare Tunnel as Zero Trust private resources and
-    # only resolve for devices enrolled in WARP.
-    internalDomain = "internal.antoinebouteiller.fr";
   };
 
   paths = {
@@ -44,6 +39,13 @@
     user = "plex";
     group = "media";
     dataDir = "/var/lib/plex";
+  };
+
+  caddy = {
+    user = "caddy";
+    group = "caddy";
+    logDir = "/var/log/caddy";
+    port = 2019;
   };
 
   postgres.user = "postgres";

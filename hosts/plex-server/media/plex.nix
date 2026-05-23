@@ -3,8 +3,8 @@ _: let
 in {
   services.plex = {
     enable = true;
-    openFirewall = true;
     dataDir = constants.plex.dataDir;
+    openFirewall = true;
   };
 
   systemd.tmpfiles.rules = [

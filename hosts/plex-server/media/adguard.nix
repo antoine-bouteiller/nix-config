@@ -4,15 +4,17 @@
   pkgs,
   ...
 }: let
-  inherit (import ./lib.nix) mkLocalCaddyVirtualHost;
   localDomains =
     lib.unique
     (map
       (service: service.localDomain)
-      (lib.attrValues (lib.filterAttrs (_: service: service.localDns.enable) config.local.media.localServices)));
+      (lib.attrValues (lib.filterAttrs (_: service: service ? localDns && service.localDns.enable) config.local.media)));
 in {
   config = {
-    local.media.localServices.adguard.localDns.enable = true;
+    local.media.adguard.localDns = {
+      enable = true;
+      port = config.services.adguardhome.port;
+    };
 
     services.adguardhome = {
       enable = true;
@@ -33,11 +35,6 @@ in {
           ];
         };
       };
-    };
-
-    services.caddy.virtualHosts = mkLocalCaddyVirtualHost {
-      domain = config.local.media.localServices.adguard.localDomain;
-      port = config.services.adguardhome.port;
     };
 
     systemd.services.adguardhome-tailscale-rewrites = {
@@ -86,7 +83,6 @@ in {
         tailscale_ip = os.environ["tailscale_ip"]
         domains = os.environ.get("LOCAL_DNS_DOMAINS", "").split()
 
-        # Handle first-boot gracefully if AdGuard hasn't generated its config yet
         if config_path.exists():
             with config_path.open() as f:
                 config = yaml.safe_load(f) or {}
@@ -106,7 +102,6 @@ in {
         ]
         next_rewrites = unmanaged_rewrites + managed_rewrites
 
-        # Exit early if nothing needs changing
         if filtering.get("rewrites") == next_rewrites and filtering.get("rewrites_enabled", True):
             print("Configuration is already up to date.")
             sys.exit(0)
@@ -120,6 +115,12 @@ in {
             temp_name = tf.name
 
         os.replace(temp_name, config_path)
+
+        # Inherit ownership from the systemd-managed parent folder
+        dir_stat = config_path.parent.stat()
+        os.chown(config_path, dir_stat.st_uid, dir_stat.st_gid)
+        os.chmod(config_path, 0o600)
+
         print("AdGuard Home configuration updated successfully.")
         PY
       '';
