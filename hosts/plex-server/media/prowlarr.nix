@@ -22,8 +22,7 @@ in {
     requires = ["pgbouncer.service"];
   };
 
-  local.media.prowlarr.localDns = {
-    enable = true;
+  local.media.prowlarr = {
     port = config.services.prowlarr.settings.server.port;
     auth = true;
   };

@@ -1,6 +1,5 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.immich = {
     enable = true;
@@ -20,9 +19,10 @@ in {
     };
   };
 
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "photo";
+  local.media.immich = {
+    host = "photo";
     port = config.services.immich.port;
+    public = true;
   };
 
   systemd.services.immich-machine-learning = {

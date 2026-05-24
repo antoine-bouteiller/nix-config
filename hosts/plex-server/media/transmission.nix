@@ -48,8 +48,7 @@ in {
     "d '${downloadDir}/.watch'      0755 ${constants.transmission.user} ${constants.transmission.group} - -"
   ];
 
-  local.media.transmission.localDns = {
-    enable = true;
+  local.media.transmission = {
     port = config.services.transmission.settings.rpc-port;
     auth = true;
   };

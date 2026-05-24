@@ -23,8 +23,7 @@ in {
     };
   };
 
-  local.media.radarr.localDns = {
-    enable = true;
+  local.media.radarr = {
     port = config.services.radarr.settings.server.port;
     auth = true;
   };

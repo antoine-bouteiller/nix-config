@@ -23,8 +23,7 @@ in {
     };
   };
 
-  local.media.sonarr.localDns = {
-    enable = true;
+  local.media.sonarr = {
     port = config.services.sonarr.settings.server.port;
     auth = true;
   };

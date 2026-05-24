@@ -7,12 +7,11 @@
   localDomains =
     lib.unique
     (map
-      (service: service.localDomain)
-      (lib.attrValues (lib.filterAttrs (_: service: service ? localDns && service.localDns.enable) config.local.media)));
+      (service: service.domain)
+      (lib.attrValues config.local.media));
 in {
   config = {
-    local.media.adguard.localDns = {
-      enable = true;
+    local.media.adguard = {
       port = config.services.adguardhome.port;
     };
 

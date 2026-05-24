@@ -19,8 +19,7 @@ in {
     };
   };
 
-  local.media.bazarr.localDns = {
-    enable = true;
+  local.media.bazarr = {
     port = config.services.bazarr.listenPort;
     auth = true;
   };

@@ -1,15 +1,16 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCloudflaredIngress;
 in {
   services.seerr = {
     enable = true;
     configDir = constants.seerr.dataDir;
   };
 
-  services.cloudflared.tunnels.${constants.cloudflared.tunnelId}.ingress = mkCloudflaredIngress {
-    name = "";
+  local.media.seerr = {
+    host = "";
     port = config.services.seerr.port;
+    auth = true;
+    public = true;
   };
 
   systemd.services.seerr = {

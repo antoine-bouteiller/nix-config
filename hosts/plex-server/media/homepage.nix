@@ -41,7 +41,7 @@ in {
 
   services.homepage-dashboard = {
     enable = true;
-    allowedHosts = localMedia.dashboard.localDomain;
+    allowedHosts = localMedia.dashboard.domain;
     settings = {
       title = "Antoine's Dashboard";
       theme = "dark";
@@ -119,7 +119,7 @@ in {
           {
             Immich = {
               icon = "immich.svg";
-              href = "https://photo.${constants.network.domain}";
+              href = "https://${localMedia.immich.domain}";
               widget = {
                 type = "immich";
                 url = "http://localhost:${toString config.services.immich.port}";
@@ -135,7 +135,7 @@ in {
           {
             Seerr = {
               icon = "seerr.svg";
-              href = "https://${constants.network.domain}";
+              href = "https://${localMedia.seerr.domain}";
               widget = {
                 type = "seerr";
                 url = "http://localhost:${toString config.services.seerr.port}";
@@ -146,7 +146,7 @@ in {
           {
             Sonnar = {
               icon = "sonarr.svg";
-              href = "https://${localMedia.sonarr.localDomain}";
+              href = "https://${localMedia.sonarr.domain}";
               widget = {
                 type = "sonarr";
                 url = "http://localhost:${toString config.services.sonarr.settings.server.port}";
@@ -158,7 +158,7 @@ in {
           {
             Radarr = {
               icon = "radarr.svg";
-              href = "https://${localMedia.radarr.localDomain}";
+              href = "https://${localMedia.radarr.domain}";
               widget = {
                 type = "radarr";
                 url = "http://localhost:${toString config.services.radarr.settings.server.port}";
@@ -170,7 +170,7 @@ in {
           {
             Prowlarr = {
               icon = "prowlarr.svg";
-              href = "https://${localMedia.prowlarr.localDomain}";
+              href = "https://${localMedia.prowlarr.domain}";
               widget = {
                 type = "prowlarr";
                 url = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
@@ -182,7 +182,7 @@ in {
           {
             Bazarr = {
               icon = "bazarr.svg";
-              href = "https://${localMedia.bazarr.localDomain}";
+              href = "https://${localMedia.bazarr.domain}";
               widget = {
                 type = "bazarr";
                 url = "http://localhost:${toString config.services.bazarr.listenPort}";
@@ -197,13 +197,13 @@ in {
           {
             AdGuard = {
               icon = "adguard-home.svg";
-              href = "https://${localMedia.adguard.localDomain}";
+              href = "https://${localMedia.adguard.domain}";
             };
           }
           {
             Transmission = {
               icon = "transmission.svg";
-              href = "https://${localMedia.transmission.localDomain}";
+              href = "https://${localMedia.transmission.domain}";
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString config.services.transmission.settings.rpc-port}";
@@ -247,8 +247,7 @@ in {
     HOMEPAGE_FILE_SEERR_API_KEY = config.sops.secrets."homepage/seerr_api_key".path;
   };
 
-  local.media.dashboard.localDns = {
-    enable = true;
+  local.media.dashboard = {
     port = config.services.homepage-dashboard.listenPort;
     auth = true;
   };
