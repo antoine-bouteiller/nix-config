@@ -1,11 +1,6 @@
 {config, ...}: let
   constants = import ./constants.nix;
 in {
-  local.media.bazarr.localDns = {
-    enable = true;
-    port = config.services.bazarr.listenPort;
-  };
-
   services.bazarr = {
     enable = true;
     group = constants.libraryOwner.group;
@@ -22,6 +17,12 @@ in {
       POSTGRES_DATABASE = "bazarr";
       POSTGRES_USERNAME = "bazarr";
     };
+  };
+
+  local.media.bazarr.localDns = {
+    enable = true;
+    port = config.services.bazarr.listenPort;
+    auth = true;
   };
 
   users.users.bazarr.isSystemUser = true;

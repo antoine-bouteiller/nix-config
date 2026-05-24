@@ -1,11 +1,6 @@
 {config, ...}: let
   constants = import ./constants.nix;
 in {
-  local.media.prowlarr.localDns = {
-    enable = true;
-    port = config.services.prowlarr.settings.server.port;
-  };
-
   services.prowlarr = {
     enable = true;
     dataDir = constants.prowlarr.dataDir;
@@ -25,5 +20,11 @@ in {
   systemd.services.prowlarr = {
     after = ["pgbouncer.service"];
     requires = ["pgbouncer.service"];
+  };
+
+  local.media.prowlarr.localDns = {
+    enable = true;
+    port = config.services.prowlarr.settings.server.port;
+    auth = true;
   };
 }

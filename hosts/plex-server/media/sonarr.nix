@@ -5,11 +5,6 @@
 }: let
   constants = import ./constants.nix;
 in {
-  local.media.sonarr.localDns = {
-    enable = true;
-    port = config.services.sonarr.settings.server.port;
-  };
-
   services.sonarr = {
     enable = true;
     dataDir = constants.sonarr.dataDir;
@@ -26,6 +21,12 @@ in {
         logDb = "sonarr-log";
       };
     };
+  };
+
+  local.media.sonarr.localDns = {
+    enable = true;
+    port = config.services.sonarr.settings.server.port;
+    auth = true;
   };
 
   systemd.services.sonarr = {

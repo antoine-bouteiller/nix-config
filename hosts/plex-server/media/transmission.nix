@@ -6,11 +6,6 @@
   constants = import ./constants.nix;
   downloadDir = "${constants.paths.mediaDir}/torrents";
 in {
-  local.media.transmission.localDns = {
-    enable = true;
-    port = config.services.transmission.settings.rpc-port;
-  };
-
   services.transmission = {
     enable = true;
     user = constants.transmission.user;
@@ -52,4 +47,10 @@ in {
     "d '${downloadDir}/.incomplete' 0755 ${constants.transmission.user} ${constants.transmission.group} - -"
     "d '${downloadDir}/.watch'      0755 ${constants.transmission.user} ${constants.transmission.group} - -"
   ];
+
+  local.media.transmission.localDns = {
+    enable = true;
+    port = config.services.transmission.settings.rpc-port;
+    auth = true;
+  };
 }

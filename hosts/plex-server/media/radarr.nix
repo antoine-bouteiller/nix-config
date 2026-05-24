@@ -5,11 +5,6 @@
 }: let
   constants = import ./constants.nix;
 in {
-  local.media.radarr.localDns = {
-    enable = true;
-    port = config.services.radarr.settings.server.port;
-  };
-
   services.radarr = {
     enable = true;
     dataDir = constants.radarr.dataDir;
@@ -26,6 +21,12 @@ in {
         logDb = "radarr-log";
       };
     };
+  };
+
+  local.media.radarr.localDns = {
+    enable = true;
+    port = config.services.radarr.settings.server.port;
+    auth = true;
   };
 
   systemd.services.radarr = {
