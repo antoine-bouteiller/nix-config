@@ -32,7 +32,11 @@
 
   coolercontrol.port = 11987;
 
-  authelia.port = 9091;
+  authelia = {
+    port = 9091;
+    dataDir = "/var/lib/authelia-main";
+    user = "authelia-main";
+  };
 
   plex = {
     # Upstream services.plex hard-codes this port in its firewall rules but

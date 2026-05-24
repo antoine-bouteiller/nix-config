@@ -1,6 +1,5 @@
 {config, ...}: let
   constants = import ./constants.nix;
-  inherit (import ./lib.nix) mkCaddyVirtualHost;
 in {
   sops.secrets = {
     "authelia/jwt_secret" = {
@@ -106,8 +105,8 @@ in {
     };
   };
 
-  services.caddy.virtualHosts = mkCaddyVirtualHost {
-    url = "auth.${constants.network.domain}";
+  local.media.authelia = {
+    host = "auth";
     port = constants.authelia.port;
   };
 }
