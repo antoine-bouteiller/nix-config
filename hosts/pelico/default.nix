@@ -35,19 +35,6 @@ in {
     envchain
   ];
 
-  nix-homebrew = {
-    inherit user;
-    enable = true;
-    enableZshIntegration = false;
-    taps = {
-      "homebrew/homebrew-core" = inputs.homebrew-core;
-      "homebrew/homebrew-cask" = inputs.homebrew-cask;
-      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-    };
-    mutableTaps = false;
-    autoMigrate = false;
-  };
-
   users.users.${user} = {
     name = user;
     home = "/Users/${user}";
@@ -70,7 +57,11 @@ in {
   };
 
   homebrew = {
-    taps = builtins.attrNames config.nix-homebrew.taps;
+    taps = [
+      "homebrew/homebrew-core"
+      "homebrew/homebrew-cask"
+      "homebrew/homebrew-bundle"
+    ];
     casks = [
       "tailscale-app"
       "cmux"

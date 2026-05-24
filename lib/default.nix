@@ -18,7 +18,6 @@ in {
       modules =
         [
           home-manager.darwinModules.home-manager
-          inputs.nix-homebrew.darwinModules.nix-homebrew
           {
             networking.hostName = hostname;
           }
