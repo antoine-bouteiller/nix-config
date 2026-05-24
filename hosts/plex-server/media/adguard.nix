@@ -89,24 +89,17 @@ in {
             config = {}
 
         filtering = config.setdefault("filtering", {})
-        rewrites = filtering.get("rewrites") or []
-        managed_domains = set(domains)
-
-        unmanaged_rewrites = [
-            rw for rw in rewrites if rw.get("domain") not in managed_domains
-        ]
         managed_rewrites = [
             {"domain": domain, "answer": tailscale_ip, "enabled": True}
             for domain in domains
         ]
-        next_rewrites = unmanaged_rewrites + managed_rewrites
 
-        if filtering.get("rewrites") == next_rewrites and filtering.get("rewrites_enabled", True):
+        if filtering.get("rewrites") == managed_rewrites and filtering.get("rewrites_enabled", True):
             print("Configuration is already up to date.")
             sys.exit(0)
 
         filtering["rewrites_enabled"] = True
-        filtering["rewrites"] = next_rewrites
+        filtering["rewrites"] = managed_rewrites
 
         config_path.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile("w", dir=config_path.parent, delete=False) as tf:
