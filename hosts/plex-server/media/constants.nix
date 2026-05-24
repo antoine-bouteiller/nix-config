@@ -32,6 +32,8 @@
 
   coolercontrol.port = 11987;
 
+  authelia.port = 9091;
+
   plex = {
     # Upstream services.plex hard-codes this port in its firewall rules but
     # does not expose it as a typed config option.
