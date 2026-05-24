@@ -2,11 +2,6 @@
   constants = import ./constants.nix;
   localMedia = config.local.media;
 in {
-  local.media.dashboard.localDns = {
-    enable = true;
-    port = config.services.homepage-dashboard.listenPort;
-  };
-
   sops.secrets = {
     "homepage/sonarr_api_key" = {
       key = "sonarr_api_key";
@@ -250,5 +245,11 @@ in {
     HOMEPAGE_FILE_BAZARR_API_KEY = config.sops.secrets."homepage/bazarr_api_key".path;
     HOMEPAGE_FILE_IMMICH_API_KEY = config.sops.secrets."homepage/immich_api_key".path;
     HOMEPAGE_FILE_SEERR_API_KEY = config.sops.secrets."homepage/seerr_api_key".path;
+  };
+
+  local.media.dashboard.localDns = {
+    enable = true;
+    port = config.services.homepage-dashboard.listenPort;
+    auth = true;
   };
 }
