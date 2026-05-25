@@ -1,0 +1,16 @@
+{
+  "version": "0.133.0",
+  "nativeHashes": {
+    "aarch64-apple-darwin": "0lv8vw03arrjs95y9pb9k1k7frr3fripbv8nvrylp0gzpri87iqk",
+    "x86_64-apple-darwin": "14bv4kicisi4z5axsdfvgwi1qkzrh297c8n3nnacj3ajy1abv49b",
+    "x86_64-unknown-linux-musl": "1vrl03dyv473mwmlazxz27m9gfy2anpb5sy2invq3limkjmijq6h",
+    "aarch64-unknown-linux-musl": "04qlp8lgyxizmd2wv33c3v3s0m0w8k6pbpsnlbz40j8mz26gx2r6"
+  },
+  "npmTarballHash": "0fl9adv1s2fz5wqk1clp87jky787rwfhbspy4by2sjwzy8qsda9n",
+  "nodeOptionalDepHashes": {
+    "darwin-arm64": "1wqqfvq2d6y6hxrd8i05q72xpvbj63hdarbydwiphdb9pm6z42qn",
+    "darwin-x64": "03j6kkz99rwg1hm4p83164118vs4fwlzf8vh1hhihixg4dq3v7pw",
+    "linux-x64": "078rwgp9j7mb02mj63y3cpxnaqwyilviazxizz04nnv5nzz1k199",
+    "linux-arm64": "1v8nii56x0dw06g9wmq9icrnzjhhd65wp24jagv8v4zkv07zpsm1"
+  }
+}

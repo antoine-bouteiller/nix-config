@@ -78,6 +78,8 @@
           overlay = ./home-manager/themes/WhiteSur-icon-overlay;
         };
         claude-code = pkgs.callPackage ./pkgs/claude-code {};
+        codex = pkgs.callPackage ./pkgs/codex {};
+        codex-node = pkgs.callPackage ./pkgs/codex {runtime = "node";};
         sonarqube-cli = pkgs.callPackage ./pkgs/sonarqube-cli {};
         caddy-cloudflare = pkgs.callPackage ./pkgs/caddy-cloudflare {};
       }

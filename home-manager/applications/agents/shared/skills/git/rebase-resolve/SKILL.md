@@ -1,13 +1,13 @@
 ---
-description: Drive a git rebase to completion — auto-resolve high-confidence conflicts, escalate on judgment calls, build-gated before each --continue
-allowed-tools: Read, Edit, Write, Glob, Grep, Bash(git:*), Bash(./mvnw:*), Bash(pnpm:*), Bash(npx:*)
+name: rebase-resolve
+description: Drive an in-progress git rebase to completion with build-gated conflict resolution. Use only when the user explicitly asks for the rebase-resolve skill or says to run /rebase-resolve; do not use automatically.
 ---
 
 # Resolve Rebase Conflicts
 
 Drive an in-progress `git rebase` to completion. For each conflicted file, classify the conflict using the incoming commit's intent + the file's recent history; **auto-resolve high-confidence conflicts** (trivial whitespace / import / additive overlaps); **escalate to the user only on medium- or low-confidence cases** (semantic overlap, structural reshuffles, structured manifests, rename/delete). After every conflict in the current patch is resolved, run a full build, `git rebase --continue`, and loop.
 
-The full-reactor build is the safety net for auto-resolutions: textually trivial conflicts can hide semantic divergence, and a green build is the line between "march on" and "stop and ask." If the build goes red after an auto-resolution, the loop halts and surfaces to the user — Claude does not silently retry or revert.
+The full-reactor build is the safety net for auto-resolutions: textually trivial conflicts can hide semantic divergence, and a green build is the line between "march on" and "stop and ask." If the build goes red after an auto-resolution, the loop halts and surfaces to the user — the agent does not silently retry or revert.
 
 The user is engaged only when the classifier returns medium / low confidence, when a build fails, or when the rebase finishes. Most rebases should run end-to-end without intervention.
 
@@ -23,7 +23,7 @@ The user is engaged only when the classifier returns medium / low confidence, wh
 
 Approval to run the command does NOT extend to these. If a resolution is wrong, surface it; the user decides whether to back out.
 
-**NEVER** add `Co-Authored-By: Claude …` or any other AI attribution to commits, including any commits this command might end up creating (e.g., `git rebase --continue` re-creating the patch). Enforced by `.claude/hooks/validate-no-ai-trailer.sh`.
+**NEVER** add `Co-Authored-By: Claude …` or any other AI attribution to commits, including any commits this skill might end up creating (e.g., `git rebase --continue` re-creating the patch). Enforced by the shared `validate-no-ai-trailer.sh` hook.
 
 ## Step 1 — Detect rebase state
 

@@ -62,15 +62,6 @@
             "command": "~/.claude/hooks/rtk-rewrite.sh"
           }
         ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/validate-md-domain.sh"
-          }
-        ]
       }
     ],
     "Notification": [

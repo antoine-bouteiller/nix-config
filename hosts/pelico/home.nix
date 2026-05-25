@@ -12,8 +12,9 @@ in {
 
   local.home-manager = {
     zed.enable = true;
-    claudeCode = {
-      enable = true;
+    agents = {
+      claude-code.enable = true;
+      codex.enable = true;
     };
     tmux.enable = true;
   };

@@ -1,6 +1,6 @@
 ---
-allowed-tools: Bash(git:*)
-description: Generate conventional commit with staged changes
+name: commit
+description: Generate a conventional commit from staged changes. Use only when the user explicitly asks for the commit skill or says to run /commit; do not use automatically.
 ---
 
 # Smart Git Commit
@@ -155,8 +155,8 @@ The `scope` provides additional contextual information.
 
 ### Breaking Changes Indicator
 
-- A commit that introduce breaking changes **must** be indicated by an `;` before the `:` in the subject line e.g.
-  `feat(api);: remove status endpoint`
+- A commit that introduce breaking changes **must** be indicated by an `!` before the `:` in the subject line e.g.
+  `feat(api)!: remove status endpoint`
 - Breaking changes **should** be described in the [commit footer section](#footer), if
   the [commit description](#description) isn't sufficiently informative
 

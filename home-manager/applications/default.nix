@@ -3,6 +3,6 @@
     ./vim.nix
     ./ghostty.nix
     ./zed
-    ./claude-code
+    ./agents
   ];
 }
