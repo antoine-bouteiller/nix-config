@@ -1,17 +1,35 @@
 ---
-allowed-tools: Bash(git:*)
+allowed-tools: Agent
 description: Generate conventional commit with staged changes
 ---
 
 # Smart Git Commit
 
-## Context Analysis
+Your only job is to spawn a subagent to perform the commit task. Do **not** run `git`, analyze diffs, or craft the commit message yourself in the main process.
 
-- Current git status: !`git status --porcelain`
-- Staged changes: !`git diff --cached --name-only`
-- Recent commits: !`git log --oneline -5`
+Spawn a single Agent with:
 
-## MANDATORY: No AI attribution
+- `subagent_type`: `general-purpose`
+- `model`: `haiku`
+- `description`: `Generate conventional commit`
+- `prompt`: the full instructions in the [Subagent Prompt](#subagent-prompt) section below, verbatim
+
+When the subagent returns, relay its result (commit hash and summary) to the user.
+
+## Subagent Prompt
+
+You are committing staged changes in the current git repository. Follow these rules exactly.
+
+### Context Analysis
+
+Run these commands to understand the current state:
+
+- `git status --porcelain`
+- `git diff --cached --name-only`
+- `git diff --cached`
+- `git log --oneline -5`
+
+### MANDATORY: No AI attribution
 
 **NEVER** include any of the following in the commit message, body, footer, or trailers:
 
@@ -21,7 +39,7 @@ description: Generate conventional commit with staged changes
 
 Violating this rule makes the commit invalid. Double-check before executing.
 
-## Your Task
+### Your Task
 
 1. Analyze **only the staged changes** (`git diff --cached`) to understand what was modified
 2. **NEVER stage additional files.** Do not run `git add`. Only commit what the user has already staged.
@@ -29,7 +47,7 @@ Violating this rule makes the commit invalid. Double-check before executing.
 4. Generate a conventional commit message (feat, fix, docs, etc.) based solely on staged changes
 5. Make the message descriptive but concise
 6. Execute `git commit` with the generated message — **no Co-Authored-By or AI trailers**
-7. Show the commit hash and summary
+7. Return the commit hash and a short summary
 
 # Conventional Commit Messages
 
@@ -100,63 +118,10 @@ The `scope` provides additional contextual information.
 - Allowed scopes vary and are typically defined by the specific project
 - **Do not** use issue identifiers as scopes
 
-#### Phoenix Specific Scopes
-
-**Library Scopes (`libs/`):**
-
-- `common` - Common utilities and shared code
-- `event-model` - Agnostic event model core
-- `algorithm-api` - Algorithm plugin interfaces
-- `data-access` - Data access abstractions
-- `ui-components` - Design system components
-- `data-grid` - High-performance grid library
-- `lob-renderer` - Line of Balance renderer
-- `config-engine` - Configuration runtime engine
-
-**Domain Scopes (`domains/`):**
-
-- `production-control` - Work Order management domain
-- `customer-demand` - Customer Order/Sales Forecast domain
-- `supply-planning` - Purchase Order/STO management domain
-
-**Algorithm Scopes (`algorithms/`):**
-
-- `stock-projection` - Stock projection algorithms
-- `pegging` - Pegging and allocation algorithms
-- `coverage` - Coverage status calculations
-
-**Architecture Scopes:**
-
-- `event-driven` - Event sourcing and propagation
-- `latency-tier` - Progressive computation tiers
-- `compute-on-write` - Pre-computation pipelines
-- `materialized` - Materialized views and caching
-
-**Infrastructure Scopes:**
-
-- `build` - Maven reactor configuration
-- `ci` - GitLab CI/CD pipeline configuration
-- `ci-templates` - Reusable CI templates
-- `deps` - Dependency management
-- `docker` - Docker configuration
-- `docs` - Documentation
-- `generators` - Code generators
-
-**Examples:**
-
-- `feat(event-model): add milestone support for WO events`
-- `feat(production-control): implement WO 360 view`
-- `fix(pegging): correct FIFO allocation for STOs`
-- `refactor(data-grid): optimize virtualized rendering for 300M events`
-- `perf(compute-on-write): add incremental KPI computation pipeline`
-- `feat(lob-renderer): support 10-year timeline span`
-- `test(stock-projection): add coverage status integration tests`
-- `docs(event-driven): document latency tier architecture`
-
 ### Breaking Changes Indicator
 
-- A commit that introduce breaking changes **must** be indicated by an `;` before the `:` in the subject line e.g.
-  `feat(api);: remove status endpoint`
+- A commit that introduce breaking changes **must** be indicated by an `!` before the `:` in the subject line e.g.
+  `feat(api)!: remove status endpoint`
 - Breaking changes **should** be described in the [commit footer section](#footer), if
   the [commit description](#description) isn't sufficiently informative
 
