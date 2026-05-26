@@ -1,5 +1,5 @@
 ---
-name: commit
+name: git:commit
 description: Generate a conventional commit from staged changes. Use only when the user explicitly asks for the commit skill or says to run /commit; do not use automatically.
 ---
 

@@ -164,12 +164,14 @@ def sync(kind, target_path, fragment_path, state_path):
     if not isinstance(config, dict):
         raise TypeError(f"{target_path} must contain a top-level object/table")
     if not isinstance(managed, dict):
-        raise TypeError(f"{fragment_path} must contain a top-level object/table")
+        message = f"{fragment_path} must contain a top-level object/table"
+        raise TypeError(message)
 
     previous_paths = decode_paths(state.get("managed_paths", []))
     current_paths = config_format["managed_paths"](managed)
 
-    remove_previously_managed_paths(config, previous_paths - current_paths, kind)
+    removed_paths = previous_paths - current_paths
+    remove_previously_managed_paths(config, removed_paths, kind)
     apply_managed_paths(config, managed, current_paths)
 
     config_format["write"](target_path, config)

@@ -1,4 +1,7 @@
-{claudePluginsDir}: let
+{
+  claudePluginsDir,
+  lib,
+}: let
   allowedBashCommands = [
     "git add *"
     "git branch *"
@@ -63,9 +66,17 @@
     Allowed bash command patterns:
     ${builtins.concatStringsSep "\n" (map (command: "- ${command}") allowedBashCommands)}
   '';
+
+  shellWords = command: builtins.filter (word: word != "*" && word != "") (lib.splitString " " command);
+
+  codexPrefixRule = command: ''prefix_rule(pattern=${builtins.toJSON (shellWords command)}, decision="allow")'';
+
+  codexDefaultRules = ''
+    ${builtins.concatStringsSep "\n" (map codexPrefixRule allowedBashCommands)}
+  '';
 in {
   shared = {
-    inherit allowedBashCommands allowedFileAccess allowedWebTools;
+    inherit allowedBashCommands allowedFileAccess allowedWebTools codexDefaultRules;
   };
 
   claude = {

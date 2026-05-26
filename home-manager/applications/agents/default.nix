@@ -16,10 +16,12 @@
   claudeDir = "${agentsDir}/claude-code";
   agentSettings = import ./settings.nix {
     claudePluginsDir = "${claudeDir}/plugins";
+    inherit lib;
   };
 
   claudeManagedJson = pkgs.writeText "claude-managed-settings.json" (builtins.toJSON agentSettings.claude);
   codexManagedToml = (pkgs.formats.toml {}).generate "codex-managed-config.toml" agentSettings.codex;
+  codexDefaultRules = pkgs.writeText "codex-default.rules" agentSettings.shared.codexDefaultRules;
 
   syncAgentSettings = pkgs.writers.writePython3Bin "sync-agent-settings" {
     libraries = [pkgs.python3Packages.tomli-w];
@@ -50,6 +52,19 @@
 
   skills = findSkills ./shared/skills "";
 
+  fileEntries = dir:
+    lib.mapAttrsToList (name: type: {
+      inherit name type;
+    })
+    (builtins.readDir dir);
+
+  symlinkFiles = targetDir: sourceDir: sourcePath:
+    builtins.listToAttrs (map (entry: {
+        name = "${targetDir}/${entry.name}";
+        value = {source = mkOutOfStoreSymlink "${sourceDir}/${entry.name}";};
+      })
+      (lib.filter (entry: entry.type == "regular") (fileEntries sourcePath)));
+
   mcpJson = pkgs.writeText "agent-mcp.json" (builtins.toJSON {
     mcpServers = cfg.mcpServers;
   });
@@ -72,9 +87,9 @@
   claudeFiles =
     {
       ".claude/CLAUDE.md".source = mkOutOfStoreSymlink "${sharedDir}/AGENTS.md";
-      ".claude/hooks".source = mkOutOfStoreSymlink "${sharedDir}/hooks";
-      ".claude/rules".source = mkOutOfStoreSymlink "${sharedDir}/rules";
     }
+    // symlinkFiles ".claude/hooks" "${sharedDir}/hooks" ./shared/hooks
+    // symlinkFiles ".claude/rules" "${sharedDir}/rules" ./shared/rules
     // builtins.listToAttrs (map (skill: {
         name = ".claude/skills/${skill.name}";
         value = {source = mkOutOfStoreSymlink "${sharedDir}/skills/${skill.path}";};
@@ -84,9 +99,10 @@
   codexFiles =
     {
       ".codex/AGENTS.md".source = mkOutOfStoreSymlink "${sharedDir}/AGENTS.md";
-      ".codex/rules".source = mkOutOfStoreSymlink "${sharedDir}/rules";
-      ".codex/hooks".source = mkOutOfStoreSymlink "${sharedDir}/hooks";
+      ".codex/rules/default.rules".source = codexDefaultRules;
     }
+    // symlinkFiles ".codex/rules" "${sharedDir}/rules" ./shared/rules
+    // symlinkFiles ".codex/hooks" "${sharedDir}/hooks" ./shared/hooks
     // builtins.listToAttrs (map (skill: {
         name = ".codex/skills/${skill.name}";
         value = {source = mkOutOfStoreSymlink "${sharedDir}/skills/${skill.path}";};
