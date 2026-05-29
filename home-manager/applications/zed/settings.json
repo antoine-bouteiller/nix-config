@@ -6,33 +6,27 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/srv/docker"
-          ]
+          "paths": ["/srv/docker"],
         },
         {
-          "paths": [
-            "/srv/docker/meta/./"
-          ]
-        }
-      ]
-    }
+          "paths": ["/srv/docker/meta/./"],
+        },
+      ],
+    },
   ],
-  "agent_servers": {
-    
-  },
+  "agent_servers": {},
   "cli_default_open_behavior": "new_window",
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "collaboration_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "git_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "diff_view_style": "split",
   "buffer_font_family": "MesloLGM Nerd Font",
@@ -65,18 +59,7 @@
       },
     },
   },
-  "file_scan_exclusions": [
-    "**/.git",
-    "**/.svn",
-    "**/.hg",
-    "**/CVS",
-    "**/.DS_Store",
-    "**/.worktree",
-    "**/Thumbs.db",
-    "**/.classpath",
-    "**/.settings",
-    "**/node_modules",
-  ],
+  "file_scan_exclusions": ["**/.git", "**/.svn", "**/.hg", "**/CVS", "**/.DS_Store", "**/.worktree", "**/Thumbs.db", "**/.classpath", "**/.settings"],
   "languages": {
     "Python": {
       "language_servers": ["!basedpyright", "ruff", "ty", "!pyrefly", "!pyright", "!pylsp", "..."],

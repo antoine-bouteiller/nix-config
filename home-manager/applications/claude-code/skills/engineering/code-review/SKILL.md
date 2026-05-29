@@ -55,11 +55,13 @@ Analyze the code changes based on the following pillars:
     *   **Critical**: Bugs, security issues, or breaking changes.
     *   **Improvements**: Suggestions for better code quality or performance.
     *   **Nitpicks**: Formatting or minor style issues (optional).
+    *   Each findings should be a single, self-contained bullet point.
 *   **Conclusion**: Clear recommendation (Approved / Request Changes).
 
 #### Tone
 *   Be constructive, professional, and friendly.
 *   Explain *why* a change is requested.
+*   Be concise and clear.
 *   For approvals, acknowledge the specific value of the contribution.
 
 ### 5. Cleanup (Remote PRs only)

@@ -58,6 +58,13 @@
         $path
       )
 
+
+      # History substring key binding
+      bindkey '^[[A' history-substring-search-up
+      bindkey '^[[B' history-substring-search-down
+      bindkey '^[OA' history-substring-search-up
+      bindkey '^[OB' history-substring-search-down
+
       # Completion styles
       zstyle ':completion:*' menu select
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
