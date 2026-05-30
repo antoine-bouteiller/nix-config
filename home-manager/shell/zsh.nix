@@ -1,4 +1,8 @@
-{osConfig, ...}: {
+{
+  osConfig,
+  pkgs,
+  ...
+}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -8,13 +12,21 @@
 
     history = {
       size = 10000;
-      save = 10000;
-      ignoreDups = true;
-      ignoreAllDups = true;
-      ignoreSpace = true;
-      extended = true;
       share = true;
     };
+
+    plugins = [
+      {
+        name = "powerlevel10k-config";
+        src = ./p10k-config;
+        file = "p10k.zsh";
+      }
+      {
+        name = "zsh-powerlevel10k";
+        src = "${pkgs.zsh-powerlevel10k}/share/zsh/themes/powerlevel10k/";
+        file = "powerlevel10k.zsh-theme";
+      }
+    ];
 
     shellAliases = {
       "_" = "sudo";
@@ -46,6 +58,15 @@
     profileExtra = ''
       # OrbStack integration
       [[ -f ~/.orbstack/shell/init.zsh ]] && source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+    '';
+
+    initExtraFirst = ''
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      # Initialization code that may require console input (password prompts, [y/n]
+      # confirmations, etc.) must go above this block; everything else may go below.
+      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+      fi
     '';
 
     initContent = ''
