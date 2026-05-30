@@ -86,6 +86,12 @@ in {
           value = {source = mkOutOfStoreSymlink "${claudeDir}/skills/${skill.path}";};
         })
         skills)
+      ++ [
+        {
+          name = ".config/ccstatusline/settings.json";
+          value = {source = ./ccstatusline.json;};
+        }
+      ]
     );
   };
 }
