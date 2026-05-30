@@ -50,9 +50,12 @@
       "WebSearch"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/.claude"
-    ]
+    "additionalDirectories": ["~/.claude"]
+  },
+  "skillOverrides": {
+    "claude-api": "off",
+    "review": "off",
+    "simplify": "off"
   },
   "hooks": {
     "PreToolUse": [
@@ -96,16 +99,9 @@
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
-    "jdtls-lsp@claude-plugins-official": true,
-    "pua-unicode@dotfiles-plugins": true
+    "jdtls-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
-    "dotfiles-plugins": {
-      "source": {
-        "source": "directory",
-        "path": "./plugins"
-      }
-    },
     "thedotmack": {
       "source": {
         "source": "github",
@@ -115,9 +111,5 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true,
-  "skillOverrides": {
-    "claude-api": "off",
-    "review": "off",
-    "simplify": "off"
-  }
+  "model": "sonnet"
 }
