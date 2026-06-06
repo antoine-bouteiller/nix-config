@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   makeWrapper,
   nodejs,
-  pnpm_11,
+  pnpm_10,
   pnpmConfigHook,
   writeShellScript,
 }: let
@@ -32,7 +32,7 @@ in
       [
         makeWrapper
         nodejs
-        pnpm_11
+        pnpm_10
         pnpmConfigHook
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -49,16 +49,7 @@ in
       src = ./npm;
       inherit (sourcesData) hash;
       fetcherVersion = 3;
-      pnpm = pnpm_11;
-      # Serialize pnpm downloads and libuv's worker threadpool to work around
-      # a kqueue assertion (errno != EINTR in uv__io_poll) triggered on macOS
-      # by pnpm's concurrent workers racing on shared file descriptors.
-      env = {
-        pnpm_config_network_concurrency = "1";
-        pnpm_config_child_concurrency = "1";
-        pnpm_config_verify_store_integrity = "false";
-        UV_THREADPOOL_SIZE = "1";
-      };
+      pnpm = pnpm_10;
     };
 
     buildPhase = ''
