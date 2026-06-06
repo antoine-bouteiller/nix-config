@@ -44,11 +44,17 @@
           "updateImportsOnFileMove": {
             "enabled": "always",
           },
+          "preferences": {
+            "importModuleSpecifier": "non-relative",
+          },
         },
         "typescript": {
           "preferGoToSourceDefinition": true,
           "updateImportsOnFileMove": {
             "enabled": "always",
+          },
+          "preferences": {
+            "importModuleSpecifier": "non-relative",
           },
           "tsserver": {
             "maxTsServerMemory": 16384,

@@ -57,25 +57,37 @@
   "skillOverrides": {
     "claude-api": "off",
     "review": "off",
-    "simplify": "off"
+    "simplify": "off",
+    "code-review": "off"
   },
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      },
       {
         "matcher": "Write",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/validate-md-domain.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "comment-checker"
           }
         ]
       }
@@ -113,6 +125,5 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "skipAutoPermissionPrompt": true
 }

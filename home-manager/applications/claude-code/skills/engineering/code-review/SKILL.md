@@ -1,5 +1,5 @@
 ---
-name: engineering:code-reviewer
+name: engineering:code-reviewe
 description:
   Use this skill to review code. It supports both local changes (staged or working tree)
   and remote Pull Requests (by ID or URL). It focuses on correctness, maintainability,
@@ -15,6 +15,11 @@ This skill guides the agent in conducting professional and thorough code reviews
 ### 1. Determine Review Target
 *   **Remote PR**: If the user provides a PR number or URL (e.g., "Review PR #123"), target that remote PR.
 *   **Local Changes**: If no specific PR is mentioned, or if the user asks to "review my changes", target the current local file system states (staged and unstaged changes).
+*   **Empty Diff**: If their are no local changes look for an gitlab or github MR linked to the branch 
+   ```bash
+    gh mr view # if github 
+    gitlab mr view # if gitlab
+    ```
 
 ### 2. Preparation
 
