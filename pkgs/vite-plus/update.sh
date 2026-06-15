@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq pnpm_11
+#!nix-shell -i bash -p curl jq pnpm_10
 set -euo pipefail
 
 NPM_REGISTRY="https://registry.npmjs.org"
