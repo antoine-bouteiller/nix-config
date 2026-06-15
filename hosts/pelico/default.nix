@@ -65,6 +65,7 @@ in {
     casks = [
       "tailscale-app"
       "cmux"
+      "firefox"
     ];
   };
 

@@ -50,6 +50,7 @@
       # Utility Tools
       "unnaturalscrollwheels"
       "caffeine"
+      "rectangle"
 
       "spotify"
     ];
