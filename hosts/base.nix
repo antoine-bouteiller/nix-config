@@ -12,11 +12,6 @@
   };
 
   nix = {
-    package = pkgs.lixPackageSets.stable.lix.overrideAttrs (_: {
-      doCheck = false;
-      doInstallCheck = false;
-    });
-
     settings = {
       experimental-features = ["nix-command" "flakes"];
       substituters = ["https://nix-community.cachix.org" "https://cache.nixos.org"];
