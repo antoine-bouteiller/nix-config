@@ -25,7 +25,6 @@ in {
       plexTokenFile = config.sops.secrets."autoscan/plex_token".path;
       telegramTokenFile = config.sops.secrets."autoscan/telegram_token".path;
       telegramChatIdFile = config.sops.secrets."autoscan/telegram_chat_id".path;
-      cloudflareTokenFile = config.sops.secrets."autoscan/cloudflare_token".path;
       tmdbApiTokenFile = config.sops.secrets."autoscan/tmdb_api_token".path;
       sonarrApiKeyFile = config.sops.secrets."autoscan/sonarr_api_key".path;
       radarrApiKeyFile = config.sops.secrets."autoscan/radarr_api_key".path;
@@ -49,10 +48,6 @@ in {
   };
   sops.secrets."autoscan/telegram_chat_id" = {
     key = "telegram/chat_id";
-    owner = constants.autoscan.user;
-  };
-  sops.secrets."autoscan/cloudflare_token" = {
-    key = "cloudflare_token";
     owner = constants.autoscan.user;
   };
   sops.secrets."autoscan/tmdb_api_token" = {
