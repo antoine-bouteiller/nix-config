@@ -6,9 +6,9 @@ BASE_URL="https://binaries.sonarsource.com/Distribution/sonarqube-cli"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 declare -A PLATFORMS=(
-  ["aarch64-darwin"]="macos/sonarqube-cli-VERSION-macos-arm64.exe"
-  ["x86_64-linux"]="linux/sonarqube-cli-VERSION-linux-x86-64.exe"
-  ["aarch64-linux"]="linux/sonarqube-cli-VERSION-linux-arm64.exe"
+  ["aarch64-darwin"]="macos/sonarqube-cli-VERSION-macos-arm64"
+  ["x86_64-linux"]="linux/sonarqube-cli-VERSION-linux-x86-64"
+  ["aarch64-linux"]="linux/sonarqube-cli-VERSION-linux-arm64"
 )
 
 current_version=$(jq -r '.version' "$SCRIPT_DIR/sources.json")
@@ -33,9 +33,15 @@ platforms_json="{}"
 for nix_platform in "${!PLATFORMS[@]}"; do
   path_template="${PLATFORMS[$nix_platform]}"
   path="${path_template//VERSION/$latest_version}"
-  url="$BASE_URL/$latest_version/$path"
 
-  hash=$(nix-prefetch-url --type sha256 "$url" 2>/dev/null)
+  url="$BASE_URL/$latest_version/$path.bin"
+  hash=$(nix-prefetch-url --type sha256 "$url" 2>/dev/null || true)
+
+  if [[ -z "$hash" ]]; then
+    url="$BASE_URL/$latest_version/$path.exe"
+    hash=$(nix-prefetch-url --type sha256 "$url" 2>/dev/null)
+  fi
+
   sri_hash=$(nix hash to-sri --type sha256 "$hash")
   platforms_json=$(echo "$platforms_json" | jq \
     --arg p "$nix_platform" --arg u "$url" --arg h "$sri_hash" \

@@ -1,17 +1,17 @@
 {
-  "version": "0.13.0.1692",
+  "version": "1.0.0.2628",
   "platforms": {
     "aarch64-linux": {
-      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.13.0.1692/linux/sonarqube-cli-0.13.0.1692-linux-arm64.exe",
-      "hash": "sha256-tmI/y1u2RBGNEEiiFbzJeRCX4c6gj44s9xz5iWAaFJc="
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/1.0.0.2628/linux/sonarqube-cli-1.0.0.2628-linux-arm64.bin",
+      "hash": "sha256-yIF3oi1epPlG/NVmWXVYSlJq7+g9n6BTY/mcvOp2KH0="
     },
     "x86_64-linux": {
-      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.13.0.1692/linux/sonarqube-cli-0.13.0.1692-linux-x86-64.exe",
-      "hash": "sha256-klc2LTvsSNYS3QOd/NC59kT/ZrbAe3Hy/4FciKYKL9Q="
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/1.0.0.2628/linux/sonarqube-cli-1.0.0.2628-linux-x86-64.bin",
+      "hash": "sha256-N0lOGiuilMxijhpcMKF+4Fzz98CJUxDgJklzZVNLwrw="
     },
     "aarch64-darwin": {
-      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/0.13.0.1692/macos/sonarqube-cli-0.13.0.1692-macos-arm64.exe",
-      "hash": "sha256-2fBws09tHfwQQP9WkTQiPJaV/bjQG9DS0wVBDrJVKxM="
+      "url": "https://binaries.sonarsource.com/Distribution/sonarqube-cli/1.0.0.2628/macos/sonarqube-cli-1.0.0.2628-macos-arm64.bin",
+      "hash": "sha256-qQ3ZflwLiHI6GJM9BJrJyA4RveCZAmsywZwbKY+P/j0="
     }
   }
 }
