@@ -59,7 +59,6 @@ in {
       push.autoSetupRemote = true;
       rebase.autoStash = true;
       commit.gpgsign = true;
-      tag.gpgsign = true;
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = allowedSignersFile;
       user.signingkey = signingKeyPath;
