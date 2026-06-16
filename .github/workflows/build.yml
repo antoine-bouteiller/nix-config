@@ -1,0 +1,27 @@
+name: Build hosts
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            extra-experimental-features = nix-command flakes
+
+      - name: Verify hosts build
+        run: |
+          set -e
+          system=x86_64-linux
+          hosts=$(nix eval --json --impure ".#checks.$system" --apply 'builtins.attrNames' | jq -r '.[]')
+          for host in $hosts; do
+            echo "::group::Verifying $host"
+            nix build ".#checks.$system.$host" --dry-run --impure
+            echo "::endgroup::"
+          done
