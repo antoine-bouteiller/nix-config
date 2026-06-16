@@ -10,6 +10,7 @@
   dependencyDashboard: false,
   minimumReleaseAge: '1 day',
   labels: ['renovate'],
+  automergeStrategy: 'rebase',
   // flake.lock is owned by .github/workflows/flake-update.yml — don't double up.
   nix: { enabled: false },
   customManagers: [
@@ -28,6 +29,20 @@
       semanticCommitType: 'chore',
       semanticCommitScope: 'deps',
       commitMessageExtra: '( {{currentVersion}} ➜ {{newVersion}} )',
+    },
+    {
+      description: 'Auto-merge patch, minor and digest updates',
+      matchUpdateTypes: ['patch', 'minor', 'digest'],
+      automerge: true,
+      automergeType: 'pr',
+    },
+    {
+      description: 'Auto-merge GitHub Actions patch and digest updates',
+      matchManagers: ['github-actions'],
+      matchUpdateTypes: ['patch', 'digest'],
+      automerge: true,
+      automergeType: 'pr',
+      ignoreTests: true,
     },
   ],
 }
