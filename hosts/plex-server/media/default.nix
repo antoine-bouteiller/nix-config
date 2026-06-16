@@ -17,6 +17,7 @@
     ./recyclarr.nix
     ./homepage.nix
     ./byparr.nix
+    ./gluetun.nix
     ./coolercontrol.nix
     ./autoscan.nix
     ./immich.nix
