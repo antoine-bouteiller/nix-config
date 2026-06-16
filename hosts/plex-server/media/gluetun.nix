@@ -15,7 +15,8 @@
   virtualisation.oci-containers.containers = {
     # Proton VPN WireGuard tunnel. Owns the network namespace shared below.
     gluetun = {
-      image = "qmcgaw/gluetun:latest";
+      # renovate: datasource=docker depName=qmcgaw/gluetun
+      image = "qmcgaw/gluetun:v3.41.1";
       autoStart = true;
       environment = {
         VPN_SERVICE_PROVIDER = "protonvpn";
@@ -33,7 +34,8 @@
 
     # Tailscale node sharing gluetun's netns -> all its egress exits via Proton.
     tailscale-exit = {
-      image = "tailscale/tailscale:latest";
+      # renovate: datasource=docker depName=tailscale/tailscale
+      image = "tailscale/tailscale:v1.98.4";
       autoStart = true;
       dependsOn = ["gluetun"];
       environment = {

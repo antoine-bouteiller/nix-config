@@ -1,0 +1,33 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    ':disableRateLimiting',
+    ':ignoreUnstable',
+    'helpers:pinGitHubActionDigestsToSemver',
+  ],
+  configMigration: true,
+  dependencyDashboard: false,
+  minimumReleaseAge: '1 day',
+  labels: ['renovate'],
+  // flake.lock is owned by .github/workflows/flake-update.yml — don't double up.
+  nix: { enabled: false },
+  customManagers: [
+    {
+      customType: 'regex',
+      managerFilePatterns: ['/\\.nix$/'],
+      matchStrings: [
+        '#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s*\\n\\s*image\\s*=\\s*"[^"]*?:(?<currentValue>[^"@]+)(@(?<currentDigest>sha256:[a-f0-9]+))?";',
+      ],
+    },
+  ],
+  packageRules: [
+    {
+      matchManagers: ['custom.regex'],
+      pinDigests: true,
+      semanticCommitType: 'chore',
+      semanticCommitScope: 'deps',
+      commitMessageExtra: '( {{currentVersion}} ➜ {{newVersion}} )',
+    },
+  ],
+}

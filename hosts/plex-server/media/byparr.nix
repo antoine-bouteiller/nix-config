@@ -7,6 +7,7 @@
   virtualisation.oci-containers = {
     backend = "podman";
     containers.byparr = {
+      # renovate: datasource=docker depName=ghcr.io/thephaseless/byparr
       image = "ghcr.io/thephaseless/byparr:latest";
       autoStart = true;
       ports = ["127.0.0.1:8191:8191"];
