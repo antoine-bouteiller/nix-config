@@ -55,6 +55,9 @@
         "--network=container:gluetun"
         "--cap-add=NET_ADMIN"
         "--cap-add=NET_RAW"
+        # Kernel-mode tailscaled (TS_USERSPACE=false) opens /dev/net/tun to make
+        # its tailscale0 iface; devices aren't shared via the netns, so mount it.
+        "--device=/dev/net/tun:/dev/net/tun"
       ];
     };
   };
