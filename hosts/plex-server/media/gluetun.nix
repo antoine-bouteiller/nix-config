@@ -2,10 +2,8 @@
   # podman + oci-containers backend are already enabled by ./byparr.nix.
 
   # proton/private_key + proton/address come from the Proton WireGuard config.
-  # tailscale_exit_authkey (env-file form): TS_AUTHKEY=tskey-auth-...
   sops.secrets."proton/private_key" = {};
   sops.secrets."proton/address" = {};
-  sops.secrets."tailscale_exit_authkey" = {};
 
   sops.templates."gluetun.env".content = ''
     WIREGUARD_PRIVATE_KEY=${config.sops.placeholder."proton/private_key"}
@@ -45,11 +43,12 @@
       autoStart = true;
       dependsOn = ["gluetun"];
       environment = {
+        TS_HOSTNAME = "proton-exit";
         TS_STATE_DIR = "/var/lib/tailscale";
         TS_EXTRA_ARGS = "--advertise-exit-node";
         TS_USERSPACE = "false";
       };
-      environmentFiles = [config.sops.secrets."tailscale_exit_authkey".path];
+      # Authenticated once; state persists in the volume, so no authkey needed.
       volumes = ["/var/lib/tailscale-exit:/var/lib/tailscale"];
       extraOptions = [
         "--network=container:gluetun"
