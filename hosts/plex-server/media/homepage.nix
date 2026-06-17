@@ -195,6 +195,16 @@ in {
       {
         Infrastructure = [
           {
+            Gluetun = {
+              icon = "gluetun.png";
+              widget = {
+                type = "gluetun";
+                url = "http://localhost:8000";
+                version = 2;
+              };
+            };
+          }
+          {
             AdGuard = {
               icon = "adguard-home.svg";
               href = "https://${localMedia.adguard.domain}";

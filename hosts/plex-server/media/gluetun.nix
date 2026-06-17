@@ -30,6 +30,9 @@
         DOT = "off";
       };
       environmentFiles = [config.sops.templates."gluetun.env".path];
+      # Expose gluetun's control server (public IP / VPN status) for the
+      # homepage gluetun widget; localhost-only since homepage runs on the host.
+      ports = ["127.0.0.1:8000:8000"];
       extraOptions = [
         "--cap-add=NET_ADMIN"
         "--device=/dev/net/tun:/dev/net/tun"
