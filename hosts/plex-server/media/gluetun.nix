@@ -12,6 +12,9 @@
     WIREGUARD_ADDRESSES=${config.sops.placeholder."proton/address"}
   '';
 
+  # Bind-mount source for the tailscale node's state; podman won't create it.
+  systemd.tmpfiles.rules = ["d /var/lib/tailscale-exit 0700 root root -"];
+
   virtualisation.oci-containers.containers = {
     # Proton VPN WireGuard tunnel. Owns the network namespace shared below.
     gluetun = {
@@ -21,6 +24,9 @@
       environment = {
         VPN_SERVICE_PROVIDER = "protonvpn";
         VPN_TYPE = "wireguard";
+        # DNS-over-TLS to 1.1.1.1:853 times out in this netns; use plaintext DNS
+        # over the tunnel instead (fixes "lookup cloudflare.com: i/o timeout").
+        DOT = "off";
       };
       environmentFiles = [config.sops.templates."gluetun.env".path];
       extraOptions = [
