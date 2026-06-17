@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   # podman + oci-containers backend are already enabled by ./byparr.nix.
 
   # proton/private_key + proton/address come from the Proton WireGuard config.
@@ -13,6 +17,31 @@
   # Bind-mount source for the tailscale node's state; podman won't create it.
   systemd.tmpfiles.rules = ["d /var/lib/tailscale-exit 0700 root root -"];
 
+  # gluetun's policy routing (rule 101) sends everything via tun0, so un-NAT'd
+  # replies to exit-node clients get routed out eth0 instead of back through
+  # tailscale0 -> handshakes hang in SYN_RECV. Insert a higher-priority rule
+  # (90 < gluetun's 98-101) sending the tailnet CGNAT range to tailscale's
+  # routing table (52), where 100.64.0.0/10 correctly resolves to tailscale0.
+  systemd.services.tailscale-exit-route = {
+    description = "Return tailnet traffic via tailscale0 inside gluetun's netns";
+    after = ["podman-tailscale-exit.service"];
+    bindsTo = ["podman-tailscale-exit.service"];
+    wantedBy = ["podman-tailscale-exit.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      pid=$(${pkgs.podman}/bin/podman inspect -f '{{.State.Pid}}' gluetun)
+      nsip() { ${pkgs.util-linux}/bin/nsenter -t "$pid" -n ${pkgs.iproute2}/bin/ip "$@"; }
+      # IPv4 and IPv6 tailnet ranges both get hijacked by gluetun's rule 101.
+      nsip rule del to 100.64.0.0/10 lookup 52 priority 90 2>/dev/null || true
+      nsip rule add to 100.64.0.0/10 lookup 52 priority 90
+      nsip -6 rule del to fd7a:115c:a1e0::/48 lookup 52 priority 90 2>/dev/null || true
+      nsip -6 rule add to fd7a:115c:a1e0::/48 lookup 52 priority 90
+    '';
+  };
+
   virtualisation.oci-containers.containers = {
     # Proton VPN WireGuard tunnel. Owns the network namespace shared below.
     gluetun = {
@@ -25,9 +54,6 @@
         # DNS-over-TLS to 1.1.1.1:853 times out in this netns; use plaintext DNS
         # over the tunnel instead (fixes "lookup cloudflare.com: i/o timeout").
         DOT = "off";
-        # Allow gluetun's firewall to forward traffic from the tailnet CGNAT
-        # range; without this, exit-node clients get no internet.
-        FIREWALL_OUTBOUND_SUBNETS = "100.64.0.0/10";
       };
       environmentFiles = [config.sops.templates."gluetun.env".path];
       # Expose gluetun's control server (public IP / VPN status) for the
