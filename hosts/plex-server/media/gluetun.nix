@@ -22,12 +22,12 @@
       environment = {
         VPN_SERVICE_PROVIDER = "protonvpn";
         VPN_TYPE = "wireguard";
-        # Allow gluetun's firewall to forward traffic from the tailnet CGNAT
-        # range; without this, exit-node clients get no internet.
-        FIREWALL_OUTBOUND_SUBNETS = "100.64.0.0/10";
         # DNS-over-TLS to 1.1.1.1:853 times out in this netns; use plaintext DNS
         # over the tunnel instead (fixes "lookup cloudflare.com: i/o timeout").
         DOT = "off";
+        # Allow gluetun's firewall to forward traffic from the tailnet CGNAT
+        # range; without this, exit-node clients get no internet.
+        FIREWALL_OUTBOUND_SUBNETS = "100.64.0.0/10";
       };
       environmentFiles = [config.sops.templates."gluetun.env".path];
       # Expose gluetun's control server (public IP / VPN status) for the
@@ -53,6 +53,10 @@
         TS_STATE_DIR = "/var/lib/tailscale";
         TS_EXTRA_ARGS = "--advertise-exit-node";
         TS_USERSPACE = "false";
+        # gluetun manages the netns firewall via nftables; tailscaled defaults to
+        # iptables-legacy, whose tables don't exist here, so it installs no
+        # forward/masquerade rules and client traffic is dropped. Match nft.
+        TS_DEBUG_FIREWALL_MODE = "nftables";
       };
       # Authenticated once; state persists in the volume, so no authkey needed.
       volumes = ["/var/lib/tailscale-exit:/var/lib/tailscale"];
