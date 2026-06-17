@@ -22,6 +22,9 @@
       environment = {
         VPN_SERVICE_PROVIDER = "protonvpn";
         VPN_TYPE = "wireguard";
+        # Allow gluetun's firewall to forward traffic from the tailnet CGNAT
+        # range; without this, exit-node clients get no internet.
+        FIREWALL_OUTBOUND_SUBNETS = "100.64.0.0/10";
         # DNS-over-TLS to 1.1.1.1:853 times out in this netns; use plaintext DNS
         # over the tunnel instead (fixes "lookup cloudflare.com: i/o timeout").
         DOT = "off";
