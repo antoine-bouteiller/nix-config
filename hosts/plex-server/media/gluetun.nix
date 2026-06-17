@@ -16,7 +16,7 @@
     # Proton VPN WireGuard tunnel. Owns the network namespace shared below.
     gluetun = {
       # renovate: datasource=docker depName=qmcgaw/gluetun
-      image = "qmcgaw/gluetun:v3.41.1";
+      image = "qmcgaw/gluetun@sha256:1a5bf4b4820a879cdf8d93d7ef0d2d963af56670c9ebff8981860b6804ebc8ab"; # v3.41.1
       autoStart = true;
       environment = {
         VPN_SERVICE_PROVIDER = "protonvpn";
@@ -35,7 +35,7 @@
     # Tailscale node sharing gluetun's netns -> all its egress exits via Proton.
     tailscale-exit = {
       # renovate: datasource=docker depName=tailscale/tailscale
-      image = "tailscale/tailscale:v1.98.4";
+      image = "tailscale/tailscale@sha256:25cde9ad76020b0e29229136d0c38b5962e9a0e1774ffac9b0df68e4a37d6cf0"; # v1.98.4
       autoStart = true;
       dependsOn = ["gluetun"];
       environment = {
