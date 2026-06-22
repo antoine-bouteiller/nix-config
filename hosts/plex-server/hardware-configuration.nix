@@ -59,5 +59,11 @@ in {
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.disable_ipv6" = 1;
     "net.ipv6.conf.default.disable_ipv6" = 1;
+
+    # Smooth disk writeback on the single /mnt/media HDD so Transmission's
+    # completion fsync() doesn't stall the daemon. Flush early and cap dirty
+    # pages low → continuous writeback instead of one bursty flush at 100%.
+    "vm.dirty_background_bytes" = 67108864; # 64 MiB
+    "vm.dirty_bytes" = 268435456; # 256 MiB
   };
 }
