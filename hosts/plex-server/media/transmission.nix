@@ -23,6 +23,8 @@ in {
       watch-dir-enabled = true;
       watch-dir = "${downloadDir}/.watch";
 
+      preallocation = 2;
+
       rpc-port = 9092;
       rpc-bind-address = "0.0.0.0";
       rpc-host-whitelist-enabled = false;
