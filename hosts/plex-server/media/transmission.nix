@@ -17,11 +17,8 @@ in {
     settings = {
       download-dir = downloadDir;
 
-      incomplete-dir-enabled = true;
-      incomplete-dir = "${downloadDir}/.incomplete";
-
-      watch-dir-enabled = true;
-      watch-dir = "${downloadDir}/.watch";
+      incomplete-dir-enabled = false;
+      watch-dir-enabled = false;
 
       preallocation = 2;
 
@@ -46,8 +43,6 @@ in {
 
   systemd.tmpfiles.rules = [
     "d '${downloadDir}'             0775 ${constants.libraryOwner.user} ${constants.libraryOwner.group} - -"
-    "d '${downloadDir}/.incomplete' 0755 ${constants.transmission.user} ${constants.transmission.group} - -"
-    "d '${downloadDir}/.watch'      0755 ${constants.transmission.user} ${constants.transmission.group} - -"
   ];
 
   local.media.transmission = {
