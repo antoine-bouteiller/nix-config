@@ -2,6 +2,10 @@
 
 TRACK_DIR=/tmp/claude_caffeinates
 
+if [ ! -d "$TRACK_DIR" ]; then
+    exit 0
+fi
+
 for pid_file in "$TRACK_DIR"/*; do
     # Check if it's an actual file (handles the case where directory is empty)
     if [ -f "$pid_file" ]; then
@@ -12,16 +16,16 @@ for pid_file in "$TRACK_DIR"/*; do
             # Extract the actual PID from the original filename
             PID=$(basename "$pid_file")
 
-            # Kill the process silently
-            if kill "$PID" 2>/dev/null; then
-                # Clean up the claimed file
-                rm -f "${pid_file}.claimed"
+            # Only kill PIDs that still point at caffeinate. A stale PID file may
+            # otherwise refer to a different process after PID reuse.
+            COMMAND=$(ps -p "$PID" -o comm= 2>/dev/null)
+            case "$COMMAND" in
+                caffeinate|*/caffeinate)
+                    kill "$PID" 2>/dev/null
+                    ;;
+            esac
 
-                # Exit immediately so we only kill ONE process
-                exit 0
-            fi
-
-            # Clean up stale PID files and keep looking for a live process.
+            # Clean up handled and stale PID files and keep draining the queue.
             rm -f "${pid_file}.claimed"
         fi
     fi
