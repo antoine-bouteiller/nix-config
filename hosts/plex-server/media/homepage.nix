@@ -221,6 +221,16 @@ in {
               };
             };
           }
+          {
+            CoolerControl = {
+              icon = "coolercontrol.png";
+              href = "https://${localMedia.coolercontrol.domain}";
+              widget = {
+                type = "coolercontrol";
+                url = "http://localhost:${toString constants.coolercontrol.port}";
+              };
+            };
+          }
         ];
       }
     ];
