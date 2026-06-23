@@ -1,6 +1,6 @@
 {
   "version": "0.2.1",
-  "hash": "sha256-HS6iDBBugYw+SIltHezhz8H9dPx9+Zlr6FWWlnf7UtU=",
+  "hash": "sha256-4Qd6kDbAlaFGDrdE+tzatOcCtyNP9tMRCj8FsspTLxA=",
   "platforms": {
     "aarch64-linux": {
       "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.1.tgz",

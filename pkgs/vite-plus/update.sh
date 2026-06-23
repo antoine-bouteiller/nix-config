@@ -63,7 +63,7 @@ in pkgs.fetchPnpmDeps {
   src = $npm_dir;
   hash = "";
   fetcherVersion = 3;
-  pnpm = pkgs.pnpm_11;
+  pnpm = pkgs.pnpm_10;
 }
 NIXEOF
 
