@@ -50,8 +50,11 @@
       "WebSearch"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/.claude"]
+    "additionalDirectories": [
+      "~/.claude"
+    ]
   },
+  "model": "opus[1m]",
   "skillOverrides": {
     "claude-api": "off",
     "review": "off",

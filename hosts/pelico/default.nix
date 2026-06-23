@@ -57,11 +57,6 @@ in {
   };
 
   homebrew = {
-    taps = [
-      "homebrew/homebrew-core"
-      "homebrew/homebrew-cask"
-      "homebrew/homebrew-bundle"
-    ];
     casks = [
       "tailscale-app"
       "cmux"
