@@ -64,20 +64,16 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/validate-md-domain.sh"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
             "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/validate-no-ai-trailer.sh",
+            "timeout": 5
           }
         ]
       }
@@ -155,5 +151,7 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipWorkflowUsageWarning": true,
+  "skipAutoPermissionPrompt": true,
+  "tui": "fullscreen"
 }

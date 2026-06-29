@@ -2,9 +2,14 @@
   globals,
   pkgs,
   config,
+  inputs,
   ...
 }: let
   inherit (config.home) homeDirectory;
+  customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
+  mcpConfig = pkgs.writeText "mcp-servers.json" (builtins.toJSON {
+    mcpServers.fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
+  });
 in {
   imports = [
     ../../home-manager
@@ -14,6 +19,7 @@ in {
     zed.enable = true;
     claudeCode = {
       enable = true;
+      mcpConfigFile = mcpConfig;
     };
     tmux.enable = true;
   };

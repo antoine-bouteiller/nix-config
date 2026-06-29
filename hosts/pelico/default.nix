@@ -33,6 +33,8 @@ in {
     gh
     glab
     envchain
+    yamllint
+    shellcheck
   ];
 
   users.users.${user} = {

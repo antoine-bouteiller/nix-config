@@ -1,0 +1,17 @@
+{
+  "version": "0.9.6",
+  "platforms": {
+    "aarch64-darwin": {
+      "url": "https://github.com/dmtrKovalenko/fff/releases/download/v0.9.6/fff-mcp-aarch64-apple-darwin",
+      "hash": "sha256-Kaf63q+wYvPllUsauMaeFNyiT14GHNjTseobqzhaN1Q="
+    },
+    "x86_64-linux": {
+      "url": "https://github.com/dmtrKovalenko/fff/releases/download/v0.9.6/fff-mcp-x86_64-unknown-linux-gnu",
+      "hash": "sha256-0b0riaeejtpxsXVCYEmc7B/qr9Kt83LpI3HI1raFCaM="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/dmtrKovalenko/fff/releases/download/v0.9.6/fff-mcp-aarch64-unknown-linux-gnu",
+      "hash": "sha256-keb6FOBAWI3JLehU41AgU28eJFjOM4aytyey56iPZoQ="
+    }
+  }
+}

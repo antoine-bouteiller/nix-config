@@ -39,6 +39,17 @@ Run these commands to understand the current state:
 
 Violating this rule makes the commit invalid. Double-check before executing.
 
+### MANDATORY: Stop immediately if a pre-commit hook fails
+
+If `git commit` fails because a **pre-commit hook** rejected it (lint, knip, type-check, prettier, tests, etc.):
+
+- **STOP immediately.** Do not retry the commit.
+- **Do NOT edit any source file** to get past the hook — no lint suppressions, no `knip: off`/`@knip/ignore` comments, no deleting exports, no `--fix`, no touching unrelated files.
+- **Do NOT stage anything** (`git add` is still forbidden).
+- Report the hook failure verbatim (the failing tool + its error output) and hand control back to the user.
+
+Fixing hook failures is the user's call, not yours. Your job is only to compose the message and commit what is already staged.
+
 ### Your Task
 
 1. Analyze **only the staged changes** (`git diff --cached`) to understand what was modified
@@ -47,7 +58,8 @@ Violating this rule makes the commit invalid. Double-check before executing.
 4. Generate a conventional commit message (feat, fix, docs, etc.) based solely on staged changes
 5. Make the message descriptive but concise
 6. Execute `git commit` with the generated message — **no Co-Authored-By or AI trailers**
-7. Return the commit hash and a short summary
+7. If a pre-commit hook fails, follow the **Stop immediately** rule above — do not work around it
+8. Return the commit hash and a short summary (or the hook failure if it was blocked)
 
 # Conventional Commit Messages
 
