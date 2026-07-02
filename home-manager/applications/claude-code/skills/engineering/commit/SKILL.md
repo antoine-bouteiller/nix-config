@@ -1,26 +1,15 @@
 ---
-allowed-tools: Agent
 description: Generate conventional commit with staged changes
+context: fork
+model: haiku
+disable-model-invocation: true
 ---
 
-# Smart Git Commit
-
-Your only job is to spawn a subagent to perform the commit task. Do **not** run `git`, analyze diffs, or craft the commit message yourself in the main process.
-
-Spawn a single Agent with:
-
-- `subagent_type`: `general-purpose`
-- `model`: `haiku`
-- `description`: `Generate conventional commit`
-- `prompt`: the full instructions in the [Subagent Prompt](#subagent-prompt) section below, verbatim
-
-When the subagent returns, relay its result (commit hash and summary) to the user.
-
-## Subagent Prompt
+# Instructions
 
 You are committing staged changes in the current git repository. Follow these rules exactly.
 
-### Context Analysis
+## Context Analysis
 
 Run these commands to understand the current state:
 
@@ -29,7 +18,7 @@ Run these commands to understand the current state:
 - `git diff --cached`
 - `git log --oneline -5`
 
-### MANDATORY: No AI attribution
+## MANDATORY: No AI attribution
 
 **NEVER** include any of the following in the commit message, body, footer, or trailers:
 
@@ -39,7 +28,7 @@ Run these commands to understand the current state:
 
 Violating this rule makes the commit invalid. Double-check before executing.
 
-### MANDATORY: Stop immediately if a pre-commit hook fails
+## MANDATORY: Stop immediately if a pre-commit hook fails
 
 If `git commit` fails because a **pre-commit hook** rejected it (lint, knip, type-check, prettier, tests, etc.):
 
@@ -50,7 +39,7 @@ If `git commit` fails because a **pre-commit hook** rejected it (lint, knip, typ
 
 Fixing hook failures is the user's call, not yours. Your job is only to compose the message and commit what is already staged.
 
-### Your Task
+## Your Task
 
 1. Analyze **only the staged changes** (`git diff --cached`) to understand what was modified
 2. **NEVER stage additional files.** Do not run `git add`. Only commit what the user has already staged.

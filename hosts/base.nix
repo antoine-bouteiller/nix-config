@@ -50,5 +50,6 @@
     alejandra
     nixd
     ffmpeg
+    sops
   ];
 }

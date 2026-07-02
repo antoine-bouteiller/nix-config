@@ -32,9 +32,9 @@ in {
     customPkgs.sonarqube-cli
     gh
     glab
-    envchain
     yamllint
     shellcheck
+    beads
   ];
 
   users.users.${user} = {

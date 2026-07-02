@@ -22,6 +22,10 @@ in {
       mcpConfigFile = mcpConfig;
     };
     tmux.enable = true;
+    runenv = {
+      enable = true;
+      secretsDir = "${homeDirectory}/.dotfiles/hosts/pelico/secrets";
+    };
   };
 
   home = {

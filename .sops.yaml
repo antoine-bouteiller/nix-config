@@ -1,4 +1,8 @@
 creation_rules:
+  # Personal secrets for the Mac — kept off the plex-server key.
+  - path_regex: hosts/pelico/secrets/.*
+    age:
+      - age1w5wyppwmfvwwh4xn2hpkwn8flwh69aarhyt4xsnp6hm3d5y69sfs8n6glg # Mac Pelico
   - age:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICUZ+rb5WpsUv/4wVWlQ0aCRiNzZCIQngxXiNAJx6hJs # desktop
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHhSmVRhMXbxDkDOaUk0udibjBos2nDg6byvZ//dzMwL # dell

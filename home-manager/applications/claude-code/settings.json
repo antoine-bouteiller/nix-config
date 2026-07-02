@@ -74,6 +74,10 @@
             "type": "command",
             "command": "~/.claude/hooks/validate-no-ai-trailer.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-dangerous-git.sh"
           }
         ]
       }
@@ -150,8 +154,8 @@
       }
     }
   },
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "skipAutoPermissionPrompt": true
 }

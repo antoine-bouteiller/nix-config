@@ -38,7 +38,7 @@
 
   skills = findSkills "";
 
-  topLevelFiles = ["CLAUDE.md" "settings.json" "hooks" "commands" "rules"];
+  topLevelFiles = ["CLAUDE.md" "settings.json" "hooks" "rules"];
 
   claudePackage = customPkgs.claude-code.override {
     inherit (cfg) mcpConfigFile;

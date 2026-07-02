@@ -5,5 +5,6 @@
     ./ssh.nix
     ./tmux.nix
     ./shell-tools.nix
+    ./runenv.nix
   ];
 }
