@@ -1,7 +1,6 @@
 {
   caddy,
   lib,
-  writeShellScript,
 }: let
   sources = lib.importJSON ./sources.json;
   pkg =
@@ -19,10 +18,6 @@ in
     passthru =
       (old.passthru or {})
       // {
-        updateScript = writeShellScript "caddy-cloudflare-update" ''
-          set -e
-          cd "$PWD/pkgs/caddy-cloudflare"
-          exec ./update.sh
-        '';
+        updateScript = ./update.nu;
       };
   })

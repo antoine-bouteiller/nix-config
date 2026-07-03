@@ -3,7 +3,6 @@
   stdenv,
   autoPatchelfHook,
   fetchurl,
-  writeShellScript,
 }: let
   sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
@@ -42,11 +41,7 @@ in
 
     dontStrip = true;
 
-    passthru.updateScript = writeShellScript "sonarqube-cli-update" ''
-      set -e
-      cd "$PWD/pkgs/sonarqube-cli"
-      exec ./update.sh
-    '';
+    passthru.updateScript = ./update.nu;
 
     meta = with lib; {
       inherit version;

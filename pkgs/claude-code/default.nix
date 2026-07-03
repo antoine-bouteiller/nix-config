@@ -4,11 +4,6 @@
   fetchurl,
   makeWrapper,
   autoPatchelfHook,
-  writeShellScript,
-  bash,
-  curl,
-  jq,
-  nix,
   zlib,
   additionalPaths ? [],
   disableTelemetry ? false,
@@ -94,16 +89,7 @@ in
     '';
 
     passthru = {
-      updateScript = writeShellScript "claude-code-update" ''
-        export PATH="${lib.makeBinPath [bash curl jq nix]}:$PATH"
-        for candidate in "$PWD/pkgs/claude-code" "$PWD"; do
-          if [ -f "$candidate/update.sh" ] && [ -f "$candidate/sources.json" ]; then
-            exec bash "$candidate/update.sh"
-          fi
-        done
-        echo "Could not locate pkgs/claude-code source directory (cwd: $PWD)" >&2
-        exit 1
-      '';
+      updateScript = ./update.nu;
     };
 
     meta = with lib; {

@@ -3,7 +3,6 @@
   stdenv,
   autoPatchelfHook,
   fetchurl,
-  writeShellScript,
 }: let
   sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
@@ -40,11 +39,7 @@ in
       runHook postInstall
     '';
 
-    passthru.updateScript = writeShellScript "fff-mcp-update" ''
-      set -e
-      cd "$PWD/pkgs/fff-mcp"
-      exec ./update.sh
-    '';
+    passthru.updateScript = ./update.nu;
 
     meta = with lib; {
       inherit version;
