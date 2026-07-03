@@ -9,7 +9,6 @@
 
   local.home-manager = {
     claudeCode.enable = true;
-    gitHooks.enable = true;
     tmux.enable = true;
     zed.enable = true;
     ghostty.enable = true;

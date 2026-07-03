@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+
+echo "==> Bumping claude-code to latest release..."
+# Run the repo copy (not the store path) so it can write sources.json.
+./pkgs/claude-code/update.nu
+
+exec "${script_dir}/apply" "$@"

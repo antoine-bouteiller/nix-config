@@ -34,6 +34,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     agent-skills = {
       url = "github:Kyure-A/agent-skills-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -79,6 +83,7 @@
       "apply" = mkApp "apply" system;
       "clean" = mkApp "clean" system;
       "update" = mkApp "update" system;
+      "update-claude" = mkApp "update-claude" system;
     };
   in {
     apps = nixpkgs.lib.genAttrs allSystems mkApps;
@@ -112,8 +117,32 @@
       system: (inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix).config.build.wrapper
     );
 
+    # `nix develop` installs gitleaks + treefmt as a pre-commit hook (run once).
+    devShells = forAllSystems (system: {
+      default = nixpkgs.legacyPackages.${system}.mkShell {
+        inherit (self.checks.${system}.pre-commit-check) shellHook;
+        buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+      };
+    });
+
     checks = forAllSystems (
       system: let
+        pre-commit-check = inputs.git-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            # No built-in gitleaks hook; scan staged changes with our config.
+            gitleaks = {
+              enable = true;
+              name = "gitleaks";
+              entry = "${nixpkgs.legacyPackages.${system}.gitleaks}/bin/gitleaks protect --staged --config .gitleaks.toml";
+              pass_filenames = false;
+            };
+            treefmt = {
+              enable = true;
+              package = self.formatter.${system};
+            };
+          };
+        };
         darwinChecks = nixpkgs.lib.optionalAttrs (builtins.elem system darwinSystems) (
           nixpkgs.lib.mapAttrs (_: cfg: cfg.system) self.darwinConfigurations
         );
@@ -121,7 +150,7 @@
           nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) self.nixosConfigurations
         );
       in
-        darwinChecks // nixosChecks
+        darwinChecks // nixosChecks // {inherit pre-commit-check;}
     );
 
     nixosModules = {

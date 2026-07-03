@@ -19,7 +19,6 @@ in {
 
   local.home-manager = {
     zed.enable = true;
-    gitHooks.enable = true;
     claudeCode = {
       enable = true;
       mcpConfigFile = mcpConfig;

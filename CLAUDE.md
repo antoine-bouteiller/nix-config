@@ -8,8 +8,8 @@ Secrets via sops-nix. Entry point: `flake.nix`.
 - **`git add` before applying.** Flakes ignore untracked files — a new `.nix` file is invisible to
   the build until staged. Stage first, then apply.
 - **Format with `nix fmt`.** The flake formatter is treefmt (alejandra, deadnix, statix, typos,
-  oxfmt, renovate-validator); config in `treefmt.nix`. The pre-commit hook (on dev hosts) auto-runs
-  gitleaks + treefmt on staged files.
+  oxfmt, renovate-validator); config in `treefmt.nix`. The pre-commit hook (gitleaks + treefmt) is
+  managed by cachix/git-hooks.nix — run `nix develop` once in the repo to install it into `.git/hooks`.
 
 ## Commands
 
@@ -17,6 +17,7 @@ Secrets via sops-nix. Entry point: `flake.nix`.
 | ------------------------------------ | ------------------------------------------------------------ |
 | `nix run .#apply`                    | `darwin-rebuild`/`nixos-rebuild switch` for the current host |
 | `nix run .#update`                   | `nix flake update` + run every package's `update.nu`         |
+| `nix run .#update-claude`            | bump only claude-code to latest release, then `apply`        |
 | `nix run .#clean`                    | GC generations older than 1 day                              |
 | `nix build .#checks.<system>.<host>` | dry build a host (CI builds all)                             |
 
