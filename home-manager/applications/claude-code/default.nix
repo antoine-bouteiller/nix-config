@@ -53,6 +53,8 @@
     inherit (cfg) mcpConfigFile;
   };
 in {
+  imports = [inputs.agent-skills.homeManagerModules.default];
+
   options.local.home-manager.claudeCode = {
     enable = lib.mkEnableOption "claude code";
 
@@ -76,7 +78,31 @@ in {
       # Utils
       customPkgs.comment-checker
       rtk
+      ast-grep # binary used by the pinned ast-grep skill
     ];
+
+    # External skills pinned as flake inputs, deployed via agent-skills-nix.
+    # Local skills stay on mkOutOfStoreSymlink below (edit-and-go, no rebuild);
+    # structure = "link" uses home.file so the store bundle coexists with them
+    # instead of rsync --delete wiping the local skill symlinks.
+    programs.agent-skills = {
+      enable = true;
+      sources = {
+        ast-grep = {
+          path = inputs.ast-grep-skill;
+          subdir = "ast-grep/skills";
+        };
+        agent-browser = {
+          path = inputs.agent-browser-skill;
+          subdir = "skills";
+        };
+      };
+      skills.enableAll = ["ast-grep" "agent-browser"];
+      targets.claude = {
+        enable = true;
+        structure = "link";
+      };
+    };
 
     home.activation.cleanClaudeSkillsSymlink = lib.hm.dag.entryBefore ["writeBoundary"] ''
       if [ -L "$HOME/.claude/skills" ]; then

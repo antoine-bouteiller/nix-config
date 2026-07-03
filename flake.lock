@@ -1,5 +1,60 @@
 {
   "nodes": {
+    "agent-browser-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782493662,
+        "narHash": "sha256-uCLzNQ0NAeg1TtA6tcBhTu5VTyjkumsyiEpAhYLPQD0=",
+        "owner": "vercel-labs",
+        "repo": "agent-browser",
+        "rev": "ed2e10598c9064aecfaeb7cf21b540684db4be2c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vercel-labs",
+        "repo": "agent-browser",
+        "type": "github"
+      }
+    },
+    "agent-skills": {
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782575918,
+        "narHash": "sha256-YzRp956W8ci29lYgsXCBSt8SsIcWBv+67/i9HWSl0Q0=",
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "rev": "79eba8b513730982ab2a00dfbccd4fae84321b9c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "type": "github"
+      }
+    },
+    "ast-grep-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769044697,
+        "narHash": "sha256-LgGFtPieyKtoru22AhHW8hvkJ8kCHO2Cr8rBOWGuxvY=",
+        "owner": "ast-grep",
+        "repo": "claude-skill",
+        "rev": "577f4d4507678f2c8cee150fae25e6ce309f70b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ast-grep",
+        "repo": "claude-skill",
+        "type": "github"
+      }
+    },
     "autoscan": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -257,6 +312,9 @@
     },
     "root": {
       "inputs": {
+        "agent-browser-skill": "agent-browser-skill",
+        "agent-skills": "agent-skills",
+        "ast-grep-skill": "ast-grep-skill",
         "autoscan": "autoscan",
         "cosmic-manager": "cosmic-manager",
         "darwin": "darwin",
@@ -265,7 +323,8 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "treefmt-nix": "treefmt-nix_2"
       }
     },
     "sops-nix": {
@@ -317,6 +376,26 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_2": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
         "type": "github"
       },
       "original": {

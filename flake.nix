@@ -30,6 +30,24 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    agent-skills = {
+      url = "github:Kyure-A/agent-skills-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+    # External Claude Code skills, pinned as non-flake sources.
+    ast-grep-skill = {
+      url = "github:ast-grep/claude-skill";
+      flake = false;
+    };
+    agent-browser-skill = {
+      url = "github:vercel-labs/agent-browser";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -88,7 +106,11 @@
         }
     );
 
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    # treefmt (alejandra/deadnix/statix/typos/oxfmt/renovate-validator).
+    # Run with `nix fmt`; also invoked by the git pre-commit hook.
+    formatter = forAllSystems (
+      system: (inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix).config.build.wrapper
+    );
 
     checks = forAllSystems (
       system: let

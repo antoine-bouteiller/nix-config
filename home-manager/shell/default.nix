@@ -6,5 +6,6 @@
     ./tmux.nix
     ./shell-tools.nix
     ./runenv.nix
+    ./git-hooks.nix
   ];
 }

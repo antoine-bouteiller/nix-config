@@ -52,7 +52,6 @@
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
-  "model": "sonnet[1m]",
   "skillOverrides": {
     "claude-api": "off",
     "review": "off",

@@ -15,6 +15,7 @@ in {
 
   local.home-manager = {
     claudeCode.enable = true;
+    gitHooks.enable = true;
     tmux.enable = true;
   };
 
