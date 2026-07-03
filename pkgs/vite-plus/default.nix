@@ -3,12 +3,9 @@
   stdenv,
   autoPatchelfHook,
   fetchurl,
-  fetchPnpmDeps,
+  importNpmLock,
   makeWrapper,
   nodejs,
-  pnpm_10,
-  pnpmConfigHook,
-  writeShellScript,
 }: let
   sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
@@ -16,7 +13,7 @@
 
   source =
     sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   vpBinary = fetchurl {
     inherit (source) url hash;
@@ -30,10 +27,9 @@ in
 
     nativeBuildInputs =
       [
+        importNpmLock.npmConfigHook
         makeWrapper
         nodejs
-        pnpm_10
-        pnpmConfigHook
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
@@ -43,13 +39,8 @@ in
       stdenv.cc.cc.lib
     ];
 
-    pnpmDeps = fetchPnpmDeps {
-      pname = "vite-plus-pnpm-deps";
-      inherit version;
-      src = ./npm;
-      inherit (sourcesData) hash;
-      fetcherVersion = 3;
-      pnpm = pnpm_10;
+    npmDeps = importNpmLock {
+      npmRoot = ./npm;
     };
 
     buildPhase = ''
@@ -70,13 +61,15 @@ in
       tar xzf ${vpBinary} --strip-components=1 -C $out/bin
       chmod 755 $out/bin/vp
 
-      rm -f node_modules/.pnpm-workspace-state-v1.json
       find node_modules -name '.bin' -type d -exec rm -rf {} + 2>/dev/null || true
-      rm -f node_modules/.modules.yaml
+      rm -f node_modules/.package-lock.json
       mv node_modules $out/node_modules
 
       wrapProgram $out/bin/vp \
         --prefix PATH : ${lib.makeBinPath [nodejs]}
+
+      ln -s vp $out/bin/vpr
+      ln -s vp $out/bin/vpx
 
       runHook postInstall
     '';
@@ -95,11 +88,7 @@ in
     dontStrip = true;
 
     passthru = {
-      updateScript = writeShellScript "vite-plus-update" ''
-        set -e
-        cd "$PWD/pkgs/vite-plus"
-        exec ./update.sh
-      '';
+      updateScript = ./update.nu;
     };
 
     meta = with lib; {
