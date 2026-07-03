@@ -7,7 +7,7 @@
     statix.enable = true;
     typos = {
       enable = true;
-      excludes = ["*.svg"];
+      excludes = ["*.svg" "hosts/*/secrets/*.yaml"];
     };
     oxfmt.enable = true;
   };

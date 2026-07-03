@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  inputs,
+  ...
+}: let
   zoxideInit = pkgs.runCommand "zoxide-init.zsh" {} ''
     ${pkgs.zoxide}/bin/zoxide init zsh --cmd cd > $out
   '';
@@ -12,6 +16,9 @@
     ${pkgs.mise}/bin/mise activate zsh > $out
   '';
 in {
+  # Same treefmt wrapper `nix fmt` uses (config baked in), so `treefmt` works anywhere.
+  home.packages = [inputs.self.formatter.${pkgs.stdenv.hostPlatform.system}];
+
   programs = {
     zoxide = {
       enable = true;
