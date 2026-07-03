@@ -22,7 +22,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [pkgs.sops pkgs.age];
+    home.packages = [
+      pkgs.sops
+      pkgs.age
+    ];
     home.sessionVariables.SOPS_AGE_KEY_FILE = cfg.ageKeyFile;
 
     # runenv <namespace> <cmd> [args...] — decrypts secrets/<namespace>.yaml into the

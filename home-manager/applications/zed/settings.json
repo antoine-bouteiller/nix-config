@@ -6,27 +6,27 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/srv/docker"],
+          "paths": ["/srv/docker"]
         },
         {
-          "paths": ["/srv/docker/meta/./"],
-        },
-      ],
-    },
+          "paths": ["/srv/docker/meta/./"]
+        }
+      ]
+    }
   ],
   "agent_servers": {},
   "cli_default_open_behavior": "new_window",
   "project_panel": {
-    "dock": "right",
+    "dock": "right"
   },
   "outline_panel": {
-    "dock": "right",
+    "dock": "right"
   },
   "collaboration_panel": {
-    "dock": "right",
+    "dock": "right"
   },
   "git_panel": {
-    "dock": "right",
+    "dock": "right"
   },
   "diff_view_style": "split",
   "buffer_font_family": "MesloLGM Nerd Font",
@@ -37,98 +37,122 @@
         "experimental": {
           "completion": {
             "enableServerSideFuzzyMatch": true,
-            "entriesLimit": 10,
-          },
+            "entriesLimit": 10
+          }
         },
         "javascript": {
           "updateImportsOnFileMove": {
-            "enabled": "always",
+            "enabled": "always"
           },
           "preferences": {
-            "importModuleSpecifier": "non-relative",
-          },
+            "importModuleSpecifier": "non-relative"
+          }
         },
         "typescript": {
           "preferGoToSourceDefinition": true,
           "updateImportsOnFileMove": {
-            "enabled": "always",
+            "enabled": "always"
           },
           "preferences": {
-            "importModuleSpecifier": "non-relative",
+            "importModuleSpecifier": "non-relative"
           },
           "tsserver": {
             "maxTsServerMemory": 16384,
             "enableTracing": false,
-            "log": "off",
-          },
-        },
-      },
-    },
+            "log": "off"
+          }
+        }
+      }
+    }
   },
-  "file_scan_exclusions": ["**/.git", "**/.svn", "**/.hg", "**/CVS", "**/.DS_Store", "**/.worktree", "**/Thumbs.db", "**/.classpath", "**/.settings"],
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/.worktree",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings"
+  ],
   "languages": {
     "Python": {
-      "language_servers": ["!basedpyright", "ruff", "ty", "!pyrefly", "!pyright", "!pylsp", "..."],
+      "language_servers": ["!basedpyright", "ruff", "ty", "!pyrefly", "!pyright", "!pylsp", "..."]
     },
     "TSX": {
       "format_on_save": "on",
-      "language_servers": ["eslint", "!typescript-language-server", "vtsls", "!oxlint", "!oxfmt", "..."],
+      "language_servers": [
+        "eslint",
+        "!typescript-language-server",
+        "vtsls",
+        "!oxlint",
+        "!oxfmt",
+        "..."
+      ],
       "code_actions_on_format": {
         "source.fixAll.eslint": true,
-        "source.organizeImports": true,
-      },
+        "source.organizeImports": true
+      }
     },
     "TypeScript": {
       "format_on_save": "on",
-      "language_servers": ["eslint", "!typescript-language-server", "vtsls", "!oxlint", "!oxfmt", "..."],
+      "language_servers": [
+        "eslint",
+        "!typescript-language-server",
+        "vtsls",
+        "!oxlint",
+        "!oxfmt",
+        "..."
+      ],
       "code_actions_on_format": {
         "source.fixAll.eslint": true,
-        "source.organizeImports": true,
-      },
+        "source.organizeImports": true
+      }
     },
     "Astro": {
       "language_servers": ["eslint", "vtsls", "astro-language-server", "!oxlint", "!oxfmt", "..."],
       "code_actions_on_format": {
         "source.fixAll.eslint": true,
-        "source.organizeImports": true,
-      },
+        "source.organizeImports": true
+      }
     },
     "Nix": {
       "language_servers": ["nixd"],
       "formatter": {
         "external": {
           "command": "alejandra", // or "nixfmt"
-          "arguments": ["--quiet", "--"],
-        },
-      },
+          "arguments": ["--quiet", "--"]
+        }
+      }
     },
     "TOML": {
       "language_servers": [],
-      "format_on_save": "off",
-    },
+      "format_on_save": "off"
+    }
   },
   "agent": {
     "dock": "left",
     "default_model": {
       "enable_thinking": true,
       "provider": "google",
-      "model": "gemini-2.5-flash",
+      "model": "gemini-2.5-flash"
     },
     "commit_message_model": {
       "provider": "google",
-      "model": "gemini-2.5-flash",
+      "model": "gemini-2.5-flash"
     },
-    "model_parameters": [],
+    "model_parameters": []
   },
   "terminal": {
     "font_family": "MesloLGM Nerd Font",
     "font_size": 12,
     "line_height": {
-      "custom": 1.4,
-    },
+      "custom": 1.4
+    }
   },
   "minimap": {
-    "show": "auto",
+    "show": "auto"
   },
   "autosave": "on_focus_change",
   "confirm_quit": true,
@@ -140,7 +164,7 @@
   "theme": {
     "mode": "system",
     "light": "Ayu Light",
-    "dark": "Fleet Dark",
+    "dark": "Fleet Dark"
   },
-  "icon_theme": "Material Icon Theme",
+  "icon_theme": "Material Icon Theme"
 }

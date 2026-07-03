@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  user = globals.user;
+  inherit (globals) user;
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
@@ -44,7 +44,7 @@ in {
     caffeine-ng
   ];
 
-  services.logind.settings.Login.HandleLidSwitch = "hybernate";
+  services.logind.settings.Login.HandleLidSwitch = "hibernate";
 
   environment.etc."brave/policies/managed/policies.json".text = builtins.toJSON {
     BraveRewardsDisabled = true;
@@ -71,7 +71,10 @@ in {
   users.users.${user} = {
     isNormalUser = true;
     description = globals.name;
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   system.stateVersion = "25.11";

@@ -4,11 +4,7 @@
   pkgs,
   ...
 }: let
-  localDomains =
-    lib.unique
-    (map
-      (service: service.domain)
-      (lib.attrValues config.local.media));
+  localDomains = lib.unique (map (service: service.domain) (lib.attrValues config.local.media));
 in {
   config = {
     local.media.adguard = {

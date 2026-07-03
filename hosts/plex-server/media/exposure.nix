@@ -15,53 +15,57 @@ in {
   options.local.media = lib.mkOption {
     default = {};
     description = "Media service hostnames and exposure settings.";
-    type = lib.types.attrsOf (lib.types.submodule ({
-      name,
-      config,
-      ...
-    }: {
-      options = {
-        host = lib.mkOption {
-          type = lib.types.str;
-          default = name;
-          description = "Local DNS label for this service.";
-        };
+    type = lib.types.attrsOf (
+      lib.types.submodule (
+        {
+          name,
+          config,
+          ...
+        }: {
+          options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = name;
+              description = "Local DNS label for this service.";
+            };
 
-        port = lib.mkOption {
-          type = lib.types.nullOr lib.types.port;
-          default = null;
-          description = "Service port to expose through Caddy and optional Cloudflare Tunnel.";
-        };
+            port = lib.mkOption {
+              type = lib.types.nullOr lib.types.port;
+              default = null;
+              description = "Service port to expose through Caddy and optional Cloudflare Tunnel.";
+            };
 
-        auth = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Whether this Caddy route should import the auth proxy snippet.";
-        };
+            auth = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether this Caddy route should import the auth proxy snippet.";
+            };
 
-        public = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Whether this service should also be exposed through Cloudflare Tunnel.";
-        };
+            public = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Whether this service should also be exposed through Cloudflare Tunnel.";
+            };
 
-        extraProxyConfig = lib.mkOption {
-          type = lib.types.lines;
-          default = "";
-          description = "Extra Caddy reverse_proxy configuration for this service.";
-        };
+            extraProxyConfig = lib.mkOption {
+              type = lib.types.lines;
+              default = "";
+              description = "Extra Caddy reverse_proxy configuration for this service.";
+            };
 
-        domain = lib.mkOption {
-          type = lib.types.str;
-          default =
-            if config.host == ""
-            then constants.network.domain
-            else "${config.host}.${constants.network.domain}";
-          readOnly = true;
-          description = "Computed domain for this service.";
-        };
-      };
-    }));
+            domain = lib.mkOption {
+              type = lib.types.str;
+              default =
+                if config.host == ""
+                then constants.network.domain
+                else "${config.host}.${constants.network.domain}";
+              readOnly = true;
+              description = "Computed domain for this service.";
+            };
+          };
+        }
+      )
+    );
   };
 
   config = {
@@ -76,10 +80,10 @@ in {
       lib.concatMapAttrs (
         _: svc:
           mkCaddyVirtualHost {
-            domain = svc.domain;
-            port = svc.port;
-            auth = svc.auth;
-            extraProxyConfig = svc.extraProxyConfig;
+            inherit (svc) domain;
+            inherit (svc) port;
+            inherit (svc) auth;
+            inherit (svc) extraProxyConfig;
           }
       )
       exposedServices;
@@ -89,7 +93,7 @@ in {
         _: svc:
           mkCloudflaredIngress {
             name = svc.host;
-            port = svc.port;
+            inherit (svc) port;
           }
       )
       publicServices;

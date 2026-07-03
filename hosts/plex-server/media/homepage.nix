@@ -175,7 +175,10 @@ in {
                 type = "prowlarr";
                 url = "http://localhost:${toString config.services.prowlarr.settings.server.port}";
                 key = "{{HOMEPAGE_FILE_PROWLARR_API_KEY}}";
-                fields = ["numberOfFailGrabs" "numberOfFailQueries"];
+                fields = [
+                  "numberOfFailGrabs"
+                  "numberOfFailQueries"
+                ];
               };
             };
           }
@@ -217,7 +220,10 @@ in {
               widget = {
                 type = "transmission";
                 url = "http://localhost:${toString config.services.transmission.settings.rpc-port}";
-                fields = ["download" "upload"];
+                fields = [
+                  "download"
+                  "upload"
+                ];
               };
             };
           }
@@ -246,7 +252,10 @@ in {
       {
         resources = {
           label = "Storage";
-          disk = ["/" constants.paths.mediaDir];
+          disk = [
+            "/"
+            constants.paths.mediaDir
+          ];
         };
       }
     ];

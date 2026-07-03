@@ -70,7 +70,10 @@ in {
   services.postgresql = {
     enable = true;
     enableTCPIP = true;
-    initdbArgs = ["--auth-host=scram-sha-256" "--pwfile=${config.sops.secrets."postgres/password".path}"];
+    initdbArgs = [
+      "--auth-host=scram-sha-256"
+      "--pwfile=${config.sops.secrets."postgres/password".path}"
+    ];
 
     extensions = ps: [
       ps.pgvector
@@ -83,11 +86,9 @@ in {
 
     # ident map: allow pgbouncer OS user to connect as each service DB user
     identMap =
-      lib.concatMapStringsSep "\n" (e: "pgbouncer_map pgbouncer ${e.user}")
-      databases
+      lib.concatMapStringsSep "\n" (e: "pgbouncer_map pgbouncer ${e.user}") databases
       + "\n"
-      + lib.concatMapStringsSep "\n" (e: "pgbouncer_map ${e.user} ${e.user}")
-      databases
+      + lib.concatMapStringsSep "\n" (e: "pgbouncer_map ${e.user} ${e.user}") databases
       + "\npgbouncer_map postgres postgres";
 
     authentication = pkgs.lib.mkForce ''
@@ -109,15 +110,22 @@ in {
 
   # Auto-generate ALTER OWNER for extraDatabases + custom setupScripts
   systemd.services.postgresql-setup.script = let
-    ownershipScripts = lib.concatMapStringsSep "\n" (e:
-      lib.concatMapStringsSep "\n" (db: ''psql -tAc "ALTER DATABASE \"${db}\" OWNER TO ${e.user}"'')
-      (e.extraDatabases or []))
-    (builtins.filter (e: (e.extraDatabases or []) != []) databases);
-    customScripts =
-      lib.concatMapStringsSep "\n" (e: e.setupScript or "")
-      (builtins.filter (e: (e.setupScript or "") != "") databases);
+    ownershipScripts = lib.concatMapStringsSep "\n" (
+      e:
+        lib.concatMapStringsSep "\n" (db: ''psql -tAc "ALTER DATABASE \"${db}\" OWNER TO ${e.user}"'') (
+          e.extraDatabases or []
+        )
+    ) (builtins.filter (e: (e.extraDatabases or []) != []) databases);
+    customScripts = lib.concatMapStringsSep "\n" (e: e.setupScript or "") (
+      builtins.filter (e: (e.setupScript or "") != "") databases
+    );
   in
     lib.mkAfter (
-      lib.concatStringsSep "\n" (builtins.filter (s: s != "") [ownershipScripts customScripts])
+      lib.concatStringsSep "\n" (
+        builtins.filter (s: s != "") [
+          ownershipScripts
+          customScripts
+        ]
+      )
     );
 }

@@ -40,7 +40,7 @@ in
     dontDropIconThemeCache = true;
 
     meta = with lib; {
-      description = "WhiteSur-alt icon theme (Vince Liuice) with local overlay";
+      description = "WhiteSure-alt icon theme (Vince Liuice) with local overlay";
       homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
       license = licenses.gpl3Only;
       platforms = platforms.all;

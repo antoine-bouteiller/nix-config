@@ -9,8 +9,8 @@
         "github.com/caddy-dns/cloudflare@v${sources.version}"
       ];
       inherit (sources) hash;
-    })
-    .overrideAttrs (_: {
+    }).overrideAttrs
+    (_: {
       doInstallCheck = false;
     });
 in

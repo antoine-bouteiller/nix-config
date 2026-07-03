@@ -146,7 +146,7 @@ The `body` should include the motivation for the change and contrast this with p
 
 ### Footer
 
-The `footer` should contain issue references and informations about **Breaking Changes**
+The `footer` should contain issue references and information about **Breaking Changes**
 
 - The footer is an **optional** part, except if the commit introduce breaking changes
 - _Optionally_ reference issue identifiers (e.g., `Closes #123`, `Fixes JIRA-456`)

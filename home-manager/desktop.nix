@@ -81,13 +81,19 @@ in {
           };
           plugins_center = {
             __type = "optional";
-            value = ["com.system76.CosmicAppList" "com.system76.CosmicAppletWorkspace"];
+            value = [
+              "com.system76.CosmicAppList"
+              "com.system76.CosmicAppletWorkspace"
+            ];
           };
           plugins_wings = {
             __type = "optional";
             value = {
               __type = "tuple";
-              value = [[] []];
+              value = [
+                []
+                []
+              ];
             };
           };
           autohide = {
@@ -179,7 +185,7 @@ in {
       enable = true;
       gtk2.force = true;
       iconTheme = {
-        name = "WhiteSur";
+        name = "WhiteSure";
         package = customPkgs.whitesur-icon-theme;
       };
     };

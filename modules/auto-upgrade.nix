@@ -6,7 +6,7 @@
   ...
 }: let
   cfg = config.autoUpgrade;
-  flakePath = config.flakePath;
+  inherit (config) flakePath;
 
   isDarwin = options ? launchd;
 
@@ -20,7 +20,11 @@
 
   updateFlakeScript = pkgs.writeShellApplication {
     name = "update-flake";
-    runtimeInputs = [pkgs.git pkgs.openssh pkgs.coreutils];
+    runtimeInputs = [
+      pkgs.git
+      pkgs.openssh
+      pkgs.coreutils
+    ];
     text = ''
       cd "${flakePath}"
       export GIT_SSH_COMMAND="ssh ${sshOpts}"
@@ -39,7 +43,15 @@
       Weekday = cfg.schedule.weekday;
     };
 
-  systemdDays = ["Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"];
+  systemdDays = [
+    "Mon"
+    "Tue"
+    "Wed"
+    "Thu"
+    "Fri"
+    "Sat"
+    "Sun"
+  ];
   systemdDayStr =
     if cfg.schedule.weekday == null
     then ""
@@ -91,7 +103,9 @@ in {
   config = lib.mkIf cfg.enable (
     if isDarwin
     then {
-      environment.etc."ssh/ssh_known_hosts".text = lib.concatStringsSep "\n" (map (key: "github.com ${key}") githubKeys);
+      environment.etc."ssh/ssh_known_hosts".text = lib.concatStringsSep "\n" (
+        map (key: "github.com ${key}") githubKeys
+      );
 
       launchd.daemons.nix-auto-upgrade = {
         script = ''
@@ -108,12 +122,16 @@ in {
       };
     }
     else {
-      programs.ssh.knownHosts = lib.listToAttrs (lib.imap0 (i: key:
-        lib.nameValuePair "github-${toString i}" {
-          hostNames = ["github.com"];
-          publicKey = key;
-        })
-      githubKeys);
+      programs.ssh.knownHosts = lib.listToAttrs (
+        lib.imap0 (
+          i: key:
+            lib.nameValuePair "github-${toString i}" {
+              hostNames = ["github.com"];
+              publicKey = key;
+            }
+        )
+        githubKeys
+      );
 
       systemd.services.flake-pull = {
         description = "Pull latest flake.lock from remote";
@@ -143,7 +161,7 @@ in {
           dates = systemdCalendar;
           flake = "${flakePath}#${config.networking.hostName}";
           flags = ["-L"];
-          allowReboot = cfg.allowReboot;
+          inherit (cfg) allowReboot;
         }
         // lib.optionalAttrs cfg.allowReboot {
           rebootWindow = {

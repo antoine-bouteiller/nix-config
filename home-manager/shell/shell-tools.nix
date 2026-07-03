@@ -16,7 +16,10 @@ in {
     zoxide = {
       enable = true;
       enableZshIntegration = false;
-      options = ["--cmd" "cd"];
+      options = [
+        "--cmd"
+        "cd"
+      ];
     };
 
     carapace = {

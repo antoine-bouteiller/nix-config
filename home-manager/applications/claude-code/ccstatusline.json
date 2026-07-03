@@ -43,16 +43,10 @@
   "minimalistMode": false,
   "powerline": {
     "enabled": false,
-    "separators": [
-      ""
-    ],
-    "separatorInvertBackground": [
-      true
-    ],
+    "separators": [""],
+    "separatorInvertBackground": [true],
     "startCaps": [],
-    "endCaps": [
-      ""
-    ],
+    "endCaps": [""],
     "theme": "custom",
     "autoAlign": true,
     "continueThemeAcrossLines": true

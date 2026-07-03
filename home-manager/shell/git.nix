@@ -47,7 +47,7 @@ in {
     };
     settings = {
       user = {
-        name = globals.name;
+        inherit (globals) name;
         email = lib.mkDefault globals.email;
       };
       init.defaultBranch = "main";

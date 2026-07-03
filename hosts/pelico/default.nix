@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  user = globals.user;
+  inherit (globals) user;
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   imports = [
@@ -46,7 +46,10 @@ in {
 
   nix = {
     settings = {
-      trusted-users = ["@admin" "${user}"];
+      trusted-users = [
+        "@admin"
+        "${user}"
+      ];
     };
 
     gc = {

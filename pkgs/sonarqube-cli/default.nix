@@ -10,7 +10,7 @@
 
   source =
     sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   binary = fetchurl {
     inherit (source) url hash;

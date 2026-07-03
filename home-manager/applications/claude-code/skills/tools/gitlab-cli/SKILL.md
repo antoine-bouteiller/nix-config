@@ -11,6 +11,7 @@ Provides guidance for using `glab`, the official GitLab CLI, to perform GitLab o
 ## When to Use This Skill
 
 Invoke when the user needs to:
+
 - Create, review, or manage merge requests
 - Work with GitLab issues
 - Monitor or trigger CI/CD pipelines
@@ -20,6 +21,7 @@ Invoke when the user needs to:
 ## Prerequisites
 
 Verify glab installation before executing commands:
+
 ```bash
 glab --version
 ```
@@ -113,6 +115,7 @@ glab ci lint
 ### Working Outside Repository Context
 
 When not in a Git repository, specify the repository:
+
 ```bash
 glab mr list -R owner/repo
 glab issue list -R owner/repo
@@ -121,6 +124,7 @@ glab issue list -R owner/repo
 ### Self-Hosted GitLab
 
 Set hostname for all commands:
+
 ```bash
 export GITLAB_HOST=gitlab.example.org
 # or per-command
@@ -130,6 +134,7 @@ glab repo clone gitlab.example.org/owner/repo
 ### Automation and Scripting
 
 Use JSON output for parsing:
+
 ```bash
 glab mr list --output=json | jq '.[] | .title'
 ```
@@ -164,6 +169,7 @@ glab api --method POST projects/:id/issues --field title="Bug" --field descripti
 ## Common Commands Quick Reference
 
 **Merge Requests:**
+
 - `glab mr list --assignee=@me` - Your assigned MRs
 - `glab mr list --reviewer=@me` - MRs for you to review
 - `glab mr create` - Create new MR
@@ -172,17 +178,20 @@ glab api --method POST projects/:id/issues --field title="Bug" --field descripti
 - `glab mr merge <number>` - Merge approved MR
 
 **Issues:**
+
 - `glab issue list` - List all issues
 - `glab issue create` - Create new issue
 - `glab issue close <number>` - Close issue
 
 **CI/CD:**
+
 - `glab pipeline ci view` - Watch pipeline
 - `glab ci status` - Check status
 - `glab ci lint` - Validate .gitlab-ci.yml
 - `glab ci retry` - Retry failed pipeline
 
 **Repository:**
+
 - `glab repo clone owner/repo` - Clone repository
 - `glab repo view` - View repo details
 - `glab repo fork` - Fork repository
@@ -190,11 +199,13 @@ glab api --method POST projects/:id/issues --field title="Bug" --field descripti
 ## Progressive Disclosure
 
 For detailed command documentation, refer to:
+
 - **references/commands-detailed.md** - Comprehensive command reference with all flags and options
 - **references/quick-reference.md** - Condensed command cheat sheet
 - **references/troubleshooting.md** - Detailed error scenarios and solutions
 
 Load these references when:
+
 - User needs specific flag or option details
 - Troubleshooting authentication or connection issues
 - Working with advanced features (API, schedules, variables, etc.)

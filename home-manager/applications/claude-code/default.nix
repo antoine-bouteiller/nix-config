@@ -18,27 +18,36 @@
     entries = builtins.readDir fullPath;
     dirs = lib.filterAttrs (_: type: type == "directory") entries;
   in
-    lib.concatLists (lib.mapAttrsToList (name: _: let
-      subRelPath =
-        if relPath == ""
-        then name
-        else "${relPath}/${name}";
-      subEntries = builtins.readDir (./skills + "/${subRelPath}");
-      hasSkillMd = subEntries ? "SKILL.md";
-    in
-      if hasSkillMd
-      then [
-        {
-          name = lib.replaceStrings ["/"] [":"] subRelPath;
-          path = subRelPath;
-        }
-      ]
-      else findSkills subRelPath)
-    dirs);
+    lib.concatLists (
+      lib.mapAttrsToList (
+        name: _: let
+          subRelPath =
+            if relPath == ""
+            then name
+            else "${relPath}/${name}";
+          subEntries = builtins.readDir (./skills + "/${subRelPath}");
+          hasSkillMd = subEntries ? "SKILL.md";
+        in
+          if hasSkillMd
+          then [
+            {
+              name = lib.replaceStrings ["/"] [":"] subRelPath;
+              path = subRelPath;
+            }
+          ]
+          else findSkills subRelPath
+      )
+      dirs
+    );
 
   skills = findSkills "";
 
-  topLevelFiles = ["CLAUDE.md" "settings.json" "hooks" "rules"];
+  topLevelFiles = [
+    "CLAUDE.md"
+    "settings.json"
+    "hooks"
+    "rules"
+  ];
 
   claudePackage = customPkgs.claude-code.override {
     inherit (cfg) mcpConfigFile;
@@ -78,18 +87,24 @@ in {
     home.file = builtins.listToAttrs (
       (map (name: {
           name = ".claude/${name}";
-          value = {source = mkOutOfStoreSymlink "${claudeDir}/${name}";};
+          value = {
+            source = mkOutOfStoreSymlink "${claudeDir}/${name}";
+          };
         })
         topLevelFiles)
       ++ (map (skill: {
           name = ".claude/skills/${skill.name}";
-          value = {source = mkOutOfStoreSymlink "${claudeDir}/skills/${skill.path}";};
+          value = {
+            source = mkOutOfStoreSymlink "${claudeDir}/skills/${skill.path}";
+          };
         })
         skills)
       ++ [
         {
           name = ".config/ccstatusline/settings.json";
-          value = {source = ./ccstatusline.json;};
+          value = {
+            source = ./ccstatusline.json;
+          };
         }
       ]
     );

@@ -11,9 +11,19 @@ in {
   ];
 
   # Hardware
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-intel" "coretemp" "nct6775"];
+  boot.kernelModules = [
+    "kvm-intel"
+    "coretemp"
+    "nct6775"
+  ];
   boot.extraModulePackages = [];
   boot.kernelParams = ["reboot=pci"];
 
@@ -29,7 +39,10 @@ in {
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/18D5-EF75";
     fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   fileSystems.${constants.paths.mediaDir} = {

@@ -13,3 +13,5 @@ grav3's theme
 .gitconfig
 result
 .claude/settings.local.json
+.direnv
+.pre-commit-config.yaml

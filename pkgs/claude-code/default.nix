@@ -21,7 +21,9 @@
     additionalPaths != []
   ) "--prefix PATH : ${builtins.concatStringsSep ":" additionalPaths}";
 
-  mcpOptions = lib.optionalString (mcpConfigFile != null) ''--add-flags "--mcp-config ${toString mcpConfigFile}"'';
+  mcpOptions = lib.optionalString (
+    mcpConfigFile != null
+  ) ''--add-flags "--mcp-config ${toString mcpConfigFile}"'';
 in
   stdenv.mkDerivation rec {
     pname = "claude";

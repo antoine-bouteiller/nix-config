@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  user = globals.user;
+  inherit (globals) user;
 in {
   imports = [
     ../base-nixos.nix

@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: let
-  constants = import ./constants.nix;
   smartdWebhook = pkgs.writeShellScript "smartd-webhook" ''
         ALERT_TEXT="SMART Disk Warning
     Device: $SMARTD_DEVICE

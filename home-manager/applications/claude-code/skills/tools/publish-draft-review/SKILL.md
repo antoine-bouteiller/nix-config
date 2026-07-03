@@ -1,7 +1,6 @@
 ---
 name: publish-draft-review
-description:
-  Create unpublished inline DRAFT review comments on a GitLab merge request diff via the
+description: Create unpublished inline DRAFT review comments on a GitLab merge request diff via the
   GitLab API. Use when a code review has produced findings that should be attached to exact
   diff lines as drafts (not published) so the human can review and submit them in one batch.
   Carries a ready-to-post dataset for Phoenix MR !145 (View360 view-based rework).
@@ -17,7 +16,7 @@ button (or the `bulk_publish` endpoint) is pressed — nothing is published by t
 
 1. **Use a JSON request body via `--input <FILE>`, never `-f "position[...]"`.**
    `glab api -f` flattens form fields and the nested `position` object comes back **null** — the
-   note is created but as a *general* (non-inline) draft. The position object MUST be sent as a
+   note is created but as a _general_ (non-inline) draft. The position object MUST be sent as a
    JSON body.
 2. **`--input -` (stdin) is unreliable here. Use a real file path.** Piping the JSON into
    `glab api --input -` inside a function/heredoc produced empty bodies / parse errors. Writing
@@ -71,20 +70,20 @@ $GLAB api "projects/<PID>/merge_requests/<IID>/draft_notes" \
 
 - **MR**: `!145` — "Draft: PHX-50: Switch from book row to entity/view level on view360"
   (https://pelilab.pelico.tech/data-platform/phoenix/-/merge_requests/145)
-- **project_id**: `397`   **merge_request_iid**: `145`
+- **project_id**: `397` **merge_request_iid**: `145`
 - **diff_refs** (all three): `base_sha` = `start_sha` = `3fc68defe5dbbd6e380ad46549595708e80fa230`,
   `head_sha` = `46c00adfc79da7cd3523c515c64dcc83b86e7d0d`
 - Payloads colocated in `payloads/` next to this file (`finding1.json` … `finding6.json`),
   already encoding the correct positions and `diff_refs`.
 
-| File | File:Line (head) | Severity | Topic |
-| ---- | ---------------- | -------- | ----- |
-| `payloads/finding1.json` | `ViewResource.java:109` | Improvement | Union-backed view → uncaught `UnsupportedOperationException` becomes HTTP 500 not 4xx; catch it → 400/422 or validate at boot |
-| `payloads/finding2.json` | `ViewResource.java:98`  | Improvement | `Long.parseLong` forces numeric ids while `ViewRow.id`/`Row.id()` are `String` — UUID/string PKs would always 400 |
-| `payloads/finding3.json` | `ViewResource.java:120` | Improvement | Duplicate-id warn branch (page size 2 → log.warn → return first) is untested |
-| `payloads/finding4.json` | `Typography.tsx:51`     | Improvement | Shared DS link-color behavior change bundled in; `kind="link"` now skips color class — affects every link app-wide |
-| `payloads/finding5.json` | `View360Container.tsx:51` | Nitpick | `header` shape inconsistent — `isLoading` branch omits `tags` that the other branches set |
-| `payloads/finding6.json` | `useViewData.ts:32`     | Nitpick | `rowId!` non-null assertion vs. project's type-guard preference; `isNotNullOrUndefined` already imported |
+| File                     | File:Line (head)          | Severity    | Topic                                                                                                                         |
+| ------------------------ | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `payloads/finding1.json` | `ViewResource.java:109`   | Improvement | Union-backed view → uncaught `UnsupportedOperationException` becomes HTTP 500 not 4xx; catch it → 400/422 or validate at boot |
+| `payloads/finding2.json` | `ViewResource.java:98`    | Improvement | `Long.parseLong` forces numeric ids while `ViewRow.id`/`Row.id()` are `String` — UUID/string PKs would always 400             |
+| `payloads/finding3.json` | `ViewResource.java:120`   | Improvement | Duplicate-id warn branch (page size 2 → log.warn → return first) is untested                                                  |
+| `payloads/finding4.json` | `Typography.tsx:51`       | Improvement | Shared DS link-color behavior change bundled in; `kind="link"` now skips color class — affects every link app-wide            |
+| `payloads/finding5.json` | `View360Container.tsx:51` | Nitpick     | `header` shape inconsistent — `isLoading` branch omits `tags` that the other branches set                                     |
+| `payloads/finding6.json` | `useViewData.ts:32`       | Nitpick     | `rowId!` non-null assertion vs. project's type-guard preference; `isNotNullOrUndefined` already imported                      |
 
 > **Status note:** these six drafts were already created in the originating session
 > (draft ids 41798–41803). Before re-posting from `payloads/`, list existing draft_notes first to

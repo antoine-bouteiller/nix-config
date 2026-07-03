@@ -60,7 +60,12 @@ function getOrigin(url) {
 function isNewTabPage(url) {
   if (!url) return true;
   return (
-    url === "chrome://newtab/" || url === "chrome://newtab" || url === "brave://newtab/" || url === "brave://newtab" || url === "about:blank" || url === ""
+    url === "chrome://newtab/" ||
+    url === "chrome://newtab" ||
+    url === "brave://newtab/" ||
+    url === "brave://newtab" ||
+    url === "about:blank" ||
+    url === ""
   );
 }
 
@@ -235,7 +240,12 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   if (newOrigin === baseOrigin) return;
 
   // Allow browser internal pages
-  if (details.url.startsWith("chrome://") || details.url.startsWith("chrome-extension://") || details.url.startsWith("brave://")) return;
+  if (
+    details.url.startsWith("chrome://") ||
+    details.url.startsWith("chrome-extension://") ||
+    details.url.startsWith("brave://")
+  )
+    return;
 
   // Dedup rapid navigations (redirects, double-clicks)
   const key = `${tabId}:${details.url}`;

@@ -1,7 +1,6 @@
 ---
 name: sync-mr-ticket
-description:
-  Update a GitLab merge request's title + description and the Linear ticket linked to it,
+description: Update a GitLab merge request's title + description and the Linear ticket linked to it,
   auto-discovering both from the current git branch. Use when the user asks to "update the
   MR", "update the MR and ticket", "sync the MR description", or after rewriting commits /
   finishing a feature. The MR is found by branch (never assume the !N), and the Linear
@@ -70,6 +69,7 @@ issue-update tool isn't available, the user must run `/mcp` → select **claude.
 authenticate (the Pelico Context Layer connection is read-only and does **not** cover this).
 
 Once connected:
+
 - Fetch the ticket by its key first, so you preserve any existing context above the
   implementation summary instead of clobbering it.
 - Update the **description** to match the implemented scope (same body as the MR, minus the

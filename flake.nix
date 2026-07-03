@@ -65,38 +65,42 @@
   in {
     apps = nixpkgs.lib.genAttrs allSystems mkApps;
 
-    packages = forAllSystems (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-    in
-      {
-        comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
-        vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
-        whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
-          overlay = ./home-manager/themes/WhiteSur-icon-overlay;
+    packages = forAllSystems (
+      system: let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
         };
-        claude-code = pkgs.callPackage ./pkgs/claude-code {};
-        sonarqube-cli = pkgs.callPackage ./pkgs/sonarqube-cli {};
-        caddy-cloudflare = pkgs.callPackage ./pkgs/caddy-cloudflare {};
-        fff-mcp = pkgs.callPackage ./pkgs/fff-mcp {};
-      }
-      // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
-        nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
-      });
+      in
+        {
+          comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
+          vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
+          whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
+            overlay = ./home-manager/themes/WhiteSur-icon-overlay;
+          };
+          claude-code = pkgs.callPackage ./pkgs/claude-code {};
+          sonarqube-cli = pkgs.callPackage ./pkgs/sonarqube-cli {};
+          caddy-cloudflare = pkgs.callPackage ./pkgs/caddy-cloudflare {};
+          fff-mcp = pkgs.callPackage ./pkgs/fff-mcp {};
+        }
+        // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
+          nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
+        }
+    );
 
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    checks = forAllSystems (system: let
-      darwinChecks = nixpkgs.lib.optionalAttrs (builtins.elem system darwinSystems) (
-        nixpkgs.lib.mapAttrs (_: cfg: cfg.system) self.darwinConfigurations
-      );
-      nixosChecks = nixpkgs.lib.optionalAttrs (builtins.elem system linuxSystems) (
-        nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) self.nixosConfigurations
-      );
-    in
-      darwinChecks // nixosChecks);
+    checks = forAllSystems (
+      system: let
+        darwinChecks = nixpkgs.lib.optionalAttrs (builtins.elem system darwinSystems) (
+          nixpkgs.lib.mapAttrs (_: cfg: cfg.system) self.darwinConfigurations
+        );
+        nixosChecks = nixpkgs.lib.optionalAttrs (builtins.elem system linuxSystems) (
+          nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) self.nixosConfigurations
+        );
+      in
+        darwinChecks // nixosChecks
+    );
 
     nixosModules = {
       default = ./modules;

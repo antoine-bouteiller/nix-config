@@ -3,7 +3,13 @@
   globals,
   self,
 }: let
-  inherit (inputs) nixpkgs darwin home-manager sops-nix;
+  inherit
+    (inputs)
+    nixpkgs
+    darwin
+    home-manager
+    sops-nix
+    ;
   commonSpecialArgs = {inherit inputs globals;};
 in {
   mkDarwinHost = {

@@ -1,5 +1,5 @@
 ---
-globs: ['.claude/rules/*.md', 'CLAUDE.md', '.claude/CLAUDE.md', 'CLAUDE.local.md']
+globs: [".claude/rules/*.md", "CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md"]
 ---
 
 ## Writing and maintaining Claude Code rules
@@ -49,7 +49,7 @@ rules to relevant files when they don't apply everywhere:
 
 ```yaml
 ---
-globs: ['*.spec.md']
+globs: ["*.spec.md"]
 ---
 ```
 

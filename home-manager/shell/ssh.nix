@@ -7,7 +7,10 @@
     ];
     settings = {
       "*" = {
-        SendEnv = ["LANG" "LC_*"];
+        SendEnv = [
+          "LANG"
+          "LC_*"
+        ];
         HashKnownHosts = true;
       };
     };

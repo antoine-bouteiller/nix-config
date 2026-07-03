@@ -72,7 +72,11 @@ in {
   users.users.${user} = {
     isNormalUser = true;
     description = globals.name;
-    extraGroups = ["networkmanager" "wheel" "media"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "media"
+    ];
     openssh.authorizedKeys.keys = globals.sshKeys;
   };
   users.groups.media = {};
