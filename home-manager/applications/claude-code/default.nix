@@ -50,7 +50,7 @@
   ];
 
   claudePackage = customPkgs.claude-code.override {
-    inherit (cfg) mcpConfigFile;
+    inherit (cfg) mcpServers;
   };
 in {
   imports = [inputs.agent-skills.homeManagerModules.default];
@@ -60,14 +60,14 @@ in {
 
     package = claudePackage;
 
-    mcpConfigFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+    mcpServers = lib.mkOption {
+      type = lib.types.nullOr (lib.types.attrsOf lib.types.attrs);
       default = null;
       description = ''
-        Path to an MCP servers JSON config file. When set, the wrapped
-        `claude` binary is invoked with `--mcp-config <path>` on every call.
-        The custom package also disables Claude Code's auto-installer so
-        it cannot shadow this binary from `~/.local/bin`.
+        MCP servers attrset. When set, it is serialized to JSON and the
+        wrapped `claude` binary is invoked with `--mcp-config <json>` on
+        every call. The custom package also disables Claude Code's
+        auto-installer so it cannot shadow this binary from `~/.local/bin`.
       '';
     };
   };

@@ -7,8 +7,15 @@
 }: let
   inherit (config.home) homeDirectory;
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
-  mcpConfig = pkgs.writeText "mcp-servers.json" (
-    builtins.toJSON {
+in {
+  imports = [
+    ../../home-manager
+  ];
+
+  local.home-manager = {
+    zed.enable = true;
+    claudeCode = {
+      enable = true;
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
         sonarqube = {
@@ -31,18 +38,6 @@
           };
         };
       };
-    }
-  );
-in {
-  imports = [
-    ../../home-manager
-  ];
-
-  local.home-manager = {
-    zed.enable = true;
-    claudeCode = {
-      enable = true;
-      mcpConfigFile = mcpConfig;
     };
     tmux.enable = true;
     runenv = {
