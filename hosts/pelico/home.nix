@@ -9,7 +9,20 @@
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
   mcpConfig = pkgs.writeText "mcp-servers.json" (
     builtins.toJSON {
-      mcpServers.fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
+      mcpServers = {
+        fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
+        sonarqube = {
+          command = "docker";
+          args = ["run" "-i" "--rm" "--init" "--pull=always" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "sonarsource/sonarqube-mcp"];
+          env = {
+            "SONARQUBE_URL" = "https://sonarqube.pelico.tech";
+          };
+        };
+        linear = {
+          type = "streamable-http";
+          url = "https://mcp.linear.app/mcp";
+        };
+      };
     }
   );
 in {

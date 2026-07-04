@@ -261,6 +261,22 @@
         "type": "github"
       }
     },
+    "mattpocock-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783075031,
+        "narHash": "sha256-3muzsPd/1OgGgG+aIpXWUm9R2Lxa1I/geJxmNL8VJAY=",
+        "owner": "mattpocock",
+        "repo": "skills",
+        "rev": "272f99b22574f50e4266791c86b9302682970e23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mattpocock",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -357,12 +373,14 @@
         "darwin": "darwin",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
+        "mattpocock-skills": "mattpocock-skills",
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix",
-        "treefmt-nix": "treefmt-nix_2"
+        "treefmt-nix": "treefmt-nix_2",
+        "vercel-agent-skills": "vercel-agent-skills"
       }
     },
     "sops-nix": {
@@ -439,6 +457,22 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "vercel-agent-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781126507,
+        "narHash": "sha256-LSFC0Zxc4Lgisu5/r6qBF1R0X36hePkVPfbvbx48YdY=",
+        "owner": "vercel-labs",
+        "repo": "agent-skills",
+        "rev": "f8a72b9603728bb92a217a879b7e62e43ad76c81",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vercel-labs",
+        "repo": "agent-skills",
         "type": "github"
       }
     }

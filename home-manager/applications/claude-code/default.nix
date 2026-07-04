@@ -96,19 +96,62 @@ in {
           path = inputs.agent-browser-skill;
           subdir = "skills";
         };
+        mattpocock = {
+          path = inputs.mattpocock-skills;
+          subdir = "skills";
+        };
+        vercel = {
+          path = inputs.vercel-agent-skills;
+          subdir = "skills";
+        };
       };
-      skills.enableAll = ["ast-grep" "agent-browser"];
+      skills = {
+        enableAll = ["ast-grep" "agent-browser"];
+        # Pin specific upstream skills, renaming to our engineering: convention.
+        explicit = {
+          "tdd" = {
+            from = "mattpocock";
+            path = "engineering/tdd";
+          };
+          "domain-modeling" = {
+            from = "mattpocock";
+            path = "engineering/domain-modeling";
+          };
+          "codebase-design" = {
+            from = "mattpocock";
+            path = "engineering/codebase-design";
+          };
+          "resolving-merge-conflicts" = {
+            from = "mattpocock";
+            path = "engineering/resolving-merge-conflicts";
+          };
+          "improve-codebase-architecture" = {
+            from = "mattpocock";
+            path = "engineering/improve-codebase-architecture";
+          };
+          "grill-me" = {
+            from = "mattpocock";
+            path = "productivity/grill-me";
+          };
+          "grilling" = {
+            from = "mattpocock";
+            path = "productivity/grilling";
+          };
+          "vercel-react-best-practices" = {
+            from = "vercel";
+            path = "react-best-practices";
+          };
+          "web-design-guidelines" = {
+            from = "vercel";
+            path = "web-design-guidelines";
+          };
+        };
+      };
       targets.claude = {
         enable = true;
         structure = "link";
       };
     };
-
-    home.activation.cleanClaudeSkillsSymlink = lib.hm.dag.entryBefore ["writeBoundary"] ''
-      if [ -L "$HOME/.claude/skills" ]; then
-        run rm "$HOME/.claude/skills"
-      fi
-    '';
 
     home.file = builtins.listToAttrs (
       (map (name: {
