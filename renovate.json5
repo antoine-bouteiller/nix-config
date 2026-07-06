@@ -13,6 +13,8 @@
   automergeStrategy: "rebase",
   // flake.lock is owned by .github/workflows/flake-update.yml — don't double up.
   nix: { enabled: false },
+  // pkgs/vite-plus/npm is owned by its update.nu script — renovate bumps break the pinned hash.
+  npm: { enabled: false },
   customManagers: [
     {
       customType: "regex",
