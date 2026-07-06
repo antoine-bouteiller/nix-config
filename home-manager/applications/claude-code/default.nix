@@ -150,6 +150,9 @@ in {
       targets.claude = {
         enable = true;
         structure = "link";
+        # Static dest: the default "''${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills"
+        # routes "link" through a fallback regex that glibc rejects (Linux CI).
+        dest = ".claude/skills";
       };
     };
 
