@@ -7,7 +7,6 @@
   zlib,
   additionalPaths ? [],
   disableTelemetry ? false,
-  mcpServers ? null,
 }: let
   sourcesData = lib.importJSON ./sources.json;
   inherit (sourcesData) version;
@@ -20,12 +19,6 @@
   additionalOptions = lib.optionalString (
     additionalPaths != []
   ) "--prefix PATH : ${builtins.concatStringsSep ":" additionalPaths}";
-
-  # builtins.toJSON is compact (no whitespace), so the JSON stays a single
-  # shell token when the wrapper word-splits --add-flags at runtime.
-  mcpOptions = lib.optionalString (
-    mcpServers != null
-  ) "--add-flags ${lib.escapeShellArg "--mcp-config ${builtins.toJSON {inherit mcpServers;}}"}";
 in
   stdenv.mkDerivation rec {
     pname = "claude";
@@ -56,7 +49,6 @@ in
       wrapProgram $out/bin/claude \
         --argv0 claude \
         ${additionalOptions} \
-        ${mcpOptions} \
         --set DISABLE_AUTOUPDATER 1 \
         --set DISABLE_INSTALLATION_CHECKS 1 \
         --set ENABLE_CLAUDEAI_MCP_SERVERS false \

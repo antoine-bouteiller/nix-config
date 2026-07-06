@@ -19,14 +19,14 @@ in {
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
         sonarqube = {
-          command = "docker";
-          args = ["run" "-i" "--rm" "--init" "--pull=always" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "sonarsource/sonarqube-mcp"];
-          env = {
-            "SONARQUBE_URL" = "https://sonarqube.pelico.tech";
+          type = "http";
+          url = "http://devbouteiller-02.pelico.best:8443/mcp";
+          headers = {
+            Authorization = "Bearer $SONAR_TOKEN";
           };
         };
         linear = {
-          type = "streamable-http";
+          type = "http";
           url = "https://mcp.linear.app/mcp";
         };
         slack = {

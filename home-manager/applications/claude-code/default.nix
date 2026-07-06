@@ -48,33 +48,33 @@
     "hooks"
     "rules"
   ];
-
-  claudePackage = customPkgs.claude-code.override {
-    inherit (cfg) mcpServers;
-  };
 in {
   imports = [inputs.agent-skills.homeManagerModules.default];
 
   options.local.home-manager.claudeCode = {
     enable = lib.mkEnableOption "claude code";
 
-    package = claudePackage;
-
     mcpServers = lib.mkOption {
-      type = lib.types.nullOr (lib.types.attrsOf lib.types.attrs);
-      default = null;
+      type = lib.types.attrsOf lib.types.attrs;
+      default = {};
       description = ''
-        MCP servers attrset. When set, it is serialized to JSON and the
-        wrapped `claude` binary is invoked with `--mcp-config <json>` on
-        every call. The custom package also disables Claude Code's
-        auto-installer so it cannot shadow this binary from `~/.local/bin`.
+        MCP servers attrset, forwarded to `programs.claude-code.mcpServers`.
+        Home-manager writes them to a `.mcp.json` plugin and links it into
+        the wrapped `claude` binary via `--plugin-dir`.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
+    # Native HM module owns the package (wrapped with --plugin-dir for MCP)
+    # and the MCP config; everything else stays on the file layout below.
+    programs.claude-code = {
+      enable = true;
+      package = customPkgs.claude-code;
+      inherit (cfg) mcpServers;
+    };
+
     home.packages = with pkgs; [
-      claudePackage
       # Utils
       customPkgs.comment-checker
       rtk
