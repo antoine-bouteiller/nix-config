@@ -52,6 +52,7 @@
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
+  "model": "claude-fable-5[1m]",
   "skillOverrides": {
     "claude-api": "off",
     "review": "off",

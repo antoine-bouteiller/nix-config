@@ -5,7 +5,13 @@ const github_repo = "caddy-dns/cloudflare"
 const fake_hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 def root_dir []: nothing -> string {
-  $env.FILE_PWD
+  # When run as a flake updateScript, FILE_PWD is the read-only /nix/store
+  # copy — write to the git checkout (CWD = repo root) instead.
+  if ($env.FILE_PWD | str starts-with "/nix/store") {
+    $env.PWD | path join "pkgs" ($env.FILE_PWD | path basename)
+  } else {
+    $env.FILE_PWD
+  }
 }
 
 def fetch_latest_version []: nothing -> string {
