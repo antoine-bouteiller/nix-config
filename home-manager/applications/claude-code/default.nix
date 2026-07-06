@@ -49,8 +49,6 @@
     "rules"
   ];
 in {
-  imports = [inputs.agent-skills.homeManagerModules.default];
-
   options.local.home-manager.claudeCode = {
     enable = lib.mkEnableOption "claude code";
 
@@ -58,20 +56,43 @@ in {
       type = lib.types.attrsOf lib.types.attrs;
       default = {};
       description = ''
-        MCP servers attrset, forwarded to `programs.claude-code.mcpServers`.
-        Home-manager writes them to a `.mcp.json` plugin and links it into
-        the wrapped `claude` binary via `--plugin-dir`.
+        MCP servers attrset, forwarded to the shared `programs.mcp.servers`.
+        Every agent CLI with enableMcpIntegration = true (claude-code today;
+        codex/antigravity-cli later) picks these up.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    # Native HM module owns the package (wrapped with --plugin-dir for MCP)
-    # and the MCP config; everything else stays on the file layout below.
+    programs.mcp = {
+      enable = cfg.mcpServers != {};
+      servers = cfg.mcpServers;
+    };
+
+    # Native HM module owns the package (wrapped with --plugin-dir for MCP),
+    # the shared programs.mcp servers, and the pinned upstream skills.
+    # Everything hand-edited (settings.json, hooks, rules, CLAUDE.md, local
+    # skills) stays on mkOutOfStoreSymlink below: edit-and-go, no rebuild.
     programs.claude-code = {
       enable = true;
       package = customPkgs.claude-code;
-      inherit (cfg) mcpServers;
+      enableMcpIntegration = true;
+
+      # External skills pinned as flake inputs, symlinked per-skill via
+      # home.file so they coexist with the local skill symlinks below.
+      skills = {
+        ast-grep = "${inputs.ast-grep-skill}/ast-grep/skills/ast-grep";
+        agent-browser = "${inputs.agent-browser-skill}/skills/agent-browser";
+        tdd = "${inputs.mattpocock-skills}/skills/engineering/tdd";
+        domain-modeling = "${inputs.mattpocock-skills}/skills/engineering/domain-modeling";
+        codebase-design = "${inputs.mattpocock-skills}/skills/engineering/codebase-design";
+        resolving-merge-conflicts = "${inputs.mattpocock-skills}/skills/engineering/resolving-merge-conflicts";
+        improve-codebase-architecture = "${inputs.mattpocock-skills}/skills/engineering/improve-codebase-architecture";
+        grill-me = "${inputs.mattpocock-skills}/skills/productivity/grill-me";
+        grilling = "${inputs.mattpocock-skills}/skills/productivity/grilling";
+        vercel-react-best-practices = "${inputs.vercel-agent-skills}/skills/react-best-practices";
+        web-design-guidelines = "${inputs.vercel-agent-skills}/skills/web-design-guidelines";
+      };
     };
 
     home.packages = with pkgs; [
@@ -80,81 +101,6 @@ in {
       rtk
       ast-grep # binary used by the pinned ast-grep skill
     ];
-
-    # External skills pinned as flake inputs, deployed via agent-skills-nix.
-    # Local skills stay on mkOutOfStoreSymlink below (edit-and-go, no rebuild);
-    # structure = "link" uses home.file so the store bundle coexists with them
-    # instead of rsync --delete wiping the local skill symlinks.
-    programs.agent-skills = {
-      enable = true;
-      sources = {
-        ast-grep = {
-          path = inputs.ast-grep-skill;
-          subdir = "ast-grep/skills";
-        };
-        agent-browser = {
-          path = inputs.agent-browser-skill;
-          subdir = "skills";
-        };
-        mattpocock = {
-          path = inputs.mattpocock-skills;
-          subdir = "skills";
-        };
-        vercel = {
-          path = inputs.vercel-agent-skills;
-          subdir = "skills";
-        };
-      };
-      skills = {
-        enableAll = ["ast-grep" "agent-browser"];
-        # Pin specific upstream skills, renaming to our engineering: convention.
-        explicit = {
-          "tdd" = {
-            from = "mattpocock";
-            path = "engineering/tdd";
-          };
-          "domain-modeling" = {
-            from = "mattpocock";
-            path = "engineering/domain-modeling";
-          };
-          "codebase-design" = {
-            from = "mattpocock";
-            path = "engineering/codebase-design";
-          };
-          "resolving-merge-conflicts" = {
-            from = "mattpocock";
-            path = "engineering/resolving-merge-conflicts";
-          };
-          "improve-codebase-architecture" = {
-            from = "mattpocock";
-            path = "engineering/improve-codebase-architecture";
-          };
-          "grill-me" = {
-            from = "mattpocock";
-            path = "productivity/grill-me";
-          };
-          "grilling" = {
-            from = "mattpocock";
-            path = "productivity/grilling";
-          };
-          "vercel-react-best-practices" = {
-            from = "vercel";
-            path = "react-best-practices";
-          };
-          "web-design-guidelines" = {
-            from = "vercel";
-            path = "web-design-guidelines";
-          };
-        };
-      };
-      targets.claude = {
-        enable = true;
-        structure = "link";
-        # Static dest: the default "''${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills"
-        # routes "link" through a fallback regex that glibc rejects (Linux CI).
-        dest = ".claude/skills";
-      };
-    };
 
     home.file = builtins.listToAttrs (
       (map (name: {

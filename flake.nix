@@ -38,11 +38,6 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    agent-skills = {
-      url = "github:Kyure-A/agent-skills-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     # External Claude Code skills, pinned as non-flake sources.
     ast-grep-skill = {
       url = "github:ast-grep/claude-skill";
