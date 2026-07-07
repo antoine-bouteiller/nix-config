@@ -140,9 +140,16 @@
               entry = "${nixpkgs.legacyPackages.${system}.gitleaks}/bin/gitleaks protect --staged --config .gitleaks.toml";
               pass_filenames = false;
             };
+            # Format, then re-stage the results so the commit succeeds
+            # instead of failing on the reformatted files.
             treefmt = {
               enable = true;
-              package = self.formatter.${system};
+              name = "treefmt";
+              entry = "${nixpkgs.legacyPackages.${system}.writeShellScript "treefmt-stage" ''
+                ${self.formatter.${system}}/bin/treefmt --no-cache "$@"
+                git add -- "$@"
+              ''}";
+              pass_filenames = true;
             };
           };
         };
