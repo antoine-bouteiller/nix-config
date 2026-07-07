@@ -29,6 +29,10 @@ in {
           type = "http";
           url = "https://mcp.linear.app/mcp";
         };
+        nixos = {
+          command = "uvx";
+          args = ["mcp-nixos"];
+        };
         slack = {
           type = "http";
           url = "https://mcp.slack.com/mcp";
