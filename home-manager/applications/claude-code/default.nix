@@ -81,17 +81,11 @@ in {
       # External skills pinned as flake inputs, symlinked per-skill via
       # home.file so they coexist with the local skill symlinks below.
       skills = {
-        ast-grep = "${inputs.ast-grep-skill}/ast-grep/skills/ast-grep";
         agent-browser = "${inputs.agent-browser-skill}/skills/agent-browser";
-        tdd = "${inputs.mattpocock-skills}/skills/engineering/tdd";
-        domain-modeling = "${inputs.mattpocock-skills}/skills/engineering/domain-modeling";
-        codebase-design = "${inputs.mattpocock-skills}/skills/engineering/codebase-design";
         resolving-merge-conflicts = "${inputs.mattpocock-skills}/skills/engineering/resolving-merge-conflicts";
-        improve-codebase-architecture = "${inputs.mattpocock-skills}/skills/engineering/improve-codebase-architecture";
         grill-me = "${inputs.mattpocock-skills}/skills/productivity/grill-me";
         grilling = "${inputs.mattpocock-skills}/skills/productivity/grilling";
-        vercel-react-best-practices = "${inputs.vercel-agent-skills}/skills/react-best-practices";
-        web-design-guidelines = "${inputs.vercel-agent-skills}/skills/web-design-guidelines";
+        writing-great-skills = "${inputs.mattpocock-skills}/skills/productivity/writing-great-skills";
       };
     };
 
@@ -99,7 +93,6 @@ in {
       # Utils
       customPkgs.comment-checker
       rtk
-      ast-grep # binary used by the pinned ast-grep skill
     ];
 
     home.file = builtins.listToAttrs (

@@ -52,7 +52,6 @@
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
-  "model": "opus[1m]",
   "skillOverrides": {
     "claude-api": "off",
     "review": "off",
@@ -155,5 +154,6 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "model": "sonnet"
 }

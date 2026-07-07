@@ -1,5 +1,6 @@
 ---
 description: Generate conventional commit with staged changes
+name: conventional-commit
 context: fork
 model: haiku
 disable-model-invocation: true
