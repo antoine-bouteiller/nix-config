@@ -1,5 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT": "1",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
+    "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
+    "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL": "1",
+    "DISABLE_COST_WARNINGS": "1",
+    "API_TIMEOUT_MS": "1200000",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "1200000"
+  },
   "permissions": {
     "allow": [
       "Bash(git add *)",
@@ -9,6 +21,7 @@
       "Bash(git log *)",
       "Bash(git show *)",
       "Bash(git status *)",
+      "Bash(git commit *)",
       "Bash(cat *)",
       "Bash(du *)",
       "Bash(find *)",
@@ -47,17 +60,32 @@
       "Write(//tmp/**)",
       "Edit(//tmp/**)",
       "WebFetch",
-      "WebSearch"
+      "WebSearch",
+      "mcp__plugin_claude-code-home-manager_fff"
+    ],
+    "deny": [
+      "DesignSync",
+      "NotebookEdit",
+      "SendMessage",
+      "PushNotification",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "AskUserQuestion",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "EnterWorktree",
+      "ExitWorktree",
+      "ShareOnboardingGuide",
+      "mcp__chrome-devtools"
     ],
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
-  "skillOverrides": {
-    "claude-api": "off",
-    "review": "off",
-    "simplify": "off",
-    "code-review": "off"
-  },
+  "model": "opus[1m]",
+  "disableClaudeAiConnectors": true,
+  "disableBundledSkills": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -123,6 +151,9 @@
       }
     ]
   },
+  "disableRemoteControl": true,
+  "disableWorkflows": true,
+  "disableArtifact": true,
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest",
@@ -151,9 +182,10 @@
       }
     }
   },
+  "feedbackSurveyRate": 0,
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "agentPushNotifEnabled": false,
+  "skipAutoPermissionPrompt": true
 }

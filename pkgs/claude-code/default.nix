@@ -51,7 +51,6 @@ in
         ${additionalOptions} \
         --set DISABLE_AUTOUPDATER 1 \
         --set DISABLE_INSTALLATION_CHECKS 1 \
-        --set ENABLE_CLAUDEAI_MCP_SERVERS false \
         --set-default DISABLE_NON_ESSENTIAL_MODEL_CALLS 1 \
         ${lib.optionalString disableTelemetry "--set DISABLE_TELEMETRY 1 --set CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC 1"}
     '';
