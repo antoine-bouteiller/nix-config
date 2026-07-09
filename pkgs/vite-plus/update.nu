@@ -51,7 +51,9 @@ def update_npm_lockfile [version: string] {
   | $"($in)\n"
   | save --force $package_json_path
 
-  ^npm install --package-lock-only --ignore-scripts --prefix $npm_dir
+  # vite-plus's optional peer deps (oxfmt/oxlint/vitest) conflict under npm's
+  # strict resolver — legacy-peer-deps matches the resolution the binary ships with.
+  ^npm install --package-lock-only --ignore-scripts --legacy-peer-deps --prefix $npm_dir
 }
 
 def update_sources_json [version: string, platforms_data: record] {
