@@ -25,7 +25,7 @@ in {
         auth_hba_file = "/etc/pgbouncer/pg_hba.conf";
         auth_file = "/etc/pgbouncer/userlist.txt";
 
-        pool_mode = "transaction";
+        pool_mode = "session";
         max_client_conn = 100;
         default_pool_size = 20;
       };
