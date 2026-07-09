@@ -61,7 +61,8 @@
       "Edit(//tmp/**)",
       "WebFetch",
       "WebSearch",
-      "mcp__plugin_claude-code-home-manager_fff"
+      "mcp__plugin_claude-code-home-manager_fff__grep",
+      "mcp__plugin_claude-code-home-manager_fff__find_files"
     ],
     "deny": [
       "DesignSync",
