@@ -66,6 +66,7 @@ in {
       "tailscale-app"
       "cmux"
       "firefox"
+      "codexbar"
     ];
   };
 

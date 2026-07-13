@@ -114,7 +114,7 @@ in {
         {
           name = ".config/ccstatusline/settings.json";
           value = {
-            source = ./ccstatusline.json;
+            source = mkOutOfStoreSymlink "${claudeDir}/ccstatusline.json";
           };
         }
       ]

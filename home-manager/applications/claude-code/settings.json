@@ -70,21 +70,18 @@
       "SendMessage",
       "PushNotification",
       "RemoteTrigger",
-      "ReportFindings",
       "ScheduleWakeup",
-      "AskUserQuestion",
       "CronCreate",
       "CronDelete",
       "CronList",
       "EnterWorktree",
       "ExitWorktree",
-      "ShareOnboardingGuide",
-      "mcp__chrome-devtools"
+      "ShareOnboardingGuide"
     ],
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5[1m]",
   "disableClaudeAiConnectors": true,
   "disableBundledSkills": true,
   "hooks": {

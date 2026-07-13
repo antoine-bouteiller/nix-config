@@ -4,12 +4,12 @@
     [
       {
         "id": "3",
-        "type": "context-percentage-usable",
+        "type": "context-bar",
         "color": "brightBlack"
       },
       {
         "id": "93270010-7ceb-4fca-b09e-8812fb95d041",
-        "type": "session-cost"
+        "type": "session-usage"
       },
       {
         "id": "1",
