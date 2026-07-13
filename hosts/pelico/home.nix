@@ -18,29 +18,29 @@ in {
       enable = true;
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
-        # sonarqube = {
-        #   type = "http";
-        #   url = "http://devbouteiller-02.pelico.best:8443/mcp";
-        #   headers = {
-        #     Authorization = "Bearer $SONAR_TOKEN";
-        #   };
-        # };
-        # linear = {
-        #   type = "http";
-        #   url = "https://mcp.linear.app/mcp";
-        # };
-        # nixos = {
-        #   command = "uvx";
-        #   args = ["mcp-nixos"];
-        # };
-        # slack = {
-        #   type = "http";
-        #   url = "https://mcp.slack.com/mcp";
-        #   oauth = {
-        #     clientId = "1601185624273.8899143856786";
-        #     callbackPort = 3118;
-        #   };
-        # };
+        sonarqube = {
+          type = "http";
+          url = "http://devbouteiller-02.pelico.best:8443/mcp";
+          headers = {
+            Authorization = "Bearer $SONAR_TOKEN";
+          };
+        };
+        linear = {
+          type = "http";
+          url = "https://mcp.linear.app/mcp";
+        };
+        nixos = {
+          command = "uvx";
+          args = ["mcp-nixos"];
+        };
+        slack = {
+          type = "http";
+          url = "https://mcp.slack.com/mcp";
+          oauth = {
+            clientId = "1601185624273.8899143856786";
+            callbackPort = 3118;
+          };
+        };
       };
     };
     tmux.enable = true;

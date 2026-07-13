@@ -86,6 +86,7 @@ in {
         grill-me = "${inputs.mattpocock-skills}/skills/productivity/grill-me";
         grilling = "${inputs.mattpocock-skills}/skills/productivity/grilling";
         writing-great-skills = "${inputs.mattpocock-skills}/skills/productivity/writing-great-skills";
+        tdd = "${inputs.mattpocock-skills}/skills/productivity/tdd";
       };
     };
 
