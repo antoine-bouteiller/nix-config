@@ -63,11 +63,10 @@
       "WebFetch",
       "WebSearch",
       "mcp__plugin_claude-code-home-manager_fff__grep",
-      "mcp__plugin_claude-code-home-manager_fff__find_files"
+      "mcp__plugin_claude-code-home-manager_fff__find_files",
+      "mcp__plugin_claude-code-home-manager_fff__multi_grep"
     ],
     "deny": [
-      "EnterPlanMode",
-      "ExitPlanMode",
       "DesignSync",
       "NotebookEdit",
       "SendMessage",
@@ -79,8 +78,7 @@
       "CronList",
       "EnterWorktree",
       "ExitWorktree",
-      "ShareOnboardingGuide",
-      "AskUserQuestion"
+      "ShareOnboardingGuide"
     ],
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]

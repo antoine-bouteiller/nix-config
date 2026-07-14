@@ -21,4 +21,4 @@ For each option give: how it works (2–3 lines), main trade-offs (complexity, b
 
 ## 4. Recommend
 
-Name the option you'd choose and why, in one paragraph. Then stop — hand off to `create-plan` if the user wants to design the chosen approach. Do not implement.
+Name the option you'd choose and why, in one paragraph. Do not implement.

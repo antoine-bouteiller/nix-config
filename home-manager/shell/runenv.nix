@@ -33,7 +33,9 @@ in {
     programs.zsh.initContent = lib.mkAfter ''
       runenv() {
         emulate -L zsh
-        local ns="$1"; shift
+        local ns="env"
+        # first arg is the namespace only if secrets/<arg>.yaml exists, else default to env.yaml
+        if [[ -f ${lib.escapeShellArg cfg.secretsDir}/"$1".yaml ]]; then ns="$1"; shift; fi
         # ''${(@q)@} quotes each arg so spaces survive sops's single command string
         sops exec-env ${lib.escapeShellArg cfg.secretsDir}/"$ns".yaml "''${(j: :)''${(@q)@}}"
       }
