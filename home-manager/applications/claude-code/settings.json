@@ -104,6 +104,10 @@
           {
             "type": "command",
             "command": "comment-checker"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/strip-ponytail-comments.sh"
           }
         ]
       }
