@@ -11,8 +11,12 @@
     historySubstringSearch.enable = true;
 
     history = {
-      size = 10000;
+      size = 50000;
+      save = 50000;
+      path = "$HOME/.zsh_history";
       share = true;
+      extended = true;
+      expireDuplicatesFirst = true;
     };
 
     plugins = [
