@@ -59,6 +59,10 @@
       url = "github:vercel-labs/agent-skills";
       flake = false;
     };
+    shadcn-improve-skills = {
+      url = "github:shadcn/improve";
+      flake = false;
+    };
   };
 
   outputs = {
