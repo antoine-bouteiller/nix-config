@@ -8,7 +8,7 @@
   ];
 
   local.home-manager = {
-    claudeCode.enable = true;
+    agents.enable = true;
     tmux.enable = true;
     zed.enable = true;
     ghostty.enable = true;

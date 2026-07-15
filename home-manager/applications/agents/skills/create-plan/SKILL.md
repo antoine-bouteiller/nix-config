@@ -64,6 +64,12 @@ Two shapes:
 - [ ] <imperative step, one verifiable outcome>
 - [ ] <…>
 
+## Detailed implementation
+
+<per-step concrete detail: exact commands, diffs or code sketches against real
+paths, and the verification for each step. An implementer should be able to
+execute from this section alone.>
+
 ## Log
 
 - <YYYY-MM-DD> <what changed / what was decided>
@@ -82,6 +88,8 @@ phase file that carries the detail:
 ### Rules
 
 - One step = one checkable outcome. A step you can't tell done-from-not-done is vague — sharpen or split it.
+- `## Detailed implementation` carries the how: real commands, code sketches, diffs. In the folder
+  shape it lives in the phase files instead of the master.
 - `Status:` stays `in-progress` until every step is `[x]`, then `done`. In the folder shape, status
   lives only in the master `index.md`.
 - **The file is the state.** Tick `- [ ]` → `- [x]` the moment a step's outcome holds, and append a Log line

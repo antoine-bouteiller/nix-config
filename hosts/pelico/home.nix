@@ -14,7 +14,7 @@ in {
 
   local.home-manager = {
     zed.enable = true;
-    claudeCode = {
+    agents = {
       enable = true;
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";

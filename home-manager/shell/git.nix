@@ -40,6 +40,7 @@ in {
 
       # Claude
       ".claude/settings.local.json"
+      ".plan/"
     ];
     lfs = {
       enable = true;

@@ -14,7 +14,7 @@ in {
   ];
 
   local.home-manager = {
-    claudeCode.enable = true;
+    agents.enable = true;
     tmux.enable = true;
   };
 
