@@ -57,5 +57,6 @@
     nixd
     ffmpeg
     sops
+    nushell
   ];
 }

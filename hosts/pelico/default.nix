@@ -64,7 +64,6 @@ in {
   homebrew = {
     casks = [
       "tailscale-app"
-      "cmux"
       "firefox"
       "codexbar"
     ];

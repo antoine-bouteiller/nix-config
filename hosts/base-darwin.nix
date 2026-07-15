@@ -62,7 +62,8 @@
     ];
     greedyCasks = true;
     masApps = {
-      "runcat" = 1429033973;
+      "runcat" = 6757801838;
+      "bitwarden" = 1352778147;
     };
   };
 }
