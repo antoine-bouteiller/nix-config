@@ -1,89 +1,199 @@
 ---
 name: code-review
-description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X".
+allowed-tools: Bash(git:*), Bash(gh:*), Bash(glab:*)
+description: Review a merge request for security, performance, architecture, style, and improvements
 ---
 
-Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
+# Merge Request Review
 
-- **Standards** — does the code conform to this repo's documented coding standards?
-- **Spec** — does the code faithfully implement the originating issue / PRD / spec?
+## Context
 
-Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
+- Target branch: !`git rev-parse --abbrev-ref HEAD`
+- MR diff stats: !`git diff --stat origin/main...HEAD 2>/dev/null || git diff --stat main...HEAD 2>/dev/null || echo "no diff available - provide branch or use gh/glab"`
+- Changed files: !`git diff --name-only origin/main...HEAD 2>/dev/null || git diff --name-only main...HEAD 2>/dev/null || echo "no diff available"`
+- Recent commits on branch: !`git log --oneline origin/main...HEAD 2>/dev/null || git log --oneline main...HEAD 2>/dev/null || echo "no commits diff available"`
 
-The issue tracker should have been provided to you — run `/setup-matt-pocock-skills` if `docs/agents/issue-tracker.md` is missing.
+## Your Task
 
-## Process
+Perform a thorough code review of the merge request changes. If the context above shows "no diff available", ask the user which branch or MR to review, or use `gh pr diff` / `glab mr diff` to get the changes.
 
-### 1. Pin the fixed point
+**Review process:**
 
-Whatever the user said is the fixed point — a commit SHA, branch name, tag, `main`, `HEAD~5`, etc. If they didn't specify one, ask for it.
+1. **Gather the full diff** — read every changed file in its entirety (not just the diff hunks) so you understand the surrounding context.
+2. **Detect the stack** — identify languages, frameworks, and the project's existing conventions (look at neighbouring files, lint configs, CLAUDE.md, contributing docs). Judge the diff against _this project's_ patterns, not a generic ideal.
+3. **For each changed file**, apply the five review categories below **in priority order**. Backend, frontend, infra, and config files all get reviewed — use the subsections that apply to each file's stack.
+4. **Produce a structured review report** (format described at the end). Completion criterion: every changed file has been read in full and checked against every applicable category.
 
-Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
+---
 
-Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here — not inside two parallel sub-agents.
+## Review Categories (by priority)
 
-### 2. Identify the spec source
+### P1 — Security (CRITICAL)
 
-Look for the originating spec, in this order:
+Check every changed line at trust boundaries:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
-2. A path the user passed as an argument.
-3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
-4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+#### Injection
 
-### 3. Identify the standards sources
+- SQL built via string concatenation/interpolation — must use parameterized queries or a query builder; identifiers must be quoted/escaped through the library
+- Command execution (`exec`, `spawn`, `ProcessBuilder`, shell strings) with user-supplied input
+- Template/expression injection (server-side templates, `eval`, dynamic imports from user input)
 
-Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+#### XSS & Frontend Injection
 
-On top of whatever the repo documents, the Standards axis always carries the **smell baseline** below — a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules bind it:
+- `innerHTML`, `dangerouslySetInnerHTML`, `v-html`, `document.write` with unsanitized data
+- User input reflected into URLs, attributes, or inline event handlers
+- `javascript:` / `data:` URLs from user input in `href`/`src`
+- Missing output encoding when rendering untrusted content
 
-- **The repo overrides.** A documented repo standard always wins; where it endorses something the baseline would flag, suppress the smell.
-- **Always a judgement call.** Each smell is a labelled heuristic ("possible Feature Envy"), never a hard violation — and, like any standard here, skip anything tooling already enforces.
+#### Path Traversal & File Handling
 
-Each smell reads _what it is_ → _how to fix_; match it against the diff:
+- Paths built from user input without canonicalization/validation
+- File operations escaping the expected directory; unchecked symlink following
+- Unrestricted file upload (type, size, destination)
 
-- **Mysterious Name** — a function, variable, or type whose name doesn't reveal what it does or holds. → rename it; if no honest name comes, the design's murky.
-- **Duplicated Code** — the same logic shape appears in more than one hunk or file in the change. → extract the shared shape, call it from both.
-- **Feature Envy** — a method that reaches into another object's data more than its own. → move the method onto the data it envies.
-- **Data Clumps** — the same few fields or params keep travelling together (a type wanting to be born). → bundle them into one type, pass that.
-- **Primitive Obsession** — a primitive or string standing in for a domain concept that deserves its own type. → give the concept its own small type.
-- **Repeated Switches** — the same `switch`/`if`-cascade on the same type recurs across the change. → replace with polymorphism, or one map both sites share.
-- **Shotgun Surgery** — one logical change forces scattered edits across many files in the diff. → gather what changes together into one module.
-- **Divergent Change** — one file or module is edited for several unrelated reasons. → split so each module changes for one reason.
-- **Speculative Generality** — abstraction, parameters, or hooks added for needs the spec doesn't have. → delete it; inline back until a real need shows.
-- **Message Chains** — long `a.b().c().d()` navigation the caller shouldn't depend on. → hide the walk behind one method on the first object.
-- **Middle Man** — a class or function that mostly just delegates onward. → cut it, call the real target direct.
-- **Refused Bequest** — a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
+#### Credentials & Secrets
 
-### 4. Spawn both sub-agents in parallel
+- Secrets, tokens, passwords logged, hardcoded, or committed
+- Secrets in config without env/secret-manager indirection
+- Sensitive data leaking into frontend bundles, client-side state, localStorage, or URLs
+- Missing redaction in logs / serialized output
 
-Send a single message with two `Agent` tool calls. Use the `general-purpose` subagent for both.
+#### AuthN & AuthZ
 
-**Standards sub-agent prompt** — include:
+- Endpoints or routes missing authentication checks
+- Missing role/permission/ownership validation (IDOR: acting on IDs without ownership check)
+- Authorization enforced only client-side (hidden buttons ≠ security)
+- Token validation bypasses; insecure session/cookie flags (`HttpOnly`, `Secure`, `SameSite`)
 
-- The full diff command and commit list.
-- The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full — the sub-agent has no other access to it.
-- The brief: "Report — per file/hunk where relevant — (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls — documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+#### Untrusted Data
 
-**Spec sub-agent prompt** — include:
+- Unsafe deserialization of untrusted input (polymorphic typing, pickle, `eval`-based parsing)
+- Missing validation at system boundaries (request bodies, query params, headers, file content, env vars, postMessage origins)
+- SSRF: URLs fetched server-side from user input without allow-listing
 
-- The diff command and commit list.
-- The path or fetched contents of the spec.
-- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+#### Network & Transport
 
-If the spec is missing, skip the Spec sub-agent and note this in the final report.
+- Trust-all TLS patterns, disabled certificate validation
+- HTTP for sensitive endpoints; CORS misconfiguration (wildcard origin + credentials)
+- Missing CSRF protection on state-changing requests
 
-### 5. Aggregate
+### P2 — Performance
 
-Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate (see _Why two axes_).
+#### General
 
-End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes — that's the reranking the separation exists to prevent.
+- O(n²) loops where a map/set gives O(n); repeated work a single pass covers
+- Large allocations or expensive construction (regex compilation, clients, parsers) inside hot loops
+- Missing resource cleanup (connections, file handles, streams, subscriptions) — use the language's scoped-resource idiom
+- Expensive computation repeated without memoization/caching where the project already caches
 
-## Why two axes
+#### Backend
 
-A change can pass one axis and fail the other:
+- N+1 query patterns; missing batching for bulk operations
+- Connection/statement/result leaks; missing pooling where the project pools
+- Blocking calls in async/reactive/virtual-thread contexts
+- Race conditions: check-then-act without atomicity; missing backpressure on unbounded queues
+- Unbuffered I/O; loading whole files when streaming suffices
 
-- Code that follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
-- Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
+#### Frontend
 
-Reporting them separately stops one axis from masking the other.
+- Unnecessary re-renders: unstable deps/props (inline objects/lambdas in hot paths), missing memoization where the framework expects it (`useMemo`/`computed`/`OnPush` — per the project's framework)
+- Effects with wrong/missing dependencies; state updates in render loops
+- Fetch waterfalls where requests could be parallel; missing request deduplication/caching the project's data layer provides
+- Large lists rendered without virtualization/pagination
+- Bundle bloat: heavy dependency added for something a few lines cover; missing lazy loading for large routes/components
+- Layout thrash: repeated DOM reads/writes interleaved; animations of layout properties instead of transform/opacity
+- Memory leaks: listeners, intervals, subscriptions not cleaned up on unmount/dispose
+
+### P3 — Architecture & Correctness
+
+Judge against the project's established patterns, discovered in step 2:
+
+- New code follows the project's existing structure: DI/wiring style, module/layer boundaries, folder conventions
+- Code sits in the right layer — no business logic in controllers/components, no UI concerns in the domain layer
+- No circular dependencies; cross-module communication through the existing interfaces
+- Error handling matches the project's convention; no swallowed exceptions/rejections; errors at boundaries surfaced or logged, not silently dropped
+- API changes are backward compatible or the break is intentional and flagged
+- Frontend: state lives at the right level (server cache vs global store vs local state — per the project's stack); components stay presentational where the codebase separates container/presentation; no prop drilling where the project has an established context/store; data fetching follows the project's data layer, not ad-hoc `fetch` calls
+- Duplication of an existing utility/helper the codebase already has
+- Reuse over reinvention: prefer the project's existing patterns, then stdlib/platform, before new abstractions or dependencies
+
+### P4 — Code Style
+
+Conformance with _this project's_ standards (lint config, formatter, neighbouring code):
+
+- Formatting matches the project formatter — flag only if no formatter runs in CI
+- Naming follows the codebase's conventions (casing, prefixes, test naming)
+- Idiomatic use of the language/framework version the project targets (modern syntax the codebase already uses)
+- Types: no new `any`/unchecked casts where the project is strictly typed; null contracts consistent with the codebase
+- Imports: no unused; ordering per project convention
+- Tests follow the project's structure (given/when/then or equivalent), naming, and fixtures; new logic has tests where the project tests comparable code
+- Frontend: semantic HTML over div soup; interactive elements are real `<button>`/`<a>`; images have alt text; form inputs have labels; keyboard focus not broken — accessibility basics are style-level, missing them on new UI is a finding
+- No hardcoded user-facing strings if the project has i18n
+
+### P5 — Minor Improvements
+
+Nice-to-have, non-blocking:
+
+- Typos in comments, log messages, UI copy, or identifiers
+- Missing or outdated doc comments on public API
+- Opportunity to extract a reusable function/constant/component
+- Log level appropriateness; leftover debug output (`console.log`, commented-out code)
+- Test coverage gaps for edge cases
+- Dead code or unused parameters introduced by the MR
+- More descriptive naming
+
+---
+
+## Output Format
+
+Produce the review as a structured report using this format:
+
+```
+## MR Review: <short summary of what the MR does>
+
+### Overview
+<1-3 sentences describing the MR's purpose and scope>
+
+### P1 — Security
+<findings or "No issues found.">
+
+### P2 — Performance
+<findings or "No issues found.">
+
+### P3 — Architecture & Correctness
+<findings or "No issues found.">
+
+### P4 — Code Style
+<findings or "No issues found.">
+
+### P5 — Minor Improvements
+<findings or "No suggestions.">
+
+### Verdict
+<One of: APPROVE, APPROVE WITH COMMENTS, REQUEST CHANGES>
+<1-2 sentence rationale>
+```
+
+**For each finding**, use this format:
+
+```
+- **[severity]** `file/path.ext:line` — description of the issue
+  > suggestion or fix
+```
+
+Where severity is: `blocker`, `critical`, `major`, `minor`, `info`
+
+**Severity mapping:**
+
+- P1 findings are `blocker` or `critical`
+- P2 findings are `critical` or `major`
+- P3 findings are `major` or `minor`
+- P4 findings are `minor`
+- P5 findings are `info`
+
+**Verdict rules:**
+
+- Any `blocker` or `critical` → REQUEST CHANGES
+- Only `major` or below → APPROVE WITH COMMENTS
+- Only `minor` / `info` → APPROVE
+- Nothing found → APPROVE
