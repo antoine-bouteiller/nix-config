@@ -16,6 +16,8 @@ in {
     zed.enable = true;
     agents = {
       enable = true;
+      claude-code.enable = true;
+      pi.enable = true;
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
         sonarqube = {

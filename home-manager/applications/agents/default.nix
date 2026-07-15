@@ -74,6 +74,11 @@
     "settings.json"
     "hooks"
   ];
+
+  piTopLevelFiles = [
+    "extensions"
+    "settings.json"
+  ];
 in {
   options.local.home-manager.agents = {
     enable = lib.mkEnableOption "agent CLIs";
@@ -90,8 +95,14 @@ in {
 
     claude-code.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Deploy claude-code with its config and ~/.claude/skills.";
+    };
+
+    pi.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Deploy pi's settings.json and hand-vendored extensions (edit-and-go symlinks).";
     };
   };
 
@@ -134,6 +145,17 @@ in {
           ".config/ccstatusline/settings.json".source =
             mkOutOfStoreSymlink "${agentsDir}/claude-code/ccstatusline.json";
         };
+    })
+
+    # Pi: bun-installed binary (not nix); we only own settings + vendored
+    # extensions via edit-and-go symlinks. ponytail: skip nix packaging, add
+    # when pi ships a nixpkgs derivation.
+    (lib.mkIf cfg.pi.enable {
+      home.file = builtins.listToAttrs (map (name: {
+          name = ".pi/agent/${name}";
+          value.source = mkOutOfStoreSymlink "${agentsDir}/pi/${name}";
+        })
+        piTopLevelFiles);
     })
   ]);
 }
