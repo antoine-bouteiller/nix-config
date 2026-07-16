@@ -83,7 +83,7 @@
     "defaultMode": "auto",
     "additionalDirectories": ["~/.claude"]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus[1m]",
   "disableClaudeAiConnectors": true,
   "disableBundledSkills": true,
   "hooks": {
@@ -130,6 +130,36 @@
             "command": "~/.claude/hooks/block-dangerous-git.sh"
           }
         ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/plan-peer-review-check.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/task-peer-review-check.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/write-peer-review-check.sh",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -139,6 +169,11 @@
           {
             "type": "command",
             "command": "bash '/Users/antoinebouteiller/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/peer-review-reminder.sh",
             "timeout": 10
           }
         ]
@@ -151,6 +186,11 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/stop_caffeinate.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/stop-peer-review-check.sh",
+            "timeout": 5
           }
         ]
       }
@@ -162,6 +202,11 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/start_caffeinate.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/user-prompt-check.sh",
+            "timeout": 5
           }
         ]
       }
@@ -203,5 +248,6 @@
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "effortLevel": "medium"
 }

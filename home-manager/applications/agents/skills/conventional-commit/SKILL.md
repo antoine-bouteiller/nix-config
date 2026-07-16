@@ -2,7 +2,7 @@
 description: Generate conventional commit with staged changes
 name: conventional-commit
 context: fork
-model: haiku
+model: sonnet
 disable-model-invocation: true
 ---
 

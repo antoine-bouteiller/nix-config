@@ -73,6 +73,7 @@
     "CLAUDE.md"
     "settings.json"
     "hooks"
+    "agents"
   ];
 
   piTopLevelFiles = [

@@ -66,6 +66,7 @@ in {
       "tailscale-app"
       "firefox"
       "codexbar"
+      "nikitabobko/tap/aerospace"
     ];
   };
 
