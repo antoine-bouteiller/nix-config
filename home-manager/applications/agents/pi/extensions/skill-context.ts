@@ -81,16 +81,19 @@ export default function (pi: ExtensionAPI) {
 
     if (result.killed || result.code !== 0) {
       const reason = result.killed ? "timed out" : `exited with code ${result.code}`;
-      if (ctx.hasUI) ctx.ui.notify(`Forked skill "${skill.name}" ${reason}`, "error");
-      pi.sendUserMessage(
-        `The skill "${skill.name}" ran in a forked subagent but ${reason}.\n\nstderr:\n${result.stderr.trim() || "(empty)"}`,
-      );
+      if (ctx.hasUI)
+        ctx.ui.notify(
+          `Forked skill "${skill.name}" ${reason}.\n\nstderr:\n${result.stderr.trim() || "(empty)"}`,
+          "error",
+        );
       return { action: "handled" };
     }
 
-    pi.sendUserMessage(
-      `Result of skill "${skill.name}" (ran in a forked subagent${modelRef ? ` on ${modelRef}` : ""}):\n\n${result.stdout.trim() || "(no output)"}`,
-    );
+    // ponytail: just print the subagent output; the main agent must not act on it.
+    if (ctx.hasUI)
+      ctx.ui.notify(
+        `Result of skill "${skill.name}"${modelRef ? ` (on ${modelRef})` : ""}:\n\n${result.stdout.trim() || "(no output)"}`,
+      );
     return { action: "handled" };
   });
 }
