@@ -42,7 +42,7 @@ def main [] {
   mut platforms_data = {}
   for platform in ($platforms | transpose nix_platform target) {
     let url = $"($base)/fff-mcp-($platform.target)"
-    let hex = http get $"($url).sha256" | str trim | split row " " | first
+    let hex = http get $"($url).sha256" | decode utf-8 | str trim | split row " " | first
     let hash = nix hash convert --hash-algo sha256 $hex | str trim
     $platforms_data = $platforms_data | insert $platform.nix_platform {url: $url, hash: $hash}
     print $"  ($platform.nix_platform): ($hash)"
