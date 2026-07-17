@@ -1,21 +1,21 @@
 {
-  "version": "0.2.4",
+  "version": "0.2.5",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.2.4.tgz",
-      "hash": "sha512-Jsa9vIJl2PZKTB92cQrApL/i1+JLCWNDW6IHWVmpW4iYXZgqwz1wP9ZOPeFhq8V4+1fR76TmRQIOO6/+JsLFtQ=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.2.5.tgz",
+      "hash": "sha512-47oZxZTxySwr3EmCqyhk1ADIaeNCmCEIeAlD5eEJtE7v342AD3bm/ZgkBa5HJuoccDJBb/tPrE8IHXJ1j/kdAg=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.4.tgz",
-      "hash": "sha512-JtmCOcl8S72fXoDCR9Pzzsq743V3RDRq32GdKmeAtY05jISnw7tMq+cAANB2owKvCQLEsHgM+JY6/329Kz+WzQ=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.5.tgz",
+      "hash": "sha512-vGht57QZccUa28XSpchiX+uH91lOY3VsJ7YyGtci/QS9nCkGCkJnvY+uOXd0P0iZIMTATmkenp7XmWHw0qvbcw=="
     },
     "x86_64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.2.4.tgz",
-      "hash": "sha512-GMuHY/ojbNwEQoag16kpWFlKc48d+XeaWEhXWp6CSeywxRlK7diKvEl7Ty4Xo9scxhFO6O/6yIOhbQXyb430PA=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.2.5.tgz",
+      "hash": "sha512-x4x2FF2qHtGdSjSJfQlbbnCevcQRH8t9hVXoWH+rQ7Kts4u61cDIHx1aBoTVBJrO2Bb444Ira2SZBYK8IyY/bQ=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.2.4.tgz",
-      "hash": "sha512-hvnBmJjPNFuDWgrjlQ4WI8NqxvM03s/LFqavnA8wYifkLHmynkT+RDHNemWS/HSn6ebetrV0c+lKdz8tvRWA9g=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.2.5.tgz",
+      "hash": "sha512-I2KIQa67EYJhDZS5VDdQuJ65P+9ldDalKqTp+XZ8Xmmz0FMEAYavVQdIBajH6ob1qlgXbwGTQy9G5DKOjsNcew=="
     }
   }
 }
