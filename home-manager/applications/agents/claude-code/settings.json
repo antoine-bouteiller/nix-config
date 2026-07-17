@@ -1,5 +1,20 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agentPushNotifEnabled": false,
+  "disableArtifact": true,
+  "disableBundledSkills": true,
+  "disableClaudeAiConnectors": true,
+  "disableRemoteControl": true,
+  "disableWorkflows": true,
+  "effortLevel": "medium",
+  "enabledPlugins": {
+    "claude-mem@thedotmack": true,
+    "jdtls-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "sonarqube@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
   "env": {
     "API_TIMEOUT_MS": "1200000",
     "BASH_DEFAULT_TIMEOUT_MS": "300000",
@@ -13,7 +28,155 @@
     "DISABLE_COST_WARNINGS": "1",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "repo": "DietrichGebert/ponytail",
+        "source": "github"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "repo": "thedotmack/claude-mem",
+        "source": "github"
+      }
+    }
+  },
+  "feedbackSurveyRate": 0,
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/notify-ghostty.sh",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "comment-checker",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/strip-ponytail-comments.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Write|Edit|MultiEdit"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "rtk hook claude",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/validate-no-ai-trailer.sh",
+            "timeout": 5,
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/block-dangerous-git.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/plan-peer-review-check.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "ExitPlanMode"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/task-peer-review-check.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "Task"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/write-peer-review-check.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "Write"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/peer-review-reminder.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/antoinebouteiller/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/stop_caffeinate.sh",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/stop-peer-review-check.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/start_caffeinate.sh",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/user-prompt-check.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
+  "model": "opus[1m]",
   "permissions": {
+    "additionalDirectories": ["~/.claude"],
     "allow": [
       "Bash(git add *)",
       "Bash(git branch *)",
@@ -66,6 +229,7 @@
       "mcp__plugin_claude-code-home-manager_fff__find_files",
       "mcp__plugin_claude-code-home-manager_fff__multi_grep"
     ],
+    "defaultMode": "auto",
     "deny": [
       "DesignSync",
       "NotebookEdit",
@@ -79,175 +243,16 @@
       "EnterWorktree",
       "ExitWorktree",
       "ShareOnboardingGuide"
-    ],
-    "defaultMode": "auto",
-    "additionalDirectories": ["~/.claude"]
-  },
-  "model": "opus[1m]",
-  "disableClaudeAiConnectors": true,
-  "disableBundledSkills": true,
-  "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify-ghostty.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "comment-checker"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/strip-ponytail-comments.sh"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/validate-no-ai-trailer.sh",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-dangerous-git.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/plan-peer-review-check.sh",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/task-peer-review-check.sh",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/write-peer-review-check.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/antoinebouteiller/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/peer-review-reminder.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/stop_caffeinate.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/stop-peer-review-check.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/start_caffeinate.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/user-prompt-check.sh",
-            "timeout": 5
-          }
-        ]
-      }
     ]
   },
-  "disableRemoteControl": true,
-  "disableWorkflows": true,
-  "disableArtifact": true,
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest",
-    "padding": 0,
-    "refreshInterval": 10
-  },
-  "enabledPlugins": {
-    "claude-mem@thedotmack": true,
-    "jdtls-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "sonarqube@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
-      }
-    },
-    "thedotmack": {
-      "source": {
-        "source": "github",
-        "repo": "thedotmack/claude-mem"
-      }
-    }
-  },
-  "feedbackSurveyRate": 0,
-  "tui": "fullscreen",
+  "skipAutoPermissionPrompt": true,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true,
-  "effortLevel": "medium"
+  "statusLine": {
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0,
+    "refreshInterval": 10,
+    "type": "command"
+  },
+  "tui": "fullscreen"
 }
