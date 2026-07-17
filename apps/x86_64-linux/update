@@ -56,7 +56,18 @@ for attr in $(echo "$json_data" | jq -r 'keys[]'); do
   readarray -t cmd < <(echo "$data" | jq -r '.command[]')
 
   exe="${cmd[0]}"
-  if [[ "$exe" == /nix/store/* ]] && [ ! -e "$exe" ]; then
+  # `nix flake update` above dirtied the tree, so a bare-path updateScript
+  # (./update.nu) resolves to an unstable /nix/store/<hash>-source path that
+  # eval and build disagree on — execing it races GC and ENOENTs in CI. Every
+  # updateScript here is a checked-in script that writes to $PWD anyway, so run
+  # the working-copy file directly instead of the store path.
+  # only covers checked-in ./update.nu; a writeShellApplication
+  # updateScript would fall through to the store-path build path below.
+  rel="${exe#/nix/store/*-source/}"
+  if [ "$rel" != "$exe" ] && [ -f "$PWD/$rel" ]; then
+    exe="$PWD/$rel"
+    cmd[0]="$exe"
+  elif [[ "$exe" == /nix/store/* ]] && [ ! -e "$exe" ]; then
     echo "    Building updateScript for $attr"
     if ! nix build --no-link --impure ".#packages.${system}.${attr}.updateScript"; then
       echo "    $attr: failed to build updateScript"
