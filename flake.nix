@@ -107,7 +107,7 @@
         };
       in
         {
-          comment-checker = pkgs.callPackage ./pkgs/comment-checker.nix {};
+          comment-checker = pkgs.callPackage ./pkgs/comment-checker {};
           vite-plus = pkgs.callPackage ./pkgs/vite-plus {};
           whitesur-icon-theme = pkgs.callPackage ./pkgs/whitesur-icon-theme.nix {
             overlay = ./home-manager/themes/WhiteSur-icon-overlay;
