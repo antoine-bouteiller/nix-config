@@ -40,6 +40,7 @@
     openssh
     zip
     unzip
+    p7zip
 
     # Text and terminal utilities
     htop

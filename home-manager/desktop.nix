@@ -108,6 +108,21 @@ in {
       ];
 
       compositor.active_hint = false;
+      compositor.input_touchpad.tap_config = {
+        __type = "optional";
+        value = {
+          enabled = true;
+          button_map = {
+            __type = "optional";
+            value = {
+              __type = "enum";
+              variant = "LeftRightMiddle";
+            };
+          };
+          drag = true;
+          drag_lock = false;
+        };
+      };
       compositor.input_touchpad.scroll_config = {
         __type = "optional";
         value = {
@@ -120,7 +135,7 @@ in {
           };
           natural_scroll = {
             __type = "optional";
-            value = false;
+            value = true;
           };
           scroll_button = {
             __type = "optional";

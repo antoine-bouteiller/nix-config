@@ -2,9 +2,11 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: let
   cfg = config.gaming;
+  customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   options.gaming = {
     enable = lib.mkEnableOption "Steam, Heroic and gaming utilities";
@@ -44,6 +46,8 @@ in {
       protonup-qt
       heroic
       mangohud
+      azahar
+      customPkgs.retroarch
     ];
   };
 }
