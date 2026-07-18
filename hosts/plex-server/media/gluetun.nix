@@ -71,7 +71,7 @@
     # Tailscale node sharing gluetun's netns -> all its egress exits via Proton.
     tailscale-exit = {
       # renovate: datasource=docker depName=tailscale/tailscale
-      image = "tailscale/tailscale@sha256:d54b2e6a9c09f0e5ec52e82b9ad4af3d446b54a7c08075e92f11c39dd410105f"; # v1.98.8
+      image = "tailscale/tailscale@sha256:f15d5d3f4a68773a853180b72496f70ba614b64de0878c43fe3da39fe0afba47"; # v1.98.9
       autoStart = true;
       dependsOn = ["gluetun"];
       environment = {
