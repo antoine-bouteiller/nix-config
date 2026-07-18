@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # UserPromptSubmit hook: Identify requests likely needing peer review
 
 # Read hook context from stdin (JSON)

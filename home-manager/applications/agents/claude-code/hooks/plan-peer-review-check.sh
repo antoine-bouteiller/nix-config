@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # PreToolUse hook for ExitPlanMode: Remind to peer review the plan
 
 cat << 'EOF'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TRACK_DIR=/tmp/claude_caffeinates
 

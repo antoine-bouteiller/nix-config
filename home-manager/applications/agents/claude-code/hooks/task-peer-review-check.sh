@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # PreToolUse hook for Task: Check if dispatching to a review-related agent
 
 # Read hook context from stdin (JSON)

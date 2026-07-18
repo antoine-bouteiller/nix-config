@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # PreToolUse hook for Write: Check if writing significant implementation files
 
 # Read hook context from stdin (JSON)

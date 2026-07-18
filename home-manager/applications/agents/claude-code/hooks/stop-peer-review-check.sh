@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Stop hook: STRONGLY remind Claude to verify peer review was performed
 
 cat << 'EOF'

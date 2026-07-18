@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # SessionStart hook to remind Claude about peer review requirements
 # This hook runs at the start of each Claude Code session
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Blocks `git commit` invocations whose message includes an AI-attribution
 # trailer (e.g. `Co-Authored-By: Claude ...`, `Generated-By: Anthropic ...`).
 # Called as a PreToolUse hook on the Bash tool.

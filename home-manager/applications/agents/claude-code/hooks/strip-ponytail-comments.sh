@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Strips the `ponytail:` label from the start of comments in files just
 # written/edited, keeping the comment itself: `// ponytail: foo` -> `// foo`.
 # PostToolUse hook on Write|Edit|MultiEdit.
