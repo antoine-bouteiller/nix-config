@@ -7,10 +7,6 @@
 }: let
   cfg = config.gaming;
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
-  # Pegasus reports Wayland app_id "org.pegasus-frontend." but ships a desktop
-  # file named org.pegasus_frontend.Pegasus.desktop, so COSMIC can't match the
-  # running window to its launcher and shows a generic taskbar icon. Declare the
-  # real app_id as StartupWMClass so the compositor associates the two.
 in {
   options.gaming = {
     enable = lib.mkEnableOption "Steam, Heroic and gaming utilities";

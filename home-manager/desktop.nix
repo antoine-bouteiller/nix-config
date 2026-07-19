@@ -227,12 +227,141 @@ in {
       pkgs.nixos-icons
     ];
 
-    # walker's flake module installs walker + elephant and, with runAsService,
-    # wires up both systemd user services (walker --gapplication-service, which
-    # Requires the elephant backend) for fast shortcut-based launching.
+    # runAsService wires up the walker + elephant systemd user services for
+    # fast shortcut-based launching.
     programs.walker = {
       enable = true;
       runAsService = true;
+      config.theme = "raycast";
+      themes.raycast.style = ''
+        /* ================= */
+        /* COLORS */
+        /* ================= */
+
+        @define-color bg #1c1c1f;
+        @define-color bg2 #242427;
+        @define-color border #2e2e33;
+
+        @define-color text #e6e6e6;
+        @define-color muted #8e8e93;
+
+        @define-color accent #3b82f6;
+
+
+        /* ================= */
+        /* RESET */
+        /* ================= */
+
+        *{ all:unset; }
+
+        *{
+          color:@text;
+          font-family: Inter, JetBrains Mono, monospace;
+          font-size:16px;
+        }
+
+        scrollbar{ opacity:0; }
+
+
+        /* ================= */
+        /* MAIN WINDOW */
+        /* ================= */
+
+        .box-wrapper{
+          background:@bg;
+          border-radius:16px;
+          border:1px solid @border;
+          padding:18px;
+          min-width:650px;
+        }
+
+
+        /* ================= */
+        /* SEARCH BAR */
+        /* ================= */
+
+        .search-container{
+          background:@bg2;
+          border-radius:12px;
+          padding:14px;
+        }
+
+
+        /* ================= */
+        /* INPUT */
+        /* ================= */
+
+        .input{
+          font-size:18px;
+        }
+
+        .input placeholder{
+          color:@muted;
+        }
+
+        .input:focus,
+        .input:active{
+          outline:none;
+          box-shadow:none;
+        }
+
+
+        /* ================= */
+        /* CENTER RESULTS */
+        /* ================= */
+
+        .list{
+          padding-top:12px;
+        }
+
+        /* center each item */
+        .item-box{
+          padding:14px;
+          border-radius:10px;
+          transition:
+            transform 140ms ease,
+            background 140ms ease,
+            opacity 140ms ease;
+        }
+
+
+        /* hover animation */
+        child:hover .item-box{
+          background:@bg2;
+          transform: scale(1.02);
+        }
+
+
+        /* selected animation */
+        child:selected .item-box{
+          background:@bg2;
+          transform: scale(1.04);
+        }
+
+
+        /* ================= */
+        /* ICON */
+        /* ================= */
+
+        .item-image{
+          margin-right:12px;
+          -gtk-icon-transform: scale(1.1);
+        }
+
+
+        /* ================= */
+        /* TEXT */
+        /* ================= */
+
+        .item-text{
+          font-weight:500;
+        }
+
+        .item-subtext{
+          color:@muted;
+          font-size:12px;
+        }
+      '';
     };
   };
 }
