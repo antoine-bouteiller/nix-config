@@ -7,25 +7,21 @@
 }: let
   cfg = config.gaming;
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
-
   # Pegasus reports Wayland app_id "org.pegasus-frontend." but ships a desktop
   # file named org.pegasus_frontend.Pegasus.desktop, so COSMIC can't match the
   # running window to its launcher and shows a generic taskbar icon. Declare the
   # real app_id as StartupWMClass so the compositor associates the two.
-  pegasus-frontend = pkgs.pegasus-frontend.overrideAttrs (old: {
-    postInstall =
-      (old.postInstall or "")
-      + ''
-        echo "StartupWMClass=org.pegasus-frontend." \
-          >> $out/share/applications/org.pegasus_frontend.Pegasus.desktop
-      '';
-  });
 in {
   options.gaming = {
     enable = lib.mkEnableOption "Steam, Heroic and gaming utilities";
   };
 
   config = lib.mkIf cfg.enable {
+    # neostation's gamepad plugin only reads the legacy joystick API
+    # (/dev/input/js*). Load joydev at boot so js nodes get created on
+    # controller hotplug; otherwise it binds too late and no js device appears.
+    boot.kernelModules = ["joydev"];
+
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
@@ -55,12 +51,18 @@ in {
 
     programs.gamemode.enable = true;
 
+    services.udev.packages = [pkgs.game-devices-udev-rules];
+
     environment.systemPackages = with pkgs; [
       protonup-qt
       heroic
       mangohud
       azahar
-      melonDS
+      (retroarch.withCores (cores:
+        with cores; [
+          melonds
+          mgba
+        ]))
       customPkgs.neostation
     ];
   };

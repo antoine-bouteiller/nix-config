@@ -74,6 +74,8 @@ in {
     extraGroups = [
       "networkmanager"
       "wheel"
+      "input"
+      "video"
     ];
   };
 
