@@ -107,43 +107,63 @@ in {
         }
       ];
 
-      compositor.active_hint = false;
-      compositor.input_touchpad.tap_config = {
-        __type = "optional";
-        value = {
-          enabled = true;
-          button_map = {
+      compositor = {
+        active_hint = false;
+
+        # COSMIC deserializes input_touchpad as one whole struct; omitting the
+        # required top-level `state` field makes cosmic-comp/cosmic-settings
+        # reject the file and fall back to defaults (i.e. the settings appear to
+        # reset). Mirror the exact struct COSMIC writes itself.
+        input_touchpad = {
+          state = {
+            __type = "enum";
+            variant = "Enabled";
+          };
+          click_method = {
             __type = "optional";
             value = {
               __type = "enum";
-              variant = "LeftRightMiddle";
+              variant = "Clickfinger";
             };
           };
-          drag = true;
-          drag_lock = false;
-        };
-      };
-      compositor.input_touchpad.scroll_config = {
-        __type = "optional";
-        value = {
-          method = {
+          tap_config = {
             __type = "optional";
             value = {
-              __type = "enum";
-              variant = "Edge";
+              enabled = true;
+              button_map = {
+                __type = "optional";
+                value = {
+                  __type = "enum";
+                  variant = "LeftRightMiddle";
+                };
+              };
+              drag = true;
+              drag_lock = false;
             };
           };
-          natural_scroll = {
+          scroll_config = {
             __type = "optional";
-            value = true;
-          };
-          scroll_button = {
-            __type = "optional";
-            value = 2;
-          };
-          scroll_factor = {
-            __type = "optional";
-            value = 1.0;
+            value = {
+              method = {
+                __type = "optional";
+                value = {
+                  __type = "enum";
+                  variant = "TwoFinger";
+                };
+              };
+              natural_scroll = {
+                __type = "optional";
+                value = true;
+              };
+              scroll_button = {
+                __type = "optional";
+                value = null;
+              };
+              scroll_factor = {
+                __type = "optional";
+                value = null;
+              };
+            };
           };
         };
       };
