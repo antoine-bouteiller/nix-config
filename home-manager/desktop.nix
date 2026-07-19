@@ -7,7 +7,10 @@
 }: let
   customPkgs = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
 in {
-  imports = [inputs.cosmic-manager.homeManagerModules.cosmic-manager];
+  imports = [
+    inputs.cosmic-manager.homeManagerModules.cosmic-manager
+    inputs.walker.homeManagerModules.default
+  ];
 
   config = lib.mkIf (osConfig.desktop.enable or false) {
     wayland.desktopManager.cosmic = {
@@ -173,17 +176,12 @@ in {
           key = "Alt+Space";
           action = {
             __type = "enum";
-            variant = "System";
-            value = [
-              {
-                __type = "enum";
-                variant = "Launcher";
-              }
-            ];
+            variant = "Spawn";
+            value = ["walker"];
           };
         }
         {
-          key = "Ctrl+Shift+L";
+          key = "Alt+Ctrl+Q";
           action = {
             __type = "enum";
             variant = "System";
@@ -220,7 +218,7 @@ in {
       enable = true;
       gtk2.force = true;
       iconTheme = {
-        name = "WhiteSure";
+        name = "WhiteSur";
         package = customPkgs.whitesur-icon-theme;
       };
     };
@@ -228,5 +226,13 @@ in {
     home.packages = [
       pkgs.nixos-icons
     ];
+
+    # walker's flake module installs walker + elephant and, with runAsService,
+    # wires up both systemd user services (walker --gapplication-service, which
+    # Requires the elephant backend) for fast shortcut-based launching.
+    programs.walker = {
+      enable = true;
+      runAsService = true;
+    };
   };
 }

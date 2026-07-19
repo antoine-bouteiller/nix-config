@@ -42,6 +42,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # External Claude Code skills, pinned as non-flake sources.
     ast-grep-skill = {
       url = "github:ast-grep/claude-skill";
