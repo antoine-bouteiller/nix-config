@@ -116,10 +116,12 @@
           sonarqube-cli = pkgs.callPackage ./pkgs/sonarqube-cli {};
           caddy-cloudflare = pkgs.callPackage ./pkgs/caddy-cloudflare {};
           fff-mcp = pkgs.callPackage ./pkgs/fff-mcp {};
-          retroarch = pkgs.callPackage ./pkgs/retroarch {};
         }
         // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
           nearby-file-share = pkgs.callPackage ./pkgs/nearby-file-share.nix {};
+        }
+        // nixpkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+          neostation = pkgs.callPackage ./pkgs/neostation {};
         }
     );
 
