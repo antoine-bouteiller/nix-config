@@ -50,6 +50,7 @@
 
       # Productivity Tools
       "sol"
+      "caffeine"
 
       # Browsers
       "brave-browser"
