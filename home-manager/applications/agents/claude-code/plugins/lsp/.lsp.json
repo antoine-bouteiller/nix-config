@@ -1,0 +1,40 @@
+{
+  "typescript": {
+    "command": "vtsls",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".ts": "typescript",
+      ".tsx": "typescriptreact",
+      ".js": "javascript",
+      ".jsx": "javascriptreact",
+      ".mjs": "javascript",
+      ".cjs": "javascript"
+    },
+    "transport": "stdio",
+    "initializationOptions": {},
+    "settings": {},
+    "maxRestarts": 3
+  },
+  "java": {
+    "command": "jdtls",
+    "args": [],
+    "extensionToLanguage": {
+      ".java": "java"
+    },
+    "transport": "stdio",
+    "initializationOptions": {
+      "settings": {
+        "java": {
+          "maven": {
+            "downloadSources": true,
+            "downloadJavadoc": true
+          }
+        }
+      }
+    },
+    "settings": {},
+    "startupTimeout": 300000,
+    "shutdownTimeout": 15000,
+    "maxRestarts": 100
+  }
+}

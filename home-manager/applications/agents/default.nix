@@ -52,6 +52,8 @@
     writing-great-skills = "${inputs.mattpocock-skills}/skills/productivity/writing-great-skills";
     tdd = "${inputs.mattpocock-skills}/skills/productivity/tdd";
     improve = "${inputs.shadcn-improve-skills}/skills/improve";
+    ast-grep = "${inputs.ast-grep-skill}/skills/ast-grep";
+    hallmark = "${inputs.hallmark-skill}/skills/hallmark";
   };
 
   # skill name -> home.file entries for a given target dir (".agents" / ".claude")
@@ -74,6 +76,7 @@
     "settings.json"
     "hooks"
     "agents"
+    ".lsp.json"
   ];
 
   piTopLevelFiles = [
@@ -120,6 +123,9 @@ in {
         # Utils
         customPkgs.comment-checker
         rtk
+        ast-grep
+        vtsls
+        jdt-language-server
       ];
 
       home.file = skillFiles ".agents";

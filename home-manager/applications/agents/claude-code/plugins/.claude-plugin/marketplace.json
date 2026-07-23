@@ -1,0 +1,14 @@
+{
+  "name": "dotfiles-plugins",
+  "description": "Personal Claude Code plugins managed via dotfiles",
+  "owner": {
+    "name": "Antoine Bouteiller"
+  },
+  "plugins": [
+    {
+      "name": "lsp",
+      "description": "Local language servers",
+      "source": "./lsp"
+    }
+  ]
+}

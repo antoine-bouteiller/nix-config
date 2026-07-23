@@ -243,6 +243,22 @@
         "type": "github"
       }
     },
+    "hallmark-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780605762,
+        "narHash": "sha256-+yPIG1XdI6hhyOH48rd20+YlFrA9Gr416tPt1OoxfwQ=",
+        "owner": "Nutlope",
+        "repo": "hallmark",
+        "rev": "aeb42fb354ff4efa36ab475773a082315a3af2ce",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Nutlope",
+        "repo": "hallmark",
+        "type": "github"
+      }
+    },
     "herdr": {
       "inputs": {
         "nixpkgs": [
@@ -394,6 +410,7 @@
         "cosmic-manager": "cosmic-manager",
         "darwin": "darwin",
         "git-hooks": "git-hooks",
+        "hallmark-skill": "hallmark-skill",
         "herdr": "herdr",
         "home-manager": "home-manager",
         "mattpocock-skills": "mattpocock-skills",

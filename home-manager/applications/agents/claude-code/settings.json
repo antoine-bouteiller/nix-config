@@ -11,7 +11,8 @@
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT": "1",
     "DISABLE_COST_WARNINGS": "1",
-    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
+    "ENABLE_LSP_TOOL": "1"
   },
   "permissions": {
     "allow": [
@@ -247,11 +248,9 @@
   },
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
-    "jdtls-lsp@claude-plugins-official": true,
     "ponytail@ponytail": true,
-    "pyright-lsp@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "lsp@dotfiles-plugins": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
@@ -264,6 +263,12 @@
       "source": {
         "source": "github",
         "repo": "thedotmack/claude-mem"
+      }
+    },
+    "dotfiles-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "~/.dotfiles/home-manager/applications/agents/claude-code/plugins"
       }
     }
   },
