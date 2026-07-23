@@ -21,11 +21,8 @@ in {
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
         sonarqube = {
-          type = "http";
-          url = "http://devbouteiller-02.pelico.best:8443/mcp";
-          headers = {
-            Authorization = "Bearer $SONAR_TOKEN";
-          };
+          command = "sonar";
+          args = ["run" "mcp"];
         };
         linear = {
           type = "http";
@@ -35,10 +32,6 @@ in {
           command = "uvx";
           args = ["mcp-nixos"];
         };
-        postgres = {
-          type = "sse";
-          url = "http://devbouteiller-02.pelico.best:8000/sse";
-        };
         slack = {
           type = "http";
           url = "https://mcp.slack.com/mcp";
@@ -46,6 +39,15 @@ in {
             clientId = "1601185624273.8899143856786";
             callbackPort = 3118;
           };
+        };
+        postgres = {
+          command = "uvx";
+          args = [
+            "--python"
+            "3.13"
+            "postgres-mcp"
+            "--access-mode=unrestricted"
+          ];
         };
       };
     };
