@@ -65,8 +65,6 @@ in {
     casks = [
       "tailscale-app"
       "firefox"
-      "codexbar"
-      "nikitabobko/tap/aerospace"
     ];
   };
 
