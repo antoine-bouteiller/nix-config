@@ -49,7 +49,6 @@ in {
     enableNixpkgsReleaseCheck = false;
     packages = [
       pkgs.dockutil
-      inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
     stateVersion = "25.11";
   };
