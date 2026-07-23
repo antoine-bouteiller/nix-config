@@ -159,6 +159,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/antoinebouteiller/.claude/hooks/sonar-secrets/build-scripts/pretool-secrets.sh'",
+            "timeout": 60
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -211,6 +221,16 @@
             "type": "command",
             "command": "~/.claude/hooks/user-prompt-check.sh",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/antoinebouteiller/.claude/hooks/sonar-secrets/build-scripts/prompt-secrets.sh'",
+            "timeout": 60
           }
         ]
       }
