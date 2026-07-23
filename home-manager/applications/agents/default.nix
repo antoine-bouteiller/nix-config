@@ -79,6 +79,7 @@
   piTopLevelFiles = [
     "extensions"
     "settings.json"
+    "models.json"
   ];
 in {
   options.local.home-manager.agents = {
