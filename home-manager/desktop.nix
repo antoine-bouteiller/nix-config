@@ -60,6 +60,7 @@ in {
                   "com.system76.CosmicAppletStatusArea"
                   "com.system76.CosmicAppletAudio"
                   "com.system76.CosmicAppletNetwork"
+                  "com.system76.CosmicAppletBluetooth"
                   "com.system76.CosmicAppletNotifications"
                   "com.system76.CosmicAppletBattery"
                   "com.system76.CosmicAppletPower"
@@ -164,7 +165,7 @@ in {
               };
               scroll_factor = {
                 __type = "optional";
-                value = null;
+                value = 0.35;
               };
             };
           };

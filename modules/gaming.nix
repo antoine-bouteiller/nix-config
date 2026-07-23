@@ -14,9 +14,21 @@ in {
 
   config = lib.mkIf cfg.enable {
     # neostation's gamepad plugin only reads the legacy joystick API
-    # (/dev/input/js*). Load joydev at boot so js nodes get created on
-    # controller hotplug; otherwise it binds too late and no js device appears.
+    # (/dev/input/js*), which needs the joydev handler.
     boot.kernelModules = ["joydev"];
+
+    # Kernel regression (hid-nintendo, 6.9+): joycon_input_create() calls
+    # input_register_device() before setting any capability bits, so joydev's
+    # match (EV_ABS+ABS_X) fails at hotplug and no js node is created.
+    # Reloading joydev re-scans the by-then populated device. Drop once
+    # upstream configures axes/buttons before registering.
+    # modprobe -r is a no-op while another js device is held open;
+    # replace with a kernel patch via boot.kernelPatches if that ever bites.
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2009", ATTRS{name}!="*IMU*", RUN+="${pkgs.runtimeShell} -c '${pkgs.coreutils}/bin/sleep 1; ${pkgs.kmod}/bin/modprobe -r joydev; ${pkgs.kmod}/bin/modprobe joydev'"
+    '';
+
+    services.udev.packages = [pkgs.game-devices-udev-rules];
 
     hardware.graphics = {
       enable = true;
@@ -47,8 +59,6 @@ in {
 
     programs.gamemode.enable = true;
 
-    services.udev.packages = [pkgs.game-devices-udev-rules];
-
     environment.systemPackages = with pkgs; [
       protonup-qt
       heroic
@@ -56,7 +66,7 @@ in {
       azahar
       (retroarch.withCores (cores:
         with cores; [
-          melonds
+          melondsds
           mgba
         ]))
       customPkgs.neostation
