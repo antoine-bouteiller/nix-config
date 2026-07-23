@@ -63,14 +63,32 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-## 5. Available Tools
+## 5. Codebase Exploration Strategy
 
-You have access to various CLIs:
+When searching or navigating a codebase, select the most precise tool for the context. Avoid falling back to basic text searches (like `grep`) when semantic or structural tools will yield more accurate results.
 
-- `glab` — GitLab
-- `gh` — GitHub
-- `sonar` — SonarQube
-- `agent-browser` — headless browser you can interact with
+### Tool Selection Guide
+
+#### 1. `fff` (Fast File Finder)
+
+Use for **file discovery and structural navigation**.
+
+- **When to use:** You need to locate a file by name, find a directory structure, or fuzzy-match a path.
+- **Examples:** "Find the auth middleware file," "Where are the unit tests for the billing module?"
+
+#### 2. LSP (Language Server Protocol)
+
+Use for **semantic code relationships and type analysis**.
+
+- **When to use:** You need to understand how code connects, find exact definitions, or trace executions.
+- **Examples:** "Go to the definition of `processPayment`," "Find all references to the `User` interface," "What arguments does this function accept?"
+
+#### 3. `ast-grep`
+
+Use for **structural pattern matching and syntax search**.
+
+- **When to use:** You need to find specific code shapes, API usage patterns, or complex syntax where standard regex would break on formatting, line breaks, or comments.
+- **Examples:** "Find all `fetch` calls missing a `.catch` block," "Locate every instance where a React component uses `useEffect` with an empty dependency array."
 
 ## 6. RTK — Rust Token Killer
 
