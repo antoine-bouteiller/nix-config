@@ -20,10 +20,6 @@ in {
       pi.enable = true;
       mcpServers = {
         fff.command = "${customPkgs.fff-mcp}/bin/fff-mcp";
-        sonarqube = {
-          command = "sonar";
-          args = ["run" "mcp"];
-        };
         linear = {
           type = "http";
           url = "https://mcp.linear.app/mcp";
@@ -39,15 +35,6 @@ in {
             clientId = "1601185624273.8899143856786";
             callbackPort = 3118;
           };
-        };
-        postgres = {
-          command = "uvx";
-          args = [
-            "--python"
-            "3.13"
-            "postgres-mcp"
-            "--access-mode=unrestricted"
-          ];
         };
       };
     };

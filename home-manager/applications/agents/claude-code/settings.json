@@ -249,7 +249,6 @@
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
     "ponytail@ponytail": true,
-    "sonarqube@claude-plugins-official": true,
     "lsp@dotfiles-plugins": true
   },
   "extraKnownMarketplaces": {
