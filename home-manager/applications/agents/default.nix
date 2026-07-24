@@ -54,7 +54,7 @@
     improve = "${inputs.shadcn-improve-skills}/skills/improve";
     ast-grep = "${inputs.ast-grep-skill}/ast-grep/skills/ast-grep";
     outline = "${inputs.ast-grep-skill}/ast-grep/skills/outline";
-    hallmark = "${inputs.hallmark-skill}/skills/hallmark";
+    taste-skill = "${inputs.taste-skill}/skills/taste-skill";
   };
 
   # skill name -> home.file entries for a given target dir (".agents" / ".claude")

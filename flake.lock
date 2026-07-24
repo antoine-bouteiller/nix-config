@@ -243,22 +243,6 @@
         "type": "github"
       }
     },
-    "hallmark-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780605762,
-        "narHash": "sha256-+yPIG1XdI6hhyOH48rd20+YlFrA9Gr416tPt1OoxfwQ=",
-        "owner": "Nutlope",
-        "repo": "hallmark",
-        "rev": "aeb42fb354ff4efa36ab475773a082315a3af2ce",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Nutlope",
-        "repo": "hallmark",
-        "type": "github"
-      }
-    },
     "herdr": {
       "inputs": {
         "nixpkgs": [
@@ -410,7 +394,6 @@
         "cosmic-manager": "cosmic-manager",
         "darwin": "darwin",
         "git-hooks": "git-hooks",
-        "hallmark-skill": "hallmark-skill",
         "herdr": "herdr",
         "home-manager": "home-manager",
         "mattpocock-skills": "mattpocock-skills",
@@ -420,6 +403,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "shadcn-improve-skills": "shadcn-improve-skills",
         "sops-nix": "sops-nix",
+        "taste-skill": "taste-skill",
         "treefmt-nix": "treefmt-nix_2",
         "vercel-agent-skills": "vercel-agent-skills",
         "walker": "walker"
@@ -509,6 +493,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-linux",
+        "type": "github"
+      }
+    },
+    "taste-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784822484,
+        "narHash": "sha256-Zt3fC8/63ZHcsFLjNR6/zNykrVkT0QV3SmmCi1dlnJA=",
+        "owner": "leonxlnx",
+        "repo": "taste-skill",
+        "rev": "e988add20dab0fa97d7a76781c48961c8184288e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leonxlnx",
+        "repo": "taste-skill",
         "type": "github"
       }
     },

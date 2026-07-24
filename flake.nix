@@ -59,8 +59,8 @@
       url = "github:mattpocock/skills";
       flake = false;
     };
-    hallmark-skill = {
-      url = "github:Nutlope/hallmark";
+    taste-skill = {
+      url = "github:leonxlnx/taste-skill";
       flake = false;
     };
     vercel-agent-skills = {
