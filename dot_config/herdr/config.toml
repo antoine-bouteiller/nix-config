@@ -1,0 +1,68 @@
+onboarding = false
+
+[keys]
+close_pane = ["prefix+x", "alt+esc"]
+close_tab = "prefix+k"
+close_workspace = "prefix+shift+k"
+copy_mode = "prefix+["
+detach = "prefix+d"
+focus_pane_down = "ctrl+alt+down"
+focus_pane_left = "ctrl+alt+left"
+focus_pane_right = "ctrl+alt+right"
+focus_pane_up = "ctrl+alt+up"
+help = "prefix+?"
+last_pane = "prefix+;"
+move_tab_next = "alt+shift+right"
+move_tab_previous = "alt+shift+left"
+new_tab = "prefix+c"
+new_workspace = "prefix+shift+c"
+next_tab = ["prefix+n", "alt+right"]
+next_workspace = ["prefix+shift+n", "alt+down"]
+prefix = "ctrl+space"
+previous_tab = ["prefix+p", "alt+left"]
+previous_workspace = ["prefix+shift+p", "alt+up"]
+reload_config = "prefix+q"
+rename_pane = "prefix+shift+o"
+rename_tab = "prefix+r"
+rename_workspace = "prefix+shift+r"
+resize_mode = ["prefix+ctrl+left", "prefix+ctrl+down", "prefix+ctrl+up", "prefix+ctrl+right"]
+resize_pane_down = "ctrl+alt+shift+down"
+resize_pane_left = "ctrl+alt+shift+left"
+resize_pane_right = "ctrl+alt+shift+right"
+resize_pane_up = "ctrl+alt+shift+up"
+split_horizontal = ["prefix+h", "alt+enter"]
+split_vertical = ["prefix+v", "alt+shift+enter"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+zoom = "prefix+z"
+
+[terminal]
+new_cwd = "follow"
+
+[theme]
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+name = "catppuccin"
+
+[ui]
+agent_panel_sort = "priority"
+confirm_close = false
+mouse_capture = true
+pane_gaps = false
+pane_outer_borders = false
+pane_scrollbars = false
+prompt_new_tab_name = false
+show_agent_labels_on_pane_borders = true
+window_title = "{hostname}: {workspace}"
+
+[[ui.tab_bar_right]]
+type = "zoom"
+
+[[ui.tab_bar_right]]
+type = "hostname"
+
+[ui.toast]
+delivery = "terminal"
+
+[worktrees]
+directory = "~/Workspace/wortkrees"

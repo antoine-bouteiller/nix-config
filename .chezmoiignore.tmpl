@@ -1,0 +1,15 @@
+{{ if ne .chezmoi.hostname "lv6cfqjl6l-macos" }}
+.gitconfig-github
+.npmrc
+.config/mcp/**
+{{ end }}
+{{ if eq .chezmoi.hostname "plex-server" }}
+.agents/**
+.claude/**
+.pi/agent/**
+.config/ccstatusline/**
+.config/ghostty/**
+.config/herdr/**
+.config/tmux/**
+.config/zed/**
+{{ end }}

@@ -1,0 +1,13 @@
+*.swp
+*~
+.vscode/
+.idea/
+.zed/
+.DS_Store
+Thumbs.db
+result
+result-*
+.direnv/
+node_modules/
+.claude/settings.local.json
+.plan/

@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "dbx-mcp": {
+      "command": "dbx-mcp-server",
+      "type": "stdio"
+    },
+    "fff": {
+      "command": "fff-mcp",
+      "type": "stdio"
+    },
+    "figma": {
+      "oauth": {
+        "clientName": "Claude Code",
+        "scope": "mcp:connect"
+      },
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    "linear": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "nixos": {
+      "args": [
+        "mcp-nixos"
+      ],
+      "command": "uvx",
+      "type": "stdio"
+    },
+    "slack": {
+      "oauth": {
+        "callbackPort": 3118,
+        "clientId": "1601185624273.8899143856786"
+      },
+      "type": "http",
+      "url": "https://mcp.slack.com/mcp"
+    }
+  }
+}

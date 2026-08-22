@@ -1,0 +1,176 @@
+typeset -U path cdpath fpath manpath
+
+autoload -U compinit && compinit
+
+# Configure Catppuccin before loading the theme plugin.
+zstyle ':catppuccin:p10k' theme rainbow
+typeset -g _p10k_catppuccin_flavour=mocha
+if [[ "$OSTYPE" == darwin* ]]; then
+  typeset -g _p10k_catppuccin_flavour=latte
+  defaults read -g AppleInterfaceStyle &>/dev/null && _p10k_catppuccin_flavour=mocha
+fi
+zstyle ':catppuccin:p10k' flavour "$_p10k_catppuccin_flavour"
+
+
+# Source plugins managed by chezmoi externals
+if [[ -f "$HOME/.zsh/plugins/zsh-powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  source "$HOME/.zsh/plugins/zsh-powerlevel10k/powerlevel10k.zsh-theme"
+  [[ -f "$HOME/.zsh/plugins/catppuccin-powerlevel10k-themes/catppuccin-powerlevel10k-themes.plugin.zsh" ]] &&
+    source "$HOME/.zsh/plugins/catppuccin-powerlevel10k-themes/catppuccin-powerlevel10k-themes.plugin.zsh"
+  [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+fi
+
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+[[ -f "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
+  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+if [[ -f "$HOME/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
+  source "$HOME/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  bindkey '^[OA' history-substring-search-up
+  bindkey '^[OB' history-substring-search-down
+fi
+
+# History options
+HISTSIZE="50000"
+SAVEHIST="50000"
+
+HISTFILE="$HOME/.zsh_history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+# Set shell options
+set_opts=(
+  HIST_FCNTL_LOCK EXTENDED_HISTORY HIST_EXPIRE_DUPS_FIRST HIST_IGNORE_DUPS
+  HIST_IGNORE_SPACE SHARE_HISTORY NO_APPEND_HISTORY NO_HIST_FIND_NO_DUPS
+  NO_HIST_IGNORE_ALL_DUPS NO_HIST_SAVE_NO_DUPS
+)
+for opt in "${set_opts[@]}"; do
+  setopt "$opt"
+done
+unset opt set_opts
+
+if [[ -o interactive ]] && (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+(( $+commands[carapace] )) && source <(carapace _carapace zsh)
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# PATH setup
+export path=(
+  $HOME/{,s}bin(N)
+  $HOME/.cache/.bun/bin(N)
+  $HOME/.local/{,s}bin(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  /usr/local/{,s}bin(N)
+  $path
+)
+
+# Completion styles
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+
+if [[ "$OSTYPE" == darwin* ]] && (( $+functions[apply_catppuccin] )); then
+  _p10k_catppuccin_autoswitch() {
+    local flavour=latte
+    defaults read -g AppleInterfaceStyle &>/dev/null && flavour=mocha
+    [[ $flavour == $_p10k_catppuccin_flavour ]] && return
+    typeset -g _p10k_catppuccin_flavour=$flavour
+    apply_catppuccin rainbow "$flavour"
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd _p10k_catppuccin_autoswitch
+fi
+
+
+# Source local/work config
+[[ -f "$HOME/.dotfiles/.zlocal" ]] && source "$HOME/.dotfiles/.zlocal"
+
+function lg() {
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+    command lazygit "$@"
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+      cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+      rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
+
+if [[ -r "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration ]]; then
+  source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+fi
+
+alias -- _=sudo
+alias -- bua='bup && bcup --greedy && bcn'
+alias -- cat=bat
+alias -- cd..='cd ..'
+alias -- g=git
+alias -- ga='git add'
+alias -- gaa='git add --all'
+alias -- gb='git branch'
+alias -- gbD='git branch -D'
+alias -- gbd='git branch -d'
+alias -- gc='git commit -v'
+alias -- 'gc!'='git commit -v --amend'
+alias -- gca='git commit -v -a'
+alias -- 'gca!'='git commit -v -a --amend'
+alias -- gcam='git commit -a -m'
+alias -- 'gcam!'='git commit -a --amend'
+alias -- 'gcan!'='git commit -v -a --no-edit --amend'
+alias -- gcb='git checkout -b'
+alias -- gclean='git fetch -p && for branch in $(git for-each-ref --format '\''%(refname) %(upstream:track)'\'' refs/heads | awk '\''$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'\''); do git branch -D $branch; done'
+alias -- gcmsg='git commit -m'
+alias -- gco='git checkout'
+alias -- gcp='git cherry-pick'
+alias -- gcpa='git cherry-pick --abort'
+alias -- gcpc='git cherry-pick --continue'
+alias -- gd='git diff'
+alias -- gf='git fetch'
+alias -- gl='git pull'
+alias -- glg='git log --stat'
+alias -- glo='git log --oneline --decorate'
+alias -- glog='git log --oneline --decorate --graph'
+alias -- gp='git push'
+alias -- gpf='git push --force-with-lease'
+alias -- 'gpf!'='git push --force'
+alias -- gpr='git pull --rebase'
+alias -- gpra='git pull --rebase --autostash'
+alias -- grb='git rebase'
+alias -- grba='git rebase --abort'
+alias -- grbc='git rebase --continue'
+alias -- grbi='git rebase -i'
+alias -- gsh='git show'
+alias -- gst='git status'
+alias -- l=ls
+alias -- la='ls -lAh'
+alias -- ldot='ls -ld .*'
+alias -- ll='ls -lh'
+alias -- n='nvim .'
+alias -- please=sudo
+alias -- quit=exit
+alias -- tarls='tar -tvf'
+alias -- untar='tar -xf'
+alias -- zdot='chezmoi cd'
+alias -- zshrc='${EDITOR:-nvim} $HOME/.zshrc'
+runenv() {
+  emulate -L zsh
+  local ns="env"
+  # first arg is the namespace only if secrets/<arg>.yaml exists, else default to env.yaml
+  local secrets_dir="$HOME/.dotfiles/hosts/pelico/secrets"
+  if [[ -f "$secrets_dir/$1.yaml" ]]; then ns="$1"; shift; fi
+  # ${(@q)@} quotes each arg so spaces survive sops's single command string
+  sops exec-env "$secrets_dir/$ns.yaml" "${(j: :)${(@q)@}}"
+}
+
+# This plugin must be sourced last so it can wrap every ZLE widget.
+[[ -f "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] &&
+  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

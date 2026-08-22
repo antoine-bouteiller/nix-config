@@ -1,0 +1,2 @@
+@pelico:registry=http://nexus.pelico.best/repository/npm/
+prefix=${HOME}/.npm-packages

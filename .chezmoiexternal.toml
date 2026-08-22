@@ -1,0 +1,36 @@
+[".agents/skills/agent-browser"]
+    type = "archive"
+    url = "https://github.com/vercel-labs/agent-browser/archive/548b159b30eef119ccf6846c8bc807d0eaa3f6f8.tar.gz"
+    exact = true
+    stripComponents = 3
+    include = ["*/skills/agent-browser/**"]
+
+[".zsh/plugins/zsh-powerlevel10k"]
+    type = "archive"
+    url = "https://github.com/romkatv/powerlevel10k/archive/3308262dfbd743b6e1d3956a2b5572f7a049d692.tar.gz"
+    exact = true
+    stripComponents = 1
+
+[".zsh/plugins/catppuccin-powerlevel10k-themes"]
+    type = "archive"
+    url = "https://github.com/tolkonepiu/catppuccin-powerlevel10k-themes/archive/6e72187953e5e9face7fbf8dcc926d691f7d1f2d.tar.gz"
+    exact = true
+    stripComponents = 1
+
+[".zsh/plugins/zsh-autosuggestions"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-autosuggestions/archive/85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5.tar.gz"
+    exact = true
+    stripComponents = 1
+
+[".zsh/plugins/zsh-history-substring-search"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-history-substring-search/archive/14c8d2e0ffaee98f2df9850b19944f32546fdea5.tar.gz"
+    exact = true
+    stripComponents = 1
+
+[".zsh/plugins/zsh-syntax-highlighting"]
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/2fc57d63067c18b1100ecdbf684fa5baf49459d1.tar.gz"
+    exact = true
+    stripComponents = 1

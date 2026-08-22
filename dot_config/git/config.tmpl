@@ -1,0 +1,66 @@
+[alias]
+	br = "branch"
+	ci = "commit"
+	co = "checkout"
+	st = "status"
+
+[branch]
+	sort = "-committerdate"
+
+[column]
+	ui = "auto"
+
+[commit]
+	gpgsign = true
+	verbose = true
+
+[core]
+	autocrlf = "input"
+	editor = "nvim"
+
+[diff]
+	algorithm = "histogram"
+	colorMoved = "plain"
+	mnemonicPrefix = true
+
+[filter "lfs"]
+	clean = "git-lfs clean -- %f"
+	process = "git-lfs filter-process --skip"
+	required = true
+	smudge = "git-lfs smudge --skip -- %f"
+
+[gpg]
+	format = "ssh"
+
+[gpg "ssh"]
+	allowedSignersFile = "~/.config/git/allowed_signers"
+
+[init]
+	defaultBranch = "main"
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[rebase]
+	autoStash = true
+
+[rerere]
+	autoupdate = true
+	enabled = true
+
+[tag]
+	sort = "-version:refname"
+
+[user]
+	email = "{{ if eq .chezmoi.hostname "lv6cfqjl6l-macos" }}antoine.bouteiller@pelico.io{{ else }}115460763+antoine-bouteiller@users.noreply.github.com{{ end }}"
+	name = "Antoine Bouteiller"
+	signingkey = "~/.ssh/id_ed25519.pub"
+
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+	path = "~/.gitconfig-github"
+
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+	path = "~/.gitconfig-github"
